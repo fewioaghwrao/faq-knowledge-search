@@ -47,6 +47,13 @@ export default function Header() {
             </Link>
           )}
 
+          <Link
+  href="/ai-search"
+  className="text-sm text-slate-300 transition hover:text-white"
+>
+  AI検索
+</Link>
+
           {!loggedIn ? (
             <Link
               href="/login"

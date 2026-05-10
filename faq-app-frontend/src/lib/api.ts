@@ -6,6 +6,7 @@ import {
   LoginResponse,
 } from "@/types/faq";
 import { getToken } from "./auth";
+import type { AiSearchResponse } from "@/types/ai";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -89,5 +90,12 @@ export async function updateFaq(id: number, requestBody: FaqUpdateRequest) {
 export async function deleteFaq(id: number) {
   return request<void>(`/api/faqs/${id}`, {
     method: "DELETE",
+  });
+}
+
+export async function searchAi(question: string) {
+  return request<AiSearchResponse>("/api/ai/search", {
+    method: "POST",
+    body: JSON.stringify({ question }),
   });
 }
