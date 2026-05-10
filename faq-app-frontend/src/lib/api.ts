@@ -55,8 +55,12 @@ export async function loginApi(requestBody: LoginRequest) {
 export async function searchFaqs(keyword?: string) {
   const params = new URLSearchParams();
 
-  if (keyword) {
-    params.set("keyword", keyword);
+  const normalizedKeyword = keyword?.trim() ?? "";
+
+  if (normalizedKeyword) {
+    params.set("keyword", normalizedKeyword);
+    params.set("highlight", "true");
+    params.set("sort", "score");
   }
 
   const query = params.toString();
