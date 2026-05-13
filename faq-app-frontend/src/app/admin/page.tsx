@@ -51,16 +51,18 @@ export default function AdminPage() {
     <div className="overflow-hidden rounded-3xl border border-white/10 bg-slate-900/80 shadow-xl shadow-slate-950/30">
       <div className="h-1 bg-gradient-to-r from-blue-500 via-violet-500 to-cyan-400" />
 
-      <div className="p-5">
-        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <h2 className="text-xl font-bold text-white">FAQ一覧</h2>
-            <p className="mt-1 text-sm text-slate-400">
-              登録済みFAQの公開状態・編集・削除を管理します。
+      <div className="p-4 sm:p-5">
+        <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div className="min-w-0">
+            <h2 className="break-words text-xl font-bold text-white">
+              FAQ一覧
+            </h2>
+            <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-400">
+              登録済みFAQの公開状態・編集・削除を管理します。長いタイトルや本文でも崩れにくい一覧表示です。
             </p>
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300">
+          <div className="shrink-0 rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300">
             登録件数{" "}
             <span className="font-bold text-white">{faqs.length}</span> 件
           </div>
@@ -103,45 +105,26 @@ export default function AdminPage() {
         )}
 
         {!loading && !error && faqs.length > 0 && (
-          <div className="overflow-x-auto rounded-2xl border border-white/10">
-            <table className="w-full min-w-[760px] text-left text-sm">
-              <thead className="bg-white/5 text-slate-400">
-                <tr>
-                  <th className="px-4 py-3 font-medium">ID</th>
-                  <th className="px-4 py-3 font-medium">タイトル</th>
-                  <th className="px-4 py-3 font-medium">カテゴリ</th>
-                  <th className="px-4 py-3 font-medium">公開状態</th>
-                  <th className="px-4 py-3 font-medium">閲覧数</th>
-                  <th className="px-4 py-3 font-medium">操作</th>
-                </tr>
-              </thead>
+          <>
+            {/* Mobile / Tablet: card layout */}
+            <div className="grid gap-4 lg:hidden">
+              {faqs.map((faq) => (
+                <article
+                  key={faq.id}
+                  className="overflow-hidden rounded-2xl border border-white/10 bg-slate-950/40 shadow-lg shadow-slate-950/20"
+                >
+                  <div className="h-1 bg-gradient-to-r from-blue-500 via-violet-500 to-cyan-400" />
 
-              <tbody>
-                {faqs.map((faq) => (
-                  <tr
-                    key={faq.id}
-                    className="border-t border-white/10 transition hover:bg-white/[0.03]"
-                  >
-                    <td className="px-4 py-4 text-slate-400">
-                      #{faq.id}
-                    </td>
+                  <div className="space-y-4 p-4">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="rounded-full border border-slate-500/40 bg-slate-800 px-3 py-1 text-xs text-slate-300">
+                        #{faq.id}
+                      </span>
 
-                    <td className="px-4 py-4">
-                      <div className="font-semibold text-white">
-                        {faq.title}
-                      </div>
-                      <div className="mt-1 line-clamp-1 text-xs text-slate-500">
-                        {faq.body}
-                      </div>
-                    </td>
-
-                    <td className="px-4 py-4">
                       <span className="rounded-full border border-blue-400/30 bg-blue-500/10 px-3 py-1 text-xs text-blue-200">
                         {faq.categoryName}
                       </span>
-                    </td>
 
-                    <td className="px-4 py-4">
                       {faq.isPublished ? (
                         <span className="rounded-full border border-emerald-400/30 bg-emerald-500/10 px-3 py-1 text-xs text-emerald-300">
                           公開
@@ -151,35 +134,125 @@ export default function AdminPage() {
                           非公開
                         </span>
                       )}
-                    </td>
 
-                    <td className="px-4 py-4 text-slate-300">
-                      {faq.viewCount}
-                    </td>
+                      <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-300">
+                        Views: {faq.viewCount}
+                      </span>
+                    </div>
 
-                    <td className="px-4 py-4">
-                      <div className="flex gap-2">
-                        <Link
-                          href={`/admin/faqs/${faq.id}/edit`}
-                          className="rounded-lg border border-white/10 bg-white/10 px-3 py-2 text-xs font-medium text-white transition hover:bg-white/15"
-                        >
-                          編集
-                        </Link>
+                    <div>
+                      <h3 className="break-words text-base font-bold leading-7 text-white">
+                        {faq.title}
+                      </h3>
 
-                        <button
-                          onClick={() => handleDelete(faq.id)}
-                          disabled={deletingId === faq.id}
-                          className="rounded-lg bg-red-600 px-3 py-2 text-xs font-medium text-white transition hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-60"
-                        >
-                          {deletingId === faq.id ? "削除中..." : "削除"}
-                        </button>
-                      </div>
-                    </td>
+                      <p className="mt-2 line-clamp-4 break-words text-sm leading-6 text-slate-400">
+                        {faq.body || "本文が登録されていません。"}
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 border-t border-white/10 pt-4">
+                      <Link
+                        href={`/admin/faqs/${faq.id}/edit`}
+                        className="rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-center text-xs font-medium text-white transition hover:bg-white/15"
+                      >
+                        編集
+                      </Link>
+
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(faq.id)}
+                        disabled={deletingId === faq.id}
+                        className="rounded-xl bg-red-600 px-3 py-2 text-xs font-medium text-white transition hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-60"
+                      >
+                        {deletingId === faq.id ? "削除中..." : "削除"}
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            {/* Desktop: table layout */}
+            <div className="hidden overflow-x-auto rounded-2xl border border-white/10 lg:block">
+              <table className="w-full table-fixed text-left text-sm">
+                <thead className="bg-white/5 text-slate-400">
+                  <tr>
+                    <th className="w-20 px-4 py-3 font-medium">ID</th>
+                    <th className="px-4 py-3 font-medium">タイトル / 本文</th>
+                    <th className="w-36 px-4 py-3 font-medium">カテゴリ</th>
+                    <th className="w-28 px-4 py-3 font-medium">公開状態</th>
+                    <th className="w-24 px-4 py-3 font-medium">閲覧数</th>
+                    <th className="w-36 px-4 py-3 font-medium">操作</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+
+                <tbody>
+                  {faqs.map((faq) => (
+                    <tr
+                      key={faq.id}
+                      className="border-t border-white/10 transition hover:bg-white/[0.03]"
+                    >
+                      <td className="px-4 py-4 align-top text-slate-400">
+                        #{faq.id}
+                      </td>
+
+                      <td className="px-4 py-4 align-top">
+                        <div className="line-clamp-2 break-words font-semibold leading-6 text-white">
+                          {faq.title}
+                        </div>
+
+                        <div className="mt-2 line-clamp-3 break-words text-xs leading-5 text-slate-500">
+                          {faq.body || "本文が登録されていません。"}
+                        </div>
+                      </td>
+
+                      <td className="px-4 py-4 align-top">
+                        <span className="inline-flex max-w-full rounded-full border border-blue-400/30 bg-blue-500/10 px-3 py-1 text-xs text-blue-200">
+                          <span className="truncate">{faq.categoryName}</span>
+                        </span>
+                      </td>
+
+                      <td className="px-4 py-4 align-top">
+                        {faq.isPublished ? (
+                          <span className="rounded-full border border-emerald-400/30 bg-emerald-500/10 px-3 py-1 text-xs text-emerald-300">
+                            公開
+                          </span>
+                        ) : (
+                          <span className="rounded-full border border-slate-500/40 bg-slate-800 px-3 py-1 text-xs text-slate-300">
+                            非公開
+                          </span>
+                        )}
+                      </td>
+
+                      <td className="px-4 py-4 align-top text-slate-300">
+                        {faq.viewCount}
+                      </td>
+
+                      <td className="px-4 py-4 align-top">
+                        <div className="flex flex-col gap-2 xl:flex-row">
+                          <Link
+                            href={`/admin/faqs/${faq.id}/edit`}
+                            className="rounded-lg border border-white/10 bg-white/10 px-3 py-2 text-center text-xs font-medium text-white transition hover:bg-white/15"
+                          >
+                            編集
+                          </Link>
+
+                          <button
+                            type="button"
+                            onClick={() => handleDelete(faq.id)}
+                            disabled={deletingId === faq.id}
+                            className="rounded-lg bg-red-600 px-3 py-2 text-xs font-medium text-white transition hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-60"
+                          >
+                            {deletingId === faq.id ? "削除中..." : "削除"}
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </div>
     </div>

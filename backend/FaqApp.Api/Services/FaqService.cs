@@ -60,21 +60,22 @@ public class FaqService : IFaqService
         var faqList = await faqs.ToListAsync();
 
         var items = faqList
-.Select(x => new FaqListItemDto
-{
-    Id = x.Id,
-    Title = x.Title,
-    TitleHighlighted = query.Highlight
-        ? ApplyHighlight(x.Title, keywords)
-        : null,
-    BodyExcerpt = CreateBodyExcerpt(x.Body, keywords),
-    Score = CalculateScore(x, keywords),
-    CategoryName = x.Category.Name,
-    Tags = x.Tags.OrderBy(t => t.DisplayOrder).Select(t => t.Name).ToList(),
-    IsPublished = x.IsPublished,
-    ViewCount = x.ViewCount,
-    UpdatedAt = x.UpdatedAt
-})
+            .Select(x => new FaqListItemDto
+            {
+                Id = x.Id,
+                Title = x.Title,
+                Body = x.Body,
+                TitleHighlighted = query.Highlight
+                    ? ApplyHighlight(x.Title, keywords)
+                    : null,
+                BodyExcerpt = CreateBodyExcerpt(x.Body, keywords),
+                Score = CalculateScore(x, keywords),
+                CategoryName = x.Category.Name,
+                Tags = x.Tags.OrderBy(t => t.DisplayOrder).Select(t => t.Name).ToList(),
+                IsPublished = x.IsPublished,
+                ViewCount = x.ViewCount,
+                UpdatedAt = x.UpdatedAt
+            })
             .ToList();
 
         items = query.Sort == "score" && keywords.Length > 0
@@ -218,8 +219,26 @@ public class FaqService : IFaqService
             return [];
         }
 
+        var stopWords = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+    {
+        "場合",
+        "どう",
+        "すれば",
+        "いい",
+        "ですか",
+        "ください",
+        "について",
+        "方法",
+        "教えて",
+        "とは"
+    };
+
         return keyword
-            .Split([' ', '　'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Split(
+                [' ', '　', '、', '。', ',', '.', '？', '?', '！', '!', '・', '/', '\\', '(', ')', '（', '）'],
+                StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Where(x => x.Length >= 2)
+            .Where(x => !stopWords.Contains(x))
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToArray();
     }

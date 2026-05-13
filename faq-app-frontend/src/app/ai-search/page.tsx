@@ -11,6 +11,12 @@ export default function AiSearchPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const exampleQuestions = [
+    "ログインできない場合はどうすればいいですか？",
+    "パスワードを忘れた場合の対応を教えてください。",
+    "CSV取込でエラーが出た場合はどうすればいいですか？",
+  ];
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -31,7 +37,9 @@ export default function AiSearchPage() {
       setResult(response);
     } catch (e) {
       console.error(e);
-      setError("AI検索の実行に失敗しました。APIの起動状態を確認してください。");
+      setError(
+        "AI検索の実行に失敗しました。APIの起動状態やAI API設定を確認してください。"
+      );
     } finally {
       setLoading(false);
     }
@@ -46,16 +54,15 @@ export default function AiSearchPage() {
 
         <div className="relative">
           <span className="inline-flex rounded-full border border-violet-400/30 bg-violet-500/10 px-4 py-1 text-sm text-violet-200">
-            Phase 3 / Mock AI Search
+            Phase 3 / AI FAQ Search
           </span>
 
           <h1 className="mt-5 text-4xl font-bold tracking-tight text-white">
-            FAQをもとにAI風の回答を生成
+            FAQをもとにAI回答を生成
           </h1>
 
           <p className="mt-4 max-w-2xl text-slate-300">
-            質問文から関連FAQを検索し、モックAI回答と参照元FAQを表示します。
-            現段階では外部AI APIは呼び出していません。
+            質問文から関連FAQを検索し、上位5件のFAQをもとにAI回答と参照元FAQを表示します。
           </p>
 
           <div className="mt-6 flex flex-wrap gap-3 text-sm">
@@ -66,7 +73,7 @@ export default function AiSearchPage() {
               参照元表示
             </span>
             <span className="rounded-full border border-white/10 bg-white/10 px-4 py-2 text-slate-200">
-              AI API未使用
+              外部AI API連携
             </span>
           </div>
         </div>
@@ -89,21 +96,63 @@ export default function AiSearchPage() {
           className="mt-3 w-full resize-none rounded-2xl border border-white/10 bg-slate-800 px-4 py-3 text-white placeholder:text-slate-500 focus:border-violet-400 focus:outline-none"
         />
 
+        <div className="mt-4">
+          <div className="text-xs font-semibold text-slate-400">
+            質問例
+          </div>
+
+          <div className="mt-2 flex flex-wrap gap-2">
+            {exampleQuestions.map((example) => (
+              <button
+                key={example}
+                type="button"
+                onClick={() => {
+                  setQuestion(example);
+                  setError("");
+                  setResult(null);
+                }}
+                className="rounded-full border border-white/10 bg-slate-800 px-4 py-2 text-xs text-slate-300 transition hover:border-violet-400/50 hover:bg-slate-700 hover:text-white"
+              >
+                {example}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="mt-3 flex items-center justify-between gap-4 text-xs text-slate-500">
           <span>FAQに登録された内容をもとに回答します。</span>
           <span>{question.length}/500</span>
         </div>
 
-        <div className="mt-5 flex justify-end">
+        <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <Link
+            href="/faqs"
+            className="text-sm font-semibold text-blue-300 transition hover:text-blue-200"
+          >
+            通常のFAQ検索を見る →
+          </Link>
+
           <button
             type="submit"
             disabled={loading}
             className="rounded-xl bg-gradient-to-r from-violet-600 to-blue-600 px-6 py-3 font-semibold text-white shadow-lg shadow-violet-500/20 transition hover:from-violet-500 hover:to-blue-500 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {loading ? "検索中..." : "AI検索する"}
+            {loading ? "AI回答を生成中..." : "AI検索する"}
           </button>
         </div>
       </form>
+
+      {loading && (
+        <div className="overflow-hidden rounded-3xl border border-blue-500/30 bg-blue-950/40 shadow-xl shadow-blue-950/20">
+          <div className="h-1 bg-gradient-to-r from-violet-500 via-blue-500 to-cyan-400" />
+          <div className="p-5 text-blue-100">
+            <div className="font-semibold">AI回答を生成中です</div>
+            <p className="mt-1 text-sm text-blue-200">
+              関連FAQを検索し、FAQ本文をもとに回答を生成しています。
+            </p>
+          </div>
+        </div>
+      )}
 
       {error && (
         <div className="overflow-hidden rounded-3xl border border-red-500/30 bg-red-950/50 shadow-xl shadow-red-950/20">
@@ -121,6 +170,15 @@ export default function AiSearchPage() {
           <div className="p-5 text-yellow-100">
             <div className="font-semibold">検索結果なし</div>
             <p className="mt-1 text-sm text-yellow-200">{result.message}</p>
+
+            <div className="mt-4">
+              <Link
+                href="/faqs"
+                className="inline-flex rounded-xl border border-yellow-400/30 bg-yellow-500/10 px-4 py-2 text-sm font-semibold text-yellow-100 transition hover:bg-yellow-500/20"
+              >
+                通常のFAQ検索で探す →
+              </Link>
+            </div>
           </div>
         </div>
       )}
@@ -131,8 +189,8 @@ export default function AiSearchPage() {
 
           <div className="space-y-6 p-6">
             <div>
-              <div className="text-sm font-semibold text-violet-200">
-                モックAI回答
+              <div className="inline-flex rounded-full border border-violet-400/30 bg-violet-500/10 px-3 py-1 text-sm font-semibold text-violet-200">
+                FAQ参照AI回答
               </div>
 
               <div className="mt-3 whitespace-pre-wrap rounded-2xl border border-white/10 bg-slate-950/60 p-5 text-sm leading-7 text-slate-200">
@@ -177,9 +235,18 @@ export default function AiSearchPage() {
                   ))}
                 </div>
               ) : (
-                <p className="mt-3 text-sm text-slate-500">
-                  参照元FAQはありません。
-                </p>
+                <div className="mt-3 rounded-2xl border border-white/10 bg-slate-950/40 p-4">
+                  <p className="text-sm text-slate-400">
+                    参照元FAQはありません。通常のFAQ検索もあわせて確認してください。
+                  </p>
+
+                  <Link
+                    href="/faqs"
+                    className="mt-3 inline-flex text-sm font-semibold text-blue-300 transition hover:text-blue-200"
+                  >
+                    通常のFAQ検索を見る →
+                  </Link>
+                </div>
               )}
             </div>
           </div>

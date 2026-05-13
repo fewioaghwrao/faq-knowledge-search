@@ -5,6 +5,7 @@ using FaqApp.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using FaqApp.Api.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IFaqService, FaqService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAiService, AiService>();
+
+builder.Services.Configure<AiSettings>(
+    builder.Configuration.GetSection("AiSettings"));
+
+builder.Services.AddHttpClient<IAiApiClient, AiApiClient>();
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 export default function Header() {
   const router = useRouter();
   const [loggedIn, setLoggedIn] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     setLoggedIn(isLoggedIn());
@@ -16,60 +17,157 @@ export default function Header() {
   const handleLogout = () => {
     removeToken();
     setLoggedIn(false);
+    setMenuOpen(false);
     router.push("/");
   };
 
-  return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/80 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-        <Link href="/" className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-violet-500 font-bold text-white shadow-lg shadow-blue-500/20">
-            Q
-          </div>
-          <div>
-            <div className="text-lg font-bold text-white">
-              Knowledge FAQ
-            </div>
-            <div className="text-xs text-slate-400">
-              社内ナレッジ検索
-            </div>
-          </div>
-        </Link>
+  const closeMenu = () => {
+    setMenuOpen(false);
+  };
 
-        <nav className="flex items-center gap-3 text-sm">
-          <Link href="/" className="rounded-lg px-3 py-2 text-slate-300 hover:bg-white/10 hover:text-white">
-            FAQ一覧
+  return (
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/85 backdrop-blur">
+      <div className="mx-auto max-w-6xl px-4">
+        <div className="flex items-center justify-between py-4">
+          <Link
+            href="/"
+            onClick={closeMenu}
+            className="flex min-w-0 items-center gap-3"
+          >
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-violet-500 font-bold text-white shadow-lg shadow-blue-500/20">
+              Q
+            </div>
+
+            <div className="min-w-0">
+              <div className="truncate text-base font-bold text-white sm:text-lg">
+                Knowledge FAQ
+              </div>
+              <div className="truncate text-xs text-slate-400">
+                社内ナレッジ検索
+              </div>
+            </div>
           </Link>
 
-          {loggedIn && (
-            <Link href="/admin" className="rounded-lg px-3 py-2 text-slate-300 hover:bg-white/10 hover:text-white">
-              管理画面
-            </Link>
-          )}
-
-          <Link
-  href="/ai-search"
-  className="text-sm text-slate-300 transition hover:text-white"
->
-  AI検索
-</Link>
-
-          {!loggedIn ? (
+          {/* Desktop navigation */}
+          <nav className="hidden items-center gap-2 text-sm md:flex">
             <Link
-              href="/login"
-              className="rounded-xl bg-gradient-to-r from-blue-600 to-violet-600 px-4 py-2 font-semibold text-white shadow-lg shadow-blue-500/20 hover:from-blue-500 hover:to-violet-500"
+              href="/"
+              className="rounded-lg px-3 py-2 text-slate-300 transition hover:bg-white/10 hover:text-white"
             >
-              ログイン
+              ホーム
             </Link>
-          ) : (
-            <button
-              onClick={handleLogout}
-              className="rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-white hover:bg-white/15"
+
+            <Link
+              href="/faqs"
+              className="rounded-lg px-3 py-2 text-slate-300 transition hover:bg-white/10 hover:text-white"
             >
-              ログアウト
-            </button>
-          )}
-        </nav>
+              FAQ検索
+            </Link>
+
+            <Link
+              href="/ai-search"
+              className="rounded-lg px-3 py-2 text-slate-300 transition hover:bg-white/10 hover:text-white"
+            >
+              AI検索
+            </Link>
+
+            {loggedIn && (
+              <Link
+                href="/admin"
+                className="rounded-lg px-3 py-2 text-slate-300 transition hover:bg-white/10 hover:text-white"
+              >
+                管理画面
+              </Link>
+            )}
+
+            {!loggedIn ? (
+              <Link
+                href="/login"
+                className="ml-1 rounded-xl bg-gradient-to-r from-blue-600 to-violet-600 px-4 py-2 font-semibold text-white shadow-lg shadow-blue-500/20 transition hover:from-blue-500 hover:to-violet-500"
+              >
+                ログイン
+              </Link>
+            ) : (
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="ml-1 rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-white transition hover:bg-white/15"
+              >
+                ログアウト
+              </button>
+            )}
+          </nav>
+
+          {/* Mobile menu button */}
+          <button
+            type="button"
+            onClick={() => setMenuOpen((prev) => !prev)}
+            className="inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-sm font-semibold text-white transition hover:bg-white/15 md:hidden"
+            aria-expanded={menuOpen}
+            aria-label="メニューを開閉"
+          >
+            {menuOpen ? "閉じる" : "メニュー"}
+          </button>
+        </div>
+
+        {/* Mobile navigation */}
+        {menuOpen && (
+          <nav className="space-y-2 border-t border-white/10 pb-4 pt-3 text-sm md:hidden">
+            <Link
+              href="/"
+              onClick={closeMenu}
+              className="block rounded-xl px-4 py-3 text-slate-300 transition hover:bg-white/10 hover:text-white"
+            >
+              ホーム
+            </Link>
+
+            <Link
+              href="/faqs"
+              onClick={closeMenu}
+              className="block rounded-xl px-4 py-3 text-slate-300 transition hover:bg-white/10 hover:text-white"
+            >
+              FAQ検索
+            </Link>
+
+            <Link
+              href="/ai-search"
+              onClick={closeMenu}
+              className="block rounded-xl px-4 py-3 text-slate-300 transition hover:bg-white/10 hover:text-white"
+            >
+              AI検索
+            </Link>
+
+            {loggedIn && (
+              <Link
+                href="/admin"
+                onClick={closeMenu}
+                className="block rounded-xl px-4 py-3 text-slate-300 transition hover:bg-white/10 hover:text-white"
+              >
+                管理画面
+              </Link>
+            )}
+
+            <div className="pt-2">
+              {!loggedIn ? (
+                <Link
+                  href="/login"
+                  onClick={closeMenu}
+                  className="block rounded-xl bg-gradient-to-r from-blue-600 to-violet-600 px-4 py-3 text-center font-semibold text-white shadow-lg shadow-blue-500/20 transition hover:from-blue-500 hover:to-violet-500"
+                >
+                  ログイン
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="w-full rounded-xl border border-white/10 bg-white/10 px-4 py-3 font-semibold text-white transition hover:bg-white/15"
+                >
+                  ログアウト
+                </button>
+              )}
+            </div>
+          </nav>
+        )}
       </div>
     </header>
   );

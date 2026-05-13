@@ -1,27 +1,53 @@
 ﻿using FaqApp.Api.Dtos.Ai;
 using FaqApp.Api.Dtos.Faqs;
 using FaqApp.Api.Services.Interfaces;
+using FaqApp.Api.Settings;
+using Microsoft.Extensions.Options;
 
 namespace FaqApp.Api.Services;
 
 public class AiService : IAiService
 {
     private readonly IFaqService _faqService;
+    private readonly IAiApiClient _aiApiClient;
+    private readonly AiSettings _aiSettings;
+    private readonly ILogger<AiService> _logger;
 
-    public AiService(IFaqService faqService)
+    public AiService(
+        IFaqService faqService,
+        IAiApiClient aiApiClient,
+        IOptions<AiSettings> aiOptions,
+        ILogger<AiService> logger)
     {
         _faqService = faqService;
+        _aiApiClient = aiApiClient;
+        _aiSettings = aiOptions.Value;
+        _logger = logger;
     }
 
     public async Task<AiSearchResponse> SearchAsync(AiSearchRequest request)
     {
         var question = request.Question.Trim();
 
+        if (string.IsNullOrWhiteSpace(question))
+        {
+            return new AiSearchResponse
+            {
+                Answer = null,
+                Disclaimer = null,
+                Sources = new List<AiSourceDto>(),
+                Message = "質問文を入力してください。",
+                AiHistoryId = 0
+            };
+        }
+
         var faqs = await _faqService.SearchAsync(new FaqSearchQuery
         {
             Keyword = question,
             Page = 1,
-            PageSize = 5,
+            PageSize = _aiSettings.MaxContextFaqCount <= 0
+                ? 5
+                : _aiSettings.MaxContextFaqCount,
             Sort = "score",
             Highlight = false,
             IncludeUnpublished = false
@@ -39,9 +65,34 @@ public class AiService : IAiService
             };
         }
 
-        var topFaq = faqs.First();
+        var faqContexts = faqs.Select((faq, index) => BuildFaqContext(faq, index + 1));
 
-        var answer = BuildMockAnswer(question, faqs);
+        string answer;
+
+        try
+        {
+            answer = await _aiApiClient.GenerateAnswerAsync(
+                question,
+                faqContexts);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "AI回答の生成に失敗しました。");
+
+            return new AiSearchResponse
+            {
+                Answer = null,
+                Disclaimer = null,
+                Sources = faqs.Select(x => new AiSourceDto
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Url = $"/faqs/{x.Id}"
+                }).ToList(),
+                Message = "AI回答の生成に失敗しました。参照元FAQをご確認ください。",
+                AiHistoryId = 0
+            };
+        }
 
         return new AiSearchResponse
         {
@@ -58,48 +109,19 @@ public class AiService : IAiService
         };
     }
 
-    private static string BuildMockAnswer(string question, List<FaqListItemDto> faqs)
+    private static string BuildFaqContext(FaqListItemDto faq, int index)
     {
-        var topFaq = faqs.First();
+        var body = string.IsNullOrWhiteSpace(faq.Body)
+            ? "FAQ本文が登録されていません。"
+            : faq.Body.Trim();
 
-        var lines = new List<string>
-        {
-            "【モックAI回答】",
-            "",
-            $"質問「{question}」に関連するFAQとして、主に「{topFaq.Title}」が見つかりました。",
-            "",
-            "現時点では外部AI APIは呼び出していないため、以下はFAQ本文をもとにした仮の要約です。",
-            "",
-            CreateExcerpt(topFaq.Body),
-            "",
-            "詳細は参照元FAQをご確認ください。"
-        };
-
-        if (faqs.Count >= 2)
-        {
-            lines.Add("");
-            lines.Add("関連するFAQもあわせて確認してください。");
-
-            foreach (var faq in faqs.Skip(1).Take(3))
-            {
-                lines.Add($"- {faq.Title}");
-            }
-        }
-
-        return string.Join(Environment.NewLine, lines);
-    }
-
-    private static string CreateExcerpt(string body)
-    {
-        if (string.IsNullOrWhiteSpace(body))
-        {
-            return "FAQ本文が登録されていません。";
-        }
-
-        var normalized = body.Replace("\r\n", "\n").Replace("\r", "\n").Trim();
-
-        return normalized.Length <= 250
-            ? normalized
-            : normalized[..250] + "...";
+        return $"""
+        [FAQ{index}]
+        ID: {faq.Id}
+        タイトル: {faq.Title}
+        カテゴリ: {faq.CategoryName}
+        本文:
+        {body}
+        """;
     }
 }

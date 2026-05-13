@@ -1,37 +1,189 @@
 "use client";
 
-import { useState } from "react";
+import Link from "next/link";
+import { FormEvent, useState } from "react";
+import { searchAi } from "@/lib/api";
+import type { AiSearchResponse } from "@/types/ai";
 
-type Props = {
-  onSearch: (keyword: string) => void;
-};
+export default function AiSearchPage() {
+  const [question, setQuestion] = useState("");
+  const [result, setResult] = useState<AiSearchResponse | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-export default function SearchBar({ onSearch }: Props) {
-  const [keyword, setKeyword] = useState("");
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const normalizedQuestion = question.trim();
+
+    if (!normalizedQuestion) {
+      setError("質問文を入力してください。");
+      setResult(null);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError("");
+      setResult(null);
+
+      const response = await searchAi(normalizedQuestion);
+      setResult(response);
+    } catch (e) {
+      console.error(e);
+      setError("AI検索の実行に失敗しました。APIの起動状態やAI API設定を確認してください。");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        onSearch(keyword);
-      }}
-      className="rounded-2xl border border-white/10 bg-slate-900/80 p-3 shadow-xl"
-    >
-      <div className="flex gap-3">
-        <input
-          value={keyword}
-          onChange={(e) => setKeyword(e.target.value)}
-          placeholder="例：ログインできない、請求書、エラー対応"
-          className="w-full rounded-xl border border-white/10 bg-slate-800 px-4 py-3 text-white placeholder:text-slate-500 focus:border-blue-400 focus:outline-none"
+    <div className="space-y-8">
+      <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-slate-900 p-8 shadow-2xl shadow-slate-950/40">
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-600/20 via-blue-600/20 to-cyan-500/10" />
+        <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-violet-500/20 blur-3xl" />
+        <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-blue-500/20 blur-3xl" />
+
+        <div className="relative">
+          <span className="inline-flex rounded-full border border-violet-400/30 bg-violet-500/10 px-4 py-1 text-sm text-violet-200">
+            Phase 3 / AI FAQ Search
+          </span>
+
+          <h1 className="mt-5 text-4xl font-bold tracking-tight text-white">
+            FAQをもとにAI回答を生成
+          </h1>
+
+          <p className="mt-4 max-w-2xl text-slate-300">
+            質問文から関連FAQを検索し、上位5件のFAQをもとにAI回答と参照元FAQを表示します。
+          </p>
+
+          <div className="mt-6 flex flex-wrap gap-3 text-sm">
+            <span className="rounded-full border border-white/10 bg-white/10 px-4 py-2 text-slate-200">
+              FAQ検索連携
+            </span>
+            <span className="rounded-full border border-white/10 bg-white/10 px-4 py-2 text-slate-200">
+              参照元表示
+            </span>
+            <span className="rounded-full border border-white/10 bg-white/10 px-4 py-2 text-slate-200">
+              外部AI API連携
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <form
+        onSubmit={handleSubmit}
+        className="rounded-3xl border border-white/10 bg-slate-900/80 p-5 shadow-xl shadow-slate-950/30"
+      >
+        <label className="block text-sm font-semibold text-slate-200">
+          質問文
+        </label>
+
+        <textarea
+          value={question}
+          onChange={(e) => setQuestion(e.target.value)}
+          rows={5}
+          maxLength={500}
+          placeholder="例：ログインできない場合はどうすればいいですか？"
+          className="mt-3 w-full resize-none rounded-2xl border border-white/10 bg-slate-800 px-4 py-3 text-white placeholder:text-slate-500 focus:border-violet-400 focus:outline-none"
         />
 
-        <button
-          type="submit"
-          className="rounded-xl bg-gradient-to-r from-blue-600 to-violet-600 px-6 py-3 font-semibold text-white shadow-lg shadow-blue-500/20 hover:from-blue-500 hover:to-violet-500"
-        >
-          検索
-        </button>
-      </div>
-    </form>
+        <div className="mt-3 flex items-center justify-between gap-4 text-xs text-slate-500">
+          <span>FAQに登録された内容をもとに回答します。</span>
+          <span>{question.length}/500</span>
+        </div>
+
+        <div className="mt-5 flex justify-end">
+          <button
+            type="submit"
+            disabled={loading}
+            className="rounded-xl bg-gradient-to-r from-violet-600 to-blue-600 px-6 py-3 font-semibold text-white shadow-lg shadow-violet-500/20 transition hover:from-violet-500 hover:to-blue-500 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {loading ? "AI回答を生成中..." : "AI検索する"}
+          </button>
+        </div>
+      </form>
+
+      {error && (
+        <div className="overflow-hidden rounded-3xl border border-red-500/30 bg-red-950/50 shadow-xl shadow-red-950/20">
+          <div className="h-1 bg-gradient-to-r from-red-500 to-orange-400" />
+          <div className="p-5 text-red-100">
+            <div className="font-semibold">実行エラー</div>
+            <p className="mt-1 text-sm text-red-200">{error}</p>
+          </div>
+        </div>
+      )}
+
+      {result?.message && (
+        <div className="overflow-hidden rounded-3xl border border-yellow-500/30 bg-yellow-950/40 shadow-xl shadow-yellow-950/20">
+          <div className="h-1 bg-gradient-to-r from-yellow-400 to-orange-400" />
+          <div className="p-5 text-yellow-100">
+            <div className="font-semibold">検索結果なし</div>
+            <p className="mt-1 text-sm text-yellow-200">{result.message}</p>
+          </div>
+        </div>
+      )}
+
+      {result?.answer && (
+        <section className="overflow-hidden rounded-3xl border border-white/10 bg-slate-900/80 shadow-xl shadow-slate-950/30">
+          <div className="h-1 bg-gradient-to-r from-violet-500 via-blue-500 to-cyan-400" />
+
+          <div className="space-y-6 p-6">
+            <div>
+              <div className="text-sm font-semibold text-violet-200">
+                FAQ参照AI回答
+              </div>
+
+              <div className="mt-3 whitespace-pre-wrap rounded-2xl border border-white/10 bg-slate-950/60 p-5 text-sm leading-7 text-slate-200">
+                {result.answer}
+              </div>
+            </div>
+
+            {result.disclaimer && (
+              <div className="rounded-2xl border border-cyan-400/20 bg-cyan-500/10 p-4 text-sm text-cyan-100">
+                {result.disclaimer}
+              </div>
+            )}
+
+            <div>
+              <div className="text-sm font-semibold text-slate-200">
+                参照元FAQ
+              </div>
+
+              {result.sources.length > 0 ? (
+                <div className="mt-3 grid gap-3">
+                  {result.sources.map((source) => (
+                    <Link
+                      key={source.id}
+                      href={source.url}
+                      className="group rounded-2xl border border-white/10 bg-slate-950/50 p-4 transition hover:border-blue-400/50 hover:bg-slate-900"
+                    >
+                      <div className="flex items-center justify-between gap-4">
+                        <div>
+                          <div className="text-sm font-semibold text-white group-hover:text-blue-200">
+                            {source.title}
+                          </div>
+                          <div className="mt-1 text-xs text-slate-500">
+                            FAQ ID: {source.id}
+                          </div>
+                        </div>
+
+                        <span className="shrink-0 text-sm text-blue-300 transition group-hover:translate-x-1">
+                          詳細を見る →
+                        </span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <p className="mt-3 text-sm text-slate-500">
+                  参照元FAQはありません。
+                </p>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+    </div>
   );
 }
