@@ -55,4 +55,21 @@ public class AiController : ControllerBase
 
         return Ok(result);
     }
+
+    [HttpPost("histories/{id:int}/feedback")]
+    public async Task<IActionResult> UpdateFeedback(
+        int id,
+        [FromBody] AiSearchFeedbackRequestDto request)
+    {
+        try
+        {
+            await _aiSearchHistoryService.UpdateFeedbackAsync(id, request.IsHelpful);
+
+            return NoContent();
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+    }
 }

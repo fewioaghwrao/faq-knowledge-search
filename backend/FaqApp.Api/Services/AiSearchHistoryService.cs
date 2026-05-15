@@ -94,4 +94,19 @@ public class AiSearchHistoryService : IAiSearchHistoryService
             })
             .FirstOrDefaultAsync();
     }
+
+    public async Task UpdateFeedbackAsync(int historyId, bool isHelpful)
+    {
+        var history = await _dbContext.AiSearchHistories
+            .FirstOrDefaultAsync(x => x.Id == historyId);
+
+        if (history == null)
+        {
+            throw new KeyNotFoundException("AI検索履歴が見つかりません。");
+        }
+
+        history.IsHelpful = isHelpful;
+
+        await _dbContext.SaveChangesAsync();
+    }
 }
