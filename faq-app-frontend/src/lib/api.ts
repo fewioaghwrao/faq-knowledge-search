@@ -9,6 +9,7 @@ import { getToken } from "./auth";
 import type {
   AiSearchResponse,
   AiSearchHistoryListItem,
+  AiSearchHistoryDetail,
 } from "@/types/ai";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -125,4 +126,8 @@ export async function getAiSearchHistories(params?: AiSearchHistoryQuery) {
   return request<AiSearchHistoryListItem[]>(
     `/api/ai/histories${query ? `?${query}` : ""}`
   );
+}
+
+export async function getAiSearchHistoryDetail(id: number) {
+  return request<AiSearchHistoryDetail>(`/api/ai/histories/${id}`);
 }

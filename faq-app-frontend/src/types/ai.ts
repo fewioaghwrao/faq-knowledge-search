@@ -26,3 +26,23 @@ export type AiSearchHistoryListItem = {
   sourceCount: number;
   executedAt: string;
 };
+
+export type AiSearchHistorySource = {
+  faqId: number;
+  faqTitle: string;
+  displayOrder: number;
+  score?: number | null;
+  url: string;
+};
+
+export type AiSearchHistoryDetail = {
+  id: number;
+  question: string;
+  searchKeywords?: string | null;
+  aiAnswer?: string | null;
+  isSuccess: boolean;
+  errorMessage?: string | null;
+  isHelpful?: boolean | null;
+  executedAt: string;
+  sources: AiSearchHistorySource[];
+};
