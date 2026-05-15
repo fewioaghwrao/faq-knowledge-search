@@ -3,6 +3,7 @@ using FaqApp.Api.Dtos.Faqs;
 using FaqApp.Api.Entities;
 using FaqApp.Api.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace FaqApp.Api.Services;
 
@@ -19,6 +20,7 @@ public class FaqService : IFaqService
     {
         var page = Math.Max(query.Page, 1);
         var pageSize = Math.Clamp(query.PageSize, 1, 50);
+        var keywords = SplitKeywords(query.Keyword);
 
         var faqs = _dbContext.Faqs
             .Include(x => x.Category)
@@ -31,15 +33,18 @@ public class FaqService : IFaqService
             faqs = faqs.Where(x => x.IsPublished);
         }
 
-        if (!string.IsNullOrWhiteSpace(query.Keyword))
+        if (keywords.Length > 0)
         {
-            var keyword = query.Keyword.Trim();
+            foreach (var keyword in keywords)
+            {
+                var keywordLocal = keyword;
 
-            faqs = faqs.Where(x =>
-                x.Title.Contains(keyword) ||
-                x.Body.Contains(keyword) ||
-                x.Category.Name.Contains(keyword) ||
-                x.Tags.Any(t => t.Name.Contains(keyword)));
+                faqs = faqs.Where(x =>
+                    x.Title.Contains(keywordLocal) ||
+                    x.Body.Contains(keywordLocal) ||
+                    x.Category.Name.Contains(keywordLocal) ||
+                    x.Tags.Any(t => t.Name.Contains(keywordLocal)));
+            }
         }
 
         if (query.CategoryId.HasValue)
@@ -52,22 +57,40 @@ public class FaqService : IFaqService
             faqs = faqs.Where(x => x.Tags.Any(t => t.Id == query.TagId.Value));
         }
 
-        return await faqs
-            .OrderByDescending(x => x.UpdatedAt)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
+        var faqList = await faqs.ToListAsync();
+
+        var items = faqList
             .Select(x => new FaqListItemDto
             {
                 Id = x.Id,
                 Title = x.Title,
                 Body = x.Body,
+                TitleHighlighted = query.Highlight
+                    ? ApplyHighlight(x.Title, keywords)
+                    : null,
+                BodyExcerpt = CreateBodyExcerpt(x.Body, keywords),
+                Score = CalculateScore(x, keywords),
                 CategoryName = x.Category.Name,
                 Tags = x.Tags.OrderBy(t => t.DisplayOrder).Select(t => t.Name).ToList(),
                 IsPublished = x.IsPublished,
                 ViewCount = x.ViewCount,
                 UpdatedAt = x.UpdatedAt
             })
-            .ToListAsync();
+            .ToList();
+
+        items = query.Sort == "score" && keywords.Length > 0
+            ? items
+                .OrderByDescending(x => x.Score)
+                .ThenByDescending(x => x.UpdatedAt)
+                .ToList()
+            : items
+                .OrderByDescending(x => x.UpdatedAt)
+                .ToList();
+
+        return items
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
     }
 
     public async Task<FaqListItemDto?> GetByIdAsync(int id)
@@ -187,5 +210,140 @@ public class FaqService : IFaqService
         await _dbContext.SaveChangesAsync();
 
         return true;
+    }
+
+    private static string[] SplitKeywords(string? keyword)
+    {
+        if (string.IsNullOrWhiteSpace(keyword))
+        {
+            return [];
+        }
+
+        var stopWords = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+    {
+        "場合",
+        "どう",
+        "すれば",
+        "いい",
+        "ですか",
+        "ください",
+        "について",
+        "方法",
+        "教えて",
+        "とは"
+    };
+
+        return keyword
+            .Split(
+                [' ', '　', '、', '。', ',', '.', '？', '?', '！', '!', '・', '/', '\\', '(', ')', '（', '）'],
+                StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Where(x => x.Length >= 2)
+            .Where(x => !stopWords.Contains(x))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
+    }
+
+    private static double CalculateScore(Faq faq, string[] keywords)
+    {
+        if (keywords.Length == 0)
+        {
+            return 0;
+        }
+
+        double score = 0;
+
+        foreach (var keyword in keywords)
+        {
+            if (faq.Title.Equals(keyword, StringComparison.OrdinalIgnoreCase))
+            {
+                score += 10;
+            }
+            else if (faq.Title.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+            {
+                score += 7;
+            }
+
+            if (faq.Tags.Any(t => t.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase)))
+            {
+                score += 5;
+            }
+
+            if (faq.Category.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+            {
+                score += 4;
+            }
+
+            if (faq.Body.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+            {
+                score += 3;
+            }
+        }
+
+        return score;
+    }
+
+    private static string ApplyHighlight(string text, string[] keywords)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            return string.Empty;
+        }
+
+        var encoded = WebUtility.HtmlEncode(text);
+
+        if (keywords.Length == 0)
+        {
+            return encoded;
+        }
+
+        foreach (var keyword in keywords)
+        {
+            var encodedKeyword = WebUtility.HtmlEncode(keyword);
+
+            encoded = encoded.Replace(
+                encodedKeyword,
+                $"<mark>{encodedKeyword}</mark>",
+                StringComparison.OrdinalIgnoreCase);
+        }
+
+        return encoded;
+    }
+
+    private static string CreateBodyExcerpt(string body, string[] keywords)
+    {
+        if (string.IsNullOrWhiteSpace(body))
+        {
+            return string.Empty;
+        }
+
+        if (keywords.Length == 0)
+        {
+            return body.Length <= 120
+                ? body
+                : body[..120] + "...";
+        }
+
+        var firstHitIndex = keywords
+            .Select(keyword => body.IndexOf(keyword, StringComparison.OrdinalIgnoreCase))
+            .Where(index => index >= 0)
+            .DefaultIfEmpty(0)
+            .Min();
+
+        var start = Math.Max(0, firstHitIndex - 40);
+        var length = Math.Min(120, body.Length - start);
+
+        var excerpt = body.Substring(start, length);
+
+        if (start > 0)
+        {
+            excerpt = "..." + excerpt;
+        }
+
+        if (start + length < body.Length)
+        {
+            excerpt += "...";
+        }
+
+        return excerpt;
     }
 }

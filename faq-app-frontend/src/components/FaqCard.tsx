@@ -12,6 +12,8 @@ export default function FaqCard({ faq }: Props) {
     day: "2-digit",
   });
 
+  const displayBody = faq.bodyExcerpt || faq.body;
+
   return (
     <Link
       href={`/faqs/${faq.id}`}
@@ -32,10 +34,23 @@ export default function FaqCard({ faq }: Props) {
                   非公開
                 </span>
               )}
+
+              {faq.score > 0 && (
+                <span className="rounded-full border border-cyan-400/20 bg-cyan-500/10 px-3 py-1 text-xs text-cyan-200">
+                  score: {faq.score}
+                </span>
+              )}
             </div>
 
             <h2 className="line-clamp-2 text-lg font-bold text-white transition group-hover:text-blue-200">
-              {faq.title}
+              {faq.titleHighlighted ? (
+                <span
+                  className="[&_mark]:rounded [&_mark]:bg-yellow-300 [&_mark]:px-1 [&_mark]:text-slate-950"
+                  dangerouslySetInnerHTML={{ __html: faq.titleHighlighted }}
+                />
+              ) : (
+                faq.title
+              )}
             </h2>
           </div>
 
@@ -46,7 +61,7 @@ export default function FaqCard({ faq }: Props) {
         </div>
 
         <p className="line-clamp-2 text-sm leading-6 text-slate-300">
-          {faq.body}
+          {displayBody}
         </p>
 
         <div className="mt-5 flex flex-wrap gap-2">

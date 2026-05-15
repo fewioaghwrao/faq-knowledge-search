@@ -6,6 +6,7 @@ import {
   LoginResponse,
 } from "@/types/faq";
 import { getToken } from "./auth";
+import type { AiSearchResponse } from "@/types/ai";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -55,8 +56,12 @@ export async function loginApi(requestBody: LoginRequest) {
 export async function searchFaqs(keyword?: string) {
   const params = new URLSearchParams();
 
-  if (keyword) {
-    params.set("keyword", keyword);
+  const normalizedKeyword = keyword?.trim() ?? "";
+
+  if (normalizedKeyword) {
+    params.set("keyword", normalizedKeyword);
+    params.set("highlight", "true");
+    params.set("sort", "score");
   }
 
   const query = params.toString();
@@ -85,5 +90,12 @@ export async function updateFaq(id: number, requestBody: FaqUpdateRequest) {
 export async function deleteFaq(id: number) {
   return request<void>(`/api/faqs/${id}`, {
     method: "DELETE",
+  });
+}
+
+export async function searchAi(question: string) {
+  return request<AiSearchResponse>("/api/ai/search", {
+    method: "POST",
+    body: JSON.stringify({ question }),
   });
 }
