@@ -1,5 +1,7 @@
-﻿using FaqApp.Api.Dtos.Ai;
+﻿using FaqApp.Api.Data;
+using FaqApp.Api.Dtos.Ai;
 using FaqApp.Api.Dtos.Faqs;
+using FaqApp.Api.Entities;
 using FaqApp.Api.Services.Interfaces;
 using FaqApp.Api.Settings;
 using Microsoft.Extensions.Options;
@@ -12,17 +14,20 @@ public class AiService : IAiService
     private readonly IAiApiClient _aiApiClient;
     private readonly AiSettings _aiSettings;
     private readonly ILogger<AiService> _logger;
+    private readonly AppDbContext _dbContext;
 
     public AiService(
         IFaqService faqService,
         IAiApiClient aiApiClient,
         IOptions<AiSettings> aiOptions,
-        ILogger<AiService> logger)
+        ILogger<AiService> logger,
+        AppDbContext dbContext)
     {
         _faqService = faqService;
         _aiApiClient = aiApiClient;
         _aiSettings = aiOptions.Value;
         _logger = logger;
+        _dbContext = dbContext;
     }
 
     public async Task<AiSearchResponse> SearchAsync(AiSearchRequest request)
@@ -55,13 +60,26 @@ public class AiService : IAiService
 
         if (faqs.Count == 0)
         {
+            var noFaqHistory = new AiSearchHistory
+            {
+                Question = question,
+                SearchKeywords = question,
+                AiAnswer = null,
+                IsSuccess = false,
+                ErrorMessage = "該当するFAQが見つかりませんでした。",
+                ExecutedAt = DateTime.UtcNow
+            };
+
+            _dbContext.AiSearchHistories.Add(noFaqHistory);
+            await _dbContext.SaveChangesAsync();
+
             return new AiSearchResponse
             {
                 Answer = null,
                 Disclaimer = null,
                 Sources = new List<AiSourceDto>(),
                 Message = "該当するFAQが見つかりませんでした。管理者にご相談ください。",
-                AiHistoryId = 0
+                AiHistoryId = noFaqHistory.Id
             };
         }
 
@@ -79,6 +97,26 @@ public class AiService : IAiService
         {
             _logger.LogError(ex, "AI回答の生成に失敗しました。");
 
+            var failureHistory = new AiSearchHistory
+            {
+                Question = question,
+                SearchKeywords = question,
+                AiAnswer = null,
+                IsSuccess = false,
+                ErrorMessage = ex.Message,
+                ExecutedAt = DateTime.UtcNow,
+                Sources = faqs.Select((faq, index) => new AiSearchHistorySource
+                {
+                    FaqId = faq.Id,
+                    FaqTitle = faq.Title,
+                    DisplayOrder = index + 1,
+                    Score = faq.Score
+                }).ToList()
+            };
+
+            _dbContext.AiSearchHistories.Add(failureHistory);
+            await _dbContext.SaveChangesAsync();
+
             return new AiSearchResponse
             {
                 Answer = null,
@@ -90,9 +128,29 @@ public class AiService : IAiService
                     Url = $"/faqs/{x.Id}"
                 }).ToList(),
                 Message = "AI回答の生成に失敗しました。参照元FAQをご確認ください。",
-                AiHistoryId = 0
+                AiHistoryId = failureHistory.Id
             };
         }
+
+        var successHistory = new AiSearchHistory
+        {
+            Question = question,
+            SearchKeywords = question,
+            AiAnswer = answer,
+            IsSuccess = true,
+            ErrorMessage = null,
+            ExecutedAt = DateTime.UtcNow,
+            Sources = faqs.Select((faq, index) => new AiSearchHistorySource
+            {
+                FaqId = faq.Id,
+                FaqTitle = faq.Title,
+                DisplayOrder = index + 1,
+                Score = faq.Score
+            }).ToList()
+        };
+
+        _dbContext.AiSearchHistories.Add(successHistory);
+        await _dbContext.SaveChangesAsync();
 
         return new AiSearchResponse
         {
@@ -105,7 +163,7 @@ public class AiService : IAiService
                 Url = $"/faqs/{x.Id}"
             }).ToList(),
             Message = null,
-            AiHistoryId = 0
+            AiHistoryId = successHistory.Id
         };
     }
 

@@ -18,6 +18,10 @@ public class AppDbContext : DbContext
 
     public DbSet<Tag> Tags => Set<Tag>();
 
+    public DbSet<AiSearchHistory> AiSearchHistories => Set<AiSearchHistory>();
+
+    public DbSet<AiSearchHistorySource> AiSearchHistorySources => Set<AiSearchHistorySource>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -80,5 +84,39 @@ public class AppDbContext : DbContext
             new { Id = 2, Name = "FAQ", DisplayOrder = 2 },
             new { Id = 3, Name = "障害対応", DisplayOrder = 3 }
         );
+
+        modelBuilder.Entity<AiSearchHistory>(entity =>
+        {
+            entity.Property(x => x.Question)
+                .IsRequired()
+                .HasMaxLength(500);
+
+            entity.Property(x => x.SearchKeywords)
+                .HasMaxLength(500);
+
+            entity.Property(x => x.AiAnswer);
+
+            entity.Property(x => x.ErrorMessage);
+
+            entity.Property(x => x.ExecutedAt)
+                .HasDefaultValueSql("GETUTCDATE()");
+
+            entity.HasMany(x => x.Sources)
+                .WithOne(x => x.AiSearchHistory)
+                .HasForeignKey(x => x.AiSearchHistoryId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<AiSearchHistorySource>(entity =>
+        {
+            entity.Property(x => x.FaqTitle)
+                .IsRequired()
+                .HasMaxLength(200);
+
+            entity.HasOne(x => x.Faq)
+                .WithMany()
+                .HasForeignKey(x => x.FaqId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
     }
 }
