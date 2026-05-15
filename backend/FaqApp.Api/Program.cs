@@ -23,6 +23,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IFaqService, FaqService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAiService, AiService>();
+builder.Services.AddScoped<IAiSearchHistoryService, AiSearchHistoryService>();
 
 builder.Services.Configure<AiSettings>(
     builder.Configuration.GetSection("AiSettings"));

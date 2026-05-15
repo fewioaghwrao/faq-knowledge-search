@@ -6,7 +6,11 @@ import {
   LoginResponse,
 } from "@/types/faq";
 import { getToken } from "./auth";
-import type { AiSearchResponse } from "@/types/ai";
+import type {
+  AiSearchResponse,
+  AiSearchHistoryListItem,
+  AiSearchHistoryDetail,
+} from "@/types/ai";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -98,4 +102,32 @@ export async function searchAi(question: string) {
     method: "POST",
     body: JSON.stringify({ question }),
   });
+}
+
+export type AiSearchHistoryQuery = {
+  keyword?: string;
+  isSuccess?: string;
+  isHelpful?: string;
+  page?: string;
+  pageSize?: string;
+};
+
+export async function getAiSearchHistories(params?: AiSearchHistoryQuery) {
+  const searchParams = new URLSearchParams();
+
+  if (params?.keyword) searchParams.set("keyword", params.keyword);
+  if (params?.isSuccess) searchParams.set("isSuccess", params.isSuccess);
+  if (params?.isHelpful) searchParams.set("isHelpful", params.isHelpful);
+  if (params?.page) searchParams.set("page", params.page);
+  if (params?.pageSize) searchParams.set("pageSize", params.pageSize);
+
+  const query = searchParams.toString();
+
+  return request<AiSearchHistoryListItem[]>(
+    `/api/ai/histories${query ? `?${query}` : ""}`
+  );
+}
+
+export async function getAiSearchHistoryDetail(id: number) {
+  return request<AiSearchHistoryDetail>(`/api/ai/histories/${id}`);
 }

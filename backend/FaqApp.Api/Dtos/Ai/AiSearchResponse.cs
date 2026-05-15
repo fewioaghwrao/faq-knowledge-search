@@ -10,6 +10,6 @@ public class AiSearchResponse
 
     public string? Message { get; set; }
 
-    // フェーズ5で履歴テーブルを作るまでの仮ID
+    // AI検索履歴ID。フィードバック送信時に使用する。
     public int AiHistoryId { get; set; }
 }
