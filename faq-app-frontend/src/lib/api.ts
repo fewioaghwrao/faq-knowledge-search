@@ -10,6 +10,7 @@ import type {
   AiSearchResponse,
   AiSearchHistoryListItem,
   AiSearchHistoryDetail,
+  AiSearchFeedbackRequest,
 } from "@/types/ai";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -130,4 +131,14 @@ export async function getAiSearchHistories(params?: AiSearchHistoryQuery) {
 
 export async function getAiSearchHistoryDetail(id: number) {
   return request<AiSearchHistoryDetail>(`/api/ai/histories/${id}`);
+}
+
+export async function sendAiSearchFeedback(
+  id: number,
+  requestBody: AiSearchFeedbackRequest
+) {
+  return request<void>(`/api/ai/histories/${id}/feedback`, {
+    method: "POST",
+    body: JSON.stringify(requestBody),
+  });
 }
