@@ -39,4 +39,20 @@ public class AiController : ControllerBase
 
         return Ok(result);
     }
+
+    [HttpGet("histories/{id:int}")]
+    public async Task<IActionResult> GetHistoryDetail(int id)
+    {
+        var result = await _aiSearchHistoryService.GetDetailAsync(id);
+
+        if (result is null)
+        {
+            return NotFound(new
+            {
+                message = "指定されたAI検索履歴は存在しません。"
+            });
+        }
+
+        return Ok(result);
+    }
 }

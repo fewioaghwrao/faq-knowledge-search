@@ -65,4 +65,33 @@ public class AiSearchHistoryService : IAiSearchHistoryService
             })
             .ToListAsync();
     }
+
+    public async Task<AiSearchHistoryDetailDto?> GetDetailAsync(int id)
+    {
+        return await _dbContext.AiSearchHistories
+            .Where(x => x.Id == id)
+            .Select(x => new AiSearchHistoryDetailDto
+            {
+                Id = x.Id,
+                Question = x.Question,
+                SearchKeywords = x.SearchKeywords,
+                AiAnswer = x.AiAnswer,
+                IsSuccess = x.IsSuccess,
+                ErrorMessage = x.ErrorMessage,
+                IsHelpful = x.IsHelpful,
+                ExecutedAt = x.ExecutedAt,
+                Sources = x.Sources
+                    .OrderBy(s => s.DisplayOrder)
+                    .Select(s => new AiSearchHistorySourceDto
+                    {
+                        FaqId = s.FaqId,
+                        FaqTitle = s.FaqTitle,
+                        DisplayOrder = s.DisplayOrder,
+                        Score = s.Score,
+                        Url = $"/faqs/{s.FaqId}"
+                    })
+                    .ToList()
+            })
+            .FirstOrDefaultAsync();
+    }
 }
