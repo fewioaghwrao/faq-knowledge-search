@@ -9,10 +9,14 @@ namespace FaqApp.Api.Controller;
 public class AiController : ControllerBase
 {
     private readonly IAiService _aiService;
+    private readonly IAiSearchHistoryService _aiSearchHistoryService;
 
-    public AiController(IAiService aiService)
+    public AiController(
+        IAiService aiService,
+        IAiSearchHistoryService aiSearchHistoryService)
     {
         _aiService = aiService;
+        _aiSearchHistoryService = aiSearchHistoryService;
     }
 
     [HttpPost("search")]
@@ -24,6 +28,14 @@ public class AiController : ControllerBase
         }
 
         var result = await _aiService.SearchAsync(request);
+
+        return Ok(result);
+    }
+
+    [HttpGet("histories")]
+    public async Task<IActionResult> GetHistories([FromQuery] AiSearchHistoryQuery query)
+    {
+        var result = await _aiSearchHistoryService.GetListAsync(query);
 
         return Ok(result);
     }
