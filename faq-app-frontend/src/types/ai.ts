@@ -15,3 +15,14 @@ export type AiSearchResponse = {
   message: string | null;
   aiHistoryId: number;
 };
+
+export type AiSearchHistoryListItem = {
+  id: number;
+  question: string;
+  answerPreview?: string | null;
+  isSuccess: boolean;
+  errorMessage?: string | null;
+  isHelpful?: boolean | null;
+  sourceCount: number;
+  executedAt: string;
+};

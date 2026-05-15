@@ -62,10 +62,19 @@ export default function AdminPage() {
             </p>
           </div>
 
-          <div className="shrink-0 rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300">
-            登録件数{" "}
-            <span className="font-bold text-white">{faqs.length}</span> 件
-          </div>
+<div className="flex shrink-0 flex-col gap-2 sm:items-end">
+  <Link
+    href="/admin/ai-histories"
+    className="rounded-2xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-2 text-center text-sm font-semibold text-cyan-200 transition hover:border-cyan-300/60 hover:bg-cyan-500/20"
+  >
+    AI検索履歴を見る
+  </Link>
+
+  <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300">
+    登録件数{" "}
+    <span className="font-bold text-white">{faqs.length}</span> 件
+  </div>
+</div>
         </div>
 
         {error && (
