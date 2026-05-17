@@ -7,4 +7,6 @@ public class LoginResponse
     public DateTime ExpiresAt { get; set; }
 
     public string Role { get; set; } = string.Empty;
+
+    public string DisplayName { get; set; } = string.Empty;
 }
