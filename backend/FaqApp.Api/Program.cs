@@ -35,10 +35,26 @@ builder.Services
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Events.OnRedirectToLogin = context =>
+    {
+        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        return Task.CompletedTask;
+    };
+
+    options.Events.OnRedirectToAccessDenied = context =>
+    {
+        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+        return Task.CompletedTask;
+    };
+});
+
 builder.Services.AddScoped<IFaqService, FaqService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAiService, AiService>();
 builder.Services.AddScoped<IAiSearchHistoryService, AiSearchHistoryService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.Configure<AiSettings>(
     builder.Configuration.GetSection("AiSettings"));
@@ -46,7 +62,12 @@ builder.Services.Configure<AiSettings>(
 builder.Services.AddHttpClient<IAiApiClient, AiApiClient>();
 
 builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
     .AddJwtBearer(options =>
     {
         var secret = builder.Configuration["JwtSettings:Secret"];

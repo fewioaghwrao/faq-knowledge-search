@@ -3,7 +3,7 @@ using FaqApp.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FaqApp.Api.Controllers;
+namespace FaqApp.Api.Controller;
 
 [ApiController]
 [Route("api/faqs")]

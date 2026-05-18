@@ -12,6 +12,11 @@ import type {
   AiSearchHistoryDetail,
   AiSearchFeedbackRequest,
 } from "@/types/ai";
+import type {
+  UserListItem,
+  UpdateUserRoleRequest,
+  UpdateUserStatusRequest,
+} from "@/types/user";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -139,6 +144,30 @@ export async function sendAiSearchFeedback(
 ) {
   return request<void>(`/api/ai/histories/${id}/feedback`, {
     method: "POST",
+    body: JSON.stringify(requestBody),
+  });
+}
+
+export async function getUsers() {
+  return request<UserListItem[]>("/api/users");
+}
+
+export async function updateUserRole(
+  userId: string,
+  requestBody: UpdateUserRoleRequest
+) {
+  return request<void>(`/api/users/${userId}/role`, {
+    method: "PUT",
+    body: JSON.stringify(requestBody),
+  });
+}
+
+export async function updateUserStatus(
+  userId: string,
+  requestBody: UpdateUserStatusRequest
+) {
+  return request<void>(`/api/users/${userId}/status`, {
+    method: "PUT",
     body: JSON.stringify(requestBody),
   });
 }
