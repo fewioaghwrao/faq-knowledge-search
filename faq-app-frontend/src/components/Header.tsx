@@ -2,28 +2,44 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { isLoggedIn, removeToken } from "@/lib/auth";
+import { AUTH_CHANGED_EVENT, isLoggedIn, removeToken } from "@/lib/auth";
 import { useEffect, useState } from "react";
+
 
 export default function Header() {
   const router = useRouter();
   const [loggedIn, setLoggedIn] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  useEffect(() => {
+useEffect(() => {
+  setLoggedIn(isLoggedIn());
+}, []);
+
+useEffect(() => {
+  const handleAuthChange = () => {
     setLoggedIn(isLoggedIn());
-  }, []);
+  };
+
+  window.addEventListener(AUTH_CHANGED_EVENT, handleAuthChange);
+
+  return () => {
+    window.removeEventListener(AUTH_CHANGED_EVENT, handleAuthChange);
+  };
+}, []);
 
   const handleLogout = () => {
     removeToken();
     setLoggedIn(false);
     setMenuOpen(false);
+    setLogoutConfirmOpen(false);
     router.push("/");
   };
 
   const closeMenu = () => {
     setMenuOpen(false);
   };
+
+  const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/85 backdrop-blur">
@@ -88,13 +104,13 @@ export default function Header() {
                 ログイン
               </Link>
             ) : (
-              <button
-                type="button"
-                onClick={handleLogout}
-                className="ml-1 rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-white transition hover:bg-white/15"
-              >
-                ログアウト
-              </button>
+<button
+  type="button"
+  onClick={() => setLogoutConfirmOpen(true)}
+  className="ml-1 rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-white transition hover:bg-white/15"
+>
+  ログアウト
+</button>
             )}
           </nav>
 
@@ -157,18 +173,53 @@ export default function Header() {
                   ログイン
                 </Link>
               ) : (
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="w-full rounded-xl border border-white/10 bg-white/10 px-4 py-3 font-semibold text-white transition hover:bg-white/15"
-                >
-                  ログアウト
-                </button>
+<button
+  type="button"
+  onClick={() => setLogoutConfirmOpen(true)}
+  className="w-full rounded-xl border border-white/10 bg-white/10 px-4 py-3 font-semibold text-white transition hover:bg-white/15"
+>
+  ログアウト
+</button>
               )}
             </div>
           </nav>
         )}
       </div>
+{logoutConfirmOpen && (
+  <div className="fixed inset-0 z-[100] flex items-start justify-center bg-black/60 px-4 pt-32">
+    <div className="w-full max-w-sm overflow-hidden rounded-3xl border border-white/10 bg-slate-900 shadow-2xl shadow-slate-950/60">
+      <div className="h-1 bg-gradient-to-r from-blue-500 via-violet-500 to-cyan-400" />
+
+      <div className="p-6">
+        <h2 className="text-lg font-bold text-white">
+          ログアウトしますか？
+        </h2>
+
+        <p className="mt-3 text-sm leading-6 text-slate-300">
+          管理画面からログアウトします。再度利用する場合は、もう一度ログインしてください。
+        </p>
+
+        <div className="mt-6 flex gap-3">
+          <button
+            type="button"
+            onClick={() => setLogoutConfirmOpen(false)}
+            className="flex-1 rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/15"
+          >
+            キャンセル
+          </button>
+
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="flex-1 rounded-xl bg-gradient-to-r from-blue-600 to-violet-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 transition hover:from-blue-500 hover:to-violet-500"
+          >
+            ログアウトする
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
     </header>
   );
 }
