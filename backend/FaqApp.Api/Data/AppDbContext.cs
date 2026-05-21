@@ -37,7 +37,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
                 .HasDefaultValue(true);
 
             entity.Property(x => x.CreatedAt)
-                .HasDefaultValueSql("GETUTCDATE()");
+                .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
         });
 
         modelBuilder.Entity<Faq>(entity =>
@@ -113,7 +113,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
             entity.Property(x => x.ErrorMessage);
 
             entity.Property(x => x.ExecutedAt)
-                .HasDefaultValueSql("GETUTCDATE()");
+                .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
 
             entity.HasMany(x => x.Sources)
                 .WithOne(x => x.AiSearchHistory)
