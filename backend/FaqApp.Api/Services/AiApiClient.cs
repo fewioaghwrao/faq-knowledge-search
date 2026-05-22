@@ -5,11 +5,11 @@ using FaqApp.Api.Services.Interfaces;
 using FaqApp.Api.Settings;
 using Microsoft.Extensions.Options;
 
+
 namespace FaqApp.Api.Services;
 
 public class AiApiClient : IAiApiClient
 {
-    private const string OpenAiResponsesEndpoint = "https://api.openai.com/v1/responses";
 
     private readonly HttpClient _httpClient;
     private readonly AiSettings _settings;
@@ -35,6 +35,11 @@ public class AiApiClient : IAiApiClient
             throw new InvalidOperationException("AI APIキーが設定されていません。");
         }
 
+        if (string.IsNullOrWhiteSpace(_settings.Endpoint))
+        {
+            throw new InvalidOperationException("AI APIエンドポイントが設定されていません。");
+        }
+
         var systemPrompt = BuildSystemPrompt();
         var userPrompt = BuildUserPrompt(question, faqContexts);
 
@@ -57,7 +62,7 @@ public class AiApiClient : IAiApiClient
             max_output_tokens = 1000
         };
 
-        using var request = new HttpRequestMessage(HttpMethod.Post, OpenAiResponsesEndpoint);
+        using var request = new HttpRequestMessage(HttpMethod.Post, _settings.Endpoint);
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _settings.ApiKey);
         request.Content = new StringContent(
             JsonSerializer.Serialize(requestBody),

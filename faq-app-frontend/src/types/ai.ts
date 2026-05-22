@@ -8,6 +8,10 @@ export type AiSearchRequest = {
   question: string;
 };
 
+export type AiSearchFeedbackRequest = {
+  isHelpful: boolean;
+};
+
 export type AiSearchResponse = {
   answer: string | null;
   disclaimer: string | null;

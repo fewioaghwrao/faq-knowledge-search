@@ -1,0 +1,17 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: faq-app-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: FaqAppDb
+      MYSQL_USER: faqapp
+      MYSQL_PASSWORD: faqapp_pass
+    ports:
+      - "3307:3306"
+    volumes:
+      - faq-app-mysql-data:/var/lib/mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_0900_ai_ci
+
+volumes:
+  faq-app-mysql-data:

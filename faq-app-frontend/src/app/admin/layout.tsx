@@ -54,6 +54,13 @@ export default function AdminLayout({
             >
               新規登録
             </Link>
+
+              <Link
+    href="/admin/users"
+    className="rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/15"
+  >
+    ユーザー管理
+  </Link>
           </div>
         </div>
       </section>

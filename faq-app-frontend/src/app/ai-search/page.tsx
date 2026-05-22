@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { FormEvent, useState } from "react";
-import { searchAi } from "@/lib/api";
+import { searchAi, sendAiSearchFeedback } from "@/lib/api";
 import type { AiSearchResponse } from "@/types/ai";
 
 export default function AiSearchPage() {
@@ -10,6 +10,8 @@ export default function AiSearchPage() {
   const [result, setResult] = useState<AiSearchResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [feedbackMessage, setFeedbackMessage] = useState("");
+const [feedbackLoading, setFeedbackLoading] = useState(false);
 
   const exampleQuestions = [
     "ログインできない場合はどうすればいいですか？",
@@ -29,9 +31,10 @@ export default function AiSearchPage() {
     }
 
     try {
-      setLoading(true);
-      setError("");
-      setResult(null);
+setLoading(true);
+setError("");
+setResult(null);
+setFeedbackMessage("");
 
       const response = await searchAi(normalizedQuestion);
       setResult(response);
@@ -44,6 +47,33 @@ export default function AiSearchPage() {
       setLoading(false);
     }
   };
+
+const handleFeedback = async (isHelpful: boolean) => {
+  if (!result?.aiHistoryId) {
+    setFeedbackMessage("AI検索履歴IDが取得できないため、送信できません。");
+    return;
+  }
+
+  try {
+    setFeedbackLoading(true);
+    setFeedbackMessage("");
+
+    await sendAiSearchFeedback(result.aiHistoryId, {
+      isHelpful,
+    });
+
+    setFeedbackMessage(
+      isHelpful
+        ? "フィードバックを送信しました：役に立った"
+        : "フィードバックを送信しました：役に立たなかった"
+    );
+  } catch (error) {
+    console.error(error);
+    setFeedbackMessage("フィードバックの送信に失敗しました。");
+  } finally {
+    setFeedbackLoading(false);
+  }
+};
 
   return (
     <div className="space-y-8">
@@ -107,9 +137,10 @@ export default function AiSearchPage() {
                 key={example}
                 type="button"
                 onClick={() => {
-                  setQuestion(example);
-                  setError("");
-                  setResult(null);
+setQuestion(example);
+setError("");
+setResult(null);
+setFeedbackMessage("");
                 }}
                 className="rounded-full border border-white/10 bg-slate-800 px-4 py-2 text-xs text-slate-300 transition hover:border-violet-400/50 hover:bg-slate-700 hover:text-white"
               >
@@ -203,6 +234,38 @@ export default function AiSearchPage() {
                 {result.disclaimer}
               </div>
             )}
+
+<div className="rounded-2xl border border-white/10 bg-slate-950/50 p-4">
+  <div className="text-sm font-semibold text-slate-200">
+    このAI回答は役に立ちましたか？
+  </div>
+
+  <div className="mt-3 flex flex-wrap gap-2">
+    <button
+      type="button"
+      onClick={() => handleFeedback(true)}
+      disabled={feedbackLoading || Boolean(feedbackMessage)}
+      className="rounded-xl border border-emerald-400/30 bg-emerald-500/10 px-4 py-2 text-sm font-semibold text-emerald-200 transition hover:bg-emerald-500/20 disabled:cursor-not-allowed disabled:opacity-60"
+    >
+      役に立った
+    </button>
+
+    <button
+      type="button"
+      onClick={() => handleFeedback(false)}
+      disabled={feedbackLoading || Boolean(feedbackMessage)}
+      className="rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-200 transition hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-60"
+    >
+      役に立たなかった
+    </button>
+  </div>
+
+  {feedbackMessage && (
+    <p className="mt-3 text-sm text-slate-300">
+      {feedbackMessage}
+    </p>
+  )}
+</div>
 
             <div>
               <div className="text-sm font-semibold text-slate-200">
