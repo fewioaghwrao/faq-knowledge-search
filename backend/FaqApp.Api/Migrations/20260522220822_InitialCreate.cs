@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FaqApp.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreateMySql : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -349,9 +349,15 @@ namespace FaqApp.Api.Migrations
                 columns: new[] { "Id", "DisplayOrder", "Name" },
                 values: new object[,]
                 {
-                    { 1, 1, "ログイン" },
-                    { 2, 2, "請求" },
-                    { 3, 3, "エラー対応" }
+                    { 1, 1, "請求処理" },
+                    { 2, 2, "CSV取込" },
+                    { 3, 3, "ログイン障害" },
+                    { 4, 4, "API障害" },
+                    { 5, 5, "PDF出力" },
+                    { 6, 6, "月次締め" },
+                    { 7, 7, "ユーザー権限" },
+                    { 8, 8, "メール通知" },
+                    { 9, 9, "システム設定" }
                 });
 
             migrationBuilder.InsertData(
@@ -359,9 +365,24 @@ namespace FaqApp.Api.Migrations
                 columns: new[] { "Id", "DisplayOrder", "Name" },
                 values: new object[,]
                 {
-                    { 1, 1, "初期対応" },
-                    { 2, 2, "FAQ" },
-                    { 3, 3, "障害対応" }
+                    { 1, 1, "CSV" },
+                    { 2, 2, "エラー対応" },
+                    { 3, 3, "取込" },
+                    { 4, 4, "文字コード" },
+                    { 5, 5, "ログイン" },
+                    { 6, 6, "認証" },
+                    { 7, 7, "パスワード" },
+                    { 8, 8, "権限" },
+                    { 9, 9, "403" },
+                    { 10, 10, "PDF" },
+                    { 11, 11, "API" },
+                    { 12, 12, "タイムアウト" },
+                    { 13, 13, "月次" },
+                    { 14, 14, "請求" },
+                    { 15, 15, "メール" },
+                    { 16, 16, "SMTP" },
+                    { 17, 17, "検索" },
+                    { 18, 18, "公開設定" }
                 });
 
             migrationBuilder.CreateIndex(

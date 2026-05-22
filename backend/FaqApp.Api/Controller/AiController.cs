@@ -1,6 +1,7 @@
 ﻿using FaqApp.Api.Dtos.Ai;
 using FaqApp.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace FaqApp.Api.Controller;
 
@@ -20,6 +21,7 @@ public class AiController : ControllerBase
     }
 
     [HttpPost("search")]
+    [EnableRateLimiting("AiSearchPolicy")]
     public async Task<IActionResult> Search([FromBody] AiSearchRequest request)
     {
         if (!ModelState.IsValid)

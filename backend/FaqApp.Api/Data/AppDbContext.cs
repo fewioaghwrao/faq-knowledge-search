@@ -86,17 +86,36 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
                 .IsRequired()
                 .HasMaxLength(50);
         });
-
         modelBuilder.Entity<Category>().HasData(
-            new { Id = 1, Name = "ログイン", DisplayOrder = 1 },
-            new { Id = 2, Name = "請求", DisplayOrder = 2 },
-            new { Id = 3, Name = "エラー対応", DisplayOrder = 3 }
+            new { Id = 1, Name = "請求処理", DisplayOrder = 1 },
+            new { Id = 2, Name = "CSV取込", DisplayOrder = 2 },
+            new { Id = 3, Name = "ログイン障害", DisplayOrder = 3 },
+            new { Id = 4, Name = "API障害", DisplayOrder = 4 },
+            new { Id = 5, Name = "PDF出力", DisplayOrder = 5 },
+            new { Id = 6, Name = "月次締め", DisplayOrder = 6 },
+            new { Id = 7, Name = "ユーザー権限", DisplayOrder = 7 },
+            new { Id = 8, Name = "メール通知", DisplayOrder = 8 },
+            new { Id = 9, Name = "システム設定", DisplayOrder = 9 }
         );
-
         modelBuilder.Entity<Tag>().HasData(
-            new { Id = 1, Name = "初期対応", DisplayOrder = 1 },
-            new { Id = 2, Name = "FAQ", DisplayOrder = 2 },
-            new { Id = 3, Name = "障害対応", DisplayOrder = 3 }
+            new { Id = 1, Name = "CSV", DisplayOrder = 1 },
+            new { Id = 2, Name = "エラー対応", DisplayOrder = 2 },
+            new { Id = 3, Name = "取込", DisplayOrder = 3 },
+            new { Id = 4, Name = "文字コード", DisplayOrder = 4 },
+            new { Id = 5, Name = "ログイン", DisplayOrder = 5 },
+            new { Id = 6, Name = "認証", DisplayOrder = 6 },
+            new { Id = 7, Name = "パスワード", DisplayOrder = 7 },
+            new { Id = 8, Name = "権限", DisplayOrder = 8 },
+            new { Id = 9, Name = "403", DisplayOrder = 9 },
+            new { Id = 10, Name = "PDF", DisplayOrder = 10 },
+            new { Id = 11, Name = "API", DisplayOrder = 11 },
+            new { Id = 12, Name = "タイムアウト", DisplayOrder = 12 },
+            new { Id = 13, Name = "月次", DisplayOrder = 13 },
+            new { Id = 14, Name = "請求", DisplayOrder = 14 },
+            new { Id = 15, Name = "メール", DisplayOrder = 15 },
+            new { Id = 16, Name = "SMTP", DisplayOrder = 16 },
+            new { Id = 17, Name = "検索", DisplayOrder = 17 },
+            new { Id = 18, Name = "公開設定", DisplayOrder = 18 }
         );
 
         modelBuilder.Entity<AiSearchHistory>(entity =>

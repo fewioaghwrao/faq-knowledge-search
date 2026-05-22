@@ -45,7 +45,7 @@ export default function HomePage() {
           className="group rounded-3xl border border-white/10 bg-slate-900/80 p-6 shadow-xl shadow-slate-950/30 transition hover:-translate-y-0.5 hover:border-blue-400/60"
         >
           <div className="text-sm font-semibold text-blue-200">
-            Phase 1 / FAQ Search
+            FAQ Search
           </div>
 
           <h2 className="mt-3 text-xl font-bold text-white group-hover:text-blue-200">
@@ -66,7 +66,7 @@ export default function HomePage() {
           className="group rounded-3xl border border-white/10 bg-slate-900/80 p-6 shadow-xl shadow-slate-950/30 transition hover:-translate-y-0.5 hover:border-violet-400/60"
         >
           <div className="text-sm font-semibold text-violet-200">
-            Phase 3 / AI FAQ Search
+            AI FAQ Search
           </div>
 
           <h2 className="mt-3 text-xl font-bold text-white group-hover:text-violet-200">

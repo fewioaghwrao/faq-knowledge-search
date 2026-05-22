@@ -10,6 +10,15 @@ export default function AdminPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const pageSize = 5;
+  const totalPages = Math.ceil(faqs.length / pageSize);
+
+  const displayedFaqs = faqs.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   const loadFaqs = async () => {
     try {
@@ -18,6 +27,7 @@ export default function AdminPage() {
 
       const result = await searchFaqs();
       setFaqs(result);
+      setCurrentPage(1);
     } catch (e) {
       setError("FAQ一覧の取得に失敗しました。");
       console.error(e);
@@ -62,19 +72,19 @@ export default function AdminPage() {
             </p>
           </div>
 
-<div className="flex shrink-0 flex-col gap-2 sm:items-end">
-  <Link
-    href="/admin/ai-histories"
-    className="rounded-2xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-2 text-center text-sm font-semibold text-cyan-200 transition hover:border-cyan-300/60 hover:bg-cyan-500/20"
-  >
-    AI検索履歴を見る
-  </Link>
+          <div className="flex shrink-0 flex-col gap-2 sm:items-end">
+            <Link
+              href="/admin/ai-histories"
+              className="rounded-2xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-2 text-center text-sm font-semibold text-cyan-200 transition hover:border-cyan-300/60 hover:bg-cyan-500/20"
+            >
+              AI検索履歴を見る
+            </Link>
 
-  <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300">
-    登録件数{" "}
-    <span className="font-bold text-white">{faqs.length}</span> 件
-  </div>
-</div>
+            <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300">
+              登録件数{" "}
+              <span className="font-bold text-white">{faqs.length}</span> 件
+            </div>
+          </div>
         </div>
 
         {error && (
@@ -117,7 +127,7 @@ export default function AdminPage() {
           <>
             {/* Mobile / Tablet: card layout */}
             <div className="grid gap-4 lg:hidden">
-              {faqs.map((faq) => (
+              {displayedFaqs.map((faq) => (
                 <article
                   key={faq.id}
                   className="overflow-hidden rounded-2xl border border-white/10 bg-slate-950/40 shadow-lg shadow-slate-950/20"
@@ -196,7 +206,7 @@ export default function AdminPage() {
                 </thead>
 
                 <tbody>
-                  {faqs.map((faq) => (
+                  {displayedFaqs.map((faq) => (
                     <tr
                       key={faq.id}
                       className="border-t border-white/10 transition hover:bg-white/[0.03]"
@@ -261,6 +271,36 @@ export default function AdminPage() {
                 </tbody>
               </table>
             </div>
+
+            {totalPages > 1 && (
+              <div className="mt-6 flex items-center justify-center gap-3">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setCurrentPage((page) => Math.max(1, page - 1))
+                  }
+                  disabled={currentPage === 1}
+                  className="rounded-full border border-white/10 bg-slate-900 px-4 py-2 text-sm text-slate-200 transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-slate-900"
+                >
+                  前へ
+                </button>
+
+                <span className="text-sm text-slate-400">
+                  {currentPage} / {totalPages}
+                </span>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    setCurrentPage((page) => Math.min(totalPages, page + 1))
+                  }
+                  disabled={currentPage === totalPages}
+                  className="rounded-full border border-white/10 bg-slate-900 px-4 py-2 text-sm text-slate-200 transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-slate-900"
+                >
+                  次へ
+                </button>
+              </div>
+            )}
           </>
         )}
       </div>
