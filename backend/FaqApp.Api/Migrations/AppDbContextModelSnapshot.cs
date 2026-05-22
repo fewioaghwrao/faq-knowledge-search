@@ -202,19 +202,55 @@ namespace FaqApp.Api.Migrations
                         {
                             Id = 1,
                             DisplayOrder = 1,
-                            Name = "ログイン"
+                            Name = "請求処理"
                         },
                         new
                         {
                             Id = 2,
                             DisplayOrder = 2,
-                            Name = "請求"
+                            Name = "CSV取込"
                         },
                         new
                         {
                             Id = 3,
                             DisplayOrder = 3,
-                            Name = "エラー対応"
+                            Name = "ログイン障害"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            DisplayOrder = 4,
+                            Name = "API障害"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            DisplayOrder = 5,
+                            Name = "PDF出力"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            DisplayOrder = 6,
+                            Name = "月次締め"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            DisplayOrder = 7,
+                            Name = "ユーザー権限"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            DisplayOrder = 8,
+                            Name = "メール通知"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            DisplayOrder = 9,
+                            Name = "システム設定"
                         });
                 });
 
@@ -285,19 +321,109 @@ namespace FaqApp.Api.Migrations
                         {
                             Id = 1,
                             DisplayOrder = 1,
-                            Name = "初期対応"
+                            Name = "CSV"
                         },
                         new
                         {
                             Id = 2,
                             DisplayOrder = 2,
-                            Name = "FAQ"
+                            Name = "エラー対応"
                         },
                         new
                         {
                             Id = 3,
                             DisplayOrder = 3,
-                            Name = "障害対応"
+                            Name = "取込"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            DisplayOrder = 4,
+                            Name = "文字コード"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            DisplayOrder = 5,
+                            Name = "ログイン"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            DisplayOrder = 6,
+                            Name = "認証"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            DisplayOrder = 7,
+                            Name = "パスワード"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            DisplayOrder = 8,
+                            Name = "権限"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            DisplayOrder = 9,
+                            Name = "403"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            DisplayOrder = 10,
+                            Name = "PDF"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            DisplayOrder = 11,
+                            Name = "API"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            DisplayOrder = 12,
+                            Name = "タイムアウト"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            DisplayOrder = 13,
+                            Name = "月次"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            DisplayOrder = 14,
+                            Name = "請求"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            DisplayOrder = 15,
+                            Name = "メール"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            DisplayOrder = 16,
+                            Name = "SMTP"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            DisplayOrder = 17,
+                            Name = "検索"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            DisplayOrder = 18,
+                            Name = "公開設定"
                         });
                 });
 

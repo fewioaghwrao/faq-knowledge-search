@@ -45,10 +45,19 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     cache: "no-store",
   });
 
-  if (!response.ok) {
-    const text = await response.text();
-    throw new Error(text || `API error: ${response.status}`);
+if (!response.ok) {
+  if (response.status === 429) {
+    throw new Error(
+      "AI検索の実行回数が上限に達しました。1分ほど待ってから再実行してください。"
+    );
   }
+
+  const text = await response.text();
+
+  throw new Error(
+    text || `API error: ${response.status}`
+  );
+}
 
   if (response.status === 204) {
     return undefined as T;

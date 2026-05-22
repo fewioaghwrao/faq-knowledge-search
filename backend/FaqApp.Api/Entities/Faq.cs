@@ -58,4 +58,14 @@ public class Faq
         DeletedAt = DateTime.UtcNow;
         UpdatedAt = DateTime.UtcNow;
     }
+
+    public void SetInitialViewCount(int viewCount)
+    {
+        if (viewCount < 0)
+        {
+            viewCount = 0;
+        }
+
+        ViewCount = viewCount;
+    }
 }

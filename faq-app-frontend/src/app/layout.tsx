@@ -4,7 +4,7 @@ import Header from "@/components/Header";
 
 export const metadata: Metadata = {
   title: "社内FAQ検索アプリ",
-  description: "社内FAQ検索アプリ フェーズ1",
+  description: "社内FAQ検索アプリです。AIを活用して社内ナレッジを簡単に検索できます。",
 };
 
 export default function RootLayout({

@@ -8,8 +8,8 @@ import { useState } from "react";
 export default function LoginPage() {
   const router = useRouter();
 
-  const [email, setEmail] = useState("admin@faq-app.local");
-  const [password, setPassword] = useState("Password123!");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -75,6 +75,7 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   autoComplete="email"
+                  placeholder="メールアドレスを入力"
                   required
                 />
               </div>
@@ -91,6 +92,7 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     autoComplete="current-password"
+                    placeholder="パスワードを入力"
                     required
                   />
 
@@ -124,12 +126,6 @@ export default function LoginPage() {
                 {submitting ? "ログイン中..." : "ログイン"}
               </button>
             </form>
-
-            <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-4 text-xs text-slate-400">
-              <div className="font-semibold text-slate-300">Demo Account</div>
-              <div className="mt-1">admin@faq-app.local</div>
-              <div>Password123!</div>
-            </div>
           </div>
         </div>
       </div>

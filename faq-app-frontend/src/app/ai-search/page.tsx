@@ -13,19 +13,18 @@ export default function AiSearchPage() {
   const [feedbackMessage, setFeedbackMessage] = useState("");
 const [feedbackLoading, setFeedbackLoading] = useState(false);
 
-  const exampleQuestions = [
-    "ログインできない場合はどうすればいいですか？",
-    "パスワードを忘れた場合の対応を教えてください。",
-    "CSV取込でエラーが出た場合はどうすればいいですか？",
-  ];
-
+const exampleQuestions = [
+  "ログインできない 初期対応",
+  "CSV取込 エラー",
+  "PDF出力 失敗",
+];
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const normalizedQuestion = question.trim();
 
     if (!normalizedQuestion) {
-      setError("質問文を入力してください。");
+      setError("質問・検索キーワードを入力してください。");
       setResult(null);
       return;
     }
@@ -38,14 +37,22 @@ setFeedbackMessage("");
 
       const response = await searchAi(normalizedQuestion);
       setResult(response);
-    } catch (e) {
-      console.error(e);
-      setError(
-        "AI検索の実行に失敗しました。APIの起動状態やAI API設定を確認してください。"
-      );
-    } finally {
-      setLoading(false);
-    }
+} catch (e) {
+  const message =
+    e instanceof Error
+      ? e.message
+      : "AI検索の実行に失敗しました。APIの起動状態やAI API設定を確認してください。";
+
+  if (message.includes("実行回数が上限")) {
+    console.warn(message);
+  } else {
+    console.error(e);
+  }
+
+  setError(message);
+} finally {
+  setLoading(false);
+}
   };
 
 const handleFeedback = async (isHelpful: boolean) => {
@@ -84,7 +91,7 @@ const handleFeedback = async (isHelpful: boolean) => {
 
         <div className="relative">
           <span className="inline-flex rounded-full border border-violet-400/30 bg-violet-500/10 px-4 py-1 text-sm text-violet-200">
-            Phase 3 / AI FAQ Search
+            AI FAQ Search
           </span>
 
           <h1 className="mt-5 text-4xl font-bold tracking-tight text-white">
@@ -92,7 +99,7 @@ const handleFeedback = async (isHelpful: boolean) => {
           </h1>
 
           <p className="mt-4 max-w-2xl text-slate-300">
-            質問文から関連FAQを検索し、上位5件のFAQをもとにAI回答と参照元FAQを表示します。
+            質問・検索キーワードから関連FAQを検索し、上位5件のFAQをもとにAI回答と参照元FAQを表示します。
           </p>
 
           <div className="mt-6 flex flex-wrap gap-3 text-sm">
@@ -114,7 +121,7 @@ const handleFeedback = async (isHelpful: boolean) => {
         className="rounded-3xl border border-white/10 bg-slate-900/80 p-5 shadow-xl shadow-slate-950/30"
       >
         <label className="block text-sm font-semibold text-slate-200">
-          質問文
+          質問・検索キーワード
         </label>
 
         <textarea

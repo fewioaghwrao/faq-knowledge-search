@@ -10,6 +10,7 @@ using FaqApp.Api.Data.Seed;
 using FaqApp.Api.Entities;
 using Microsoft.AspNetCore.Identity;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -95,6 +96,24 @@ builder.Services
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddPolicy("AiSearchPolicy", context =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: context.User.Identity?.Name
+                ?? context.Connection.RemoteIpAddress?.ToString()
+                ?? "anonymous",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 5,
+                Window = TimeSpan.FromMinutes(1),
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                QueueLimit = 0
+            }));
+
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+});
+
 var allowedOrigins = builder.Configuration
     .GetSection("Cors:AllowedOrigins")
     .Get<string[]>()
@@ -126,6 +145,8 @@ app.UseCors("FrontendPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseRateLimiter();
 
 app.MapHealthChecks("/health");
 
@@ -165,12 +186,15 @@ if (enableMigration || enableSeed)
         {
             logger.LogInformation("Database seed started.");
 
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
 
             await RoleSeeder.SeedAsync(roleManager);
             await AdminUserSeeder.SeedAsync(userManager, configuration);
+            await DemoUserSeeder.SeedAsync(userManager);
+            await PortfolioFaqSeeder.SeedAsync(db);
 
             logger.LogInformation("Database seed completed.");
         }

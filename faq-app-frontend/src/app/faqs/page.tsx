@@ -12,6 +12,16 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchedKeyword, setSearchedKeyword] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const pageSize = 5;
+
+  const totalPages = Math.ceil(faqs.length / pageSize);
+
+  const displayedFaqs = faqs.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   const loadFaqs = async (keyword?: string) => {
     try {
@@ -20,6 +30,7 @@ export default function HomePage() {
 
       const normalizedKeyword = keyword?.trim() ?? "";
       setSearchedKeyword(normalizedKeyword);
+      setCurrentPage(1);
 
       const result = await searchFaqs(normalizedKeyword);
       setFaqs(result);
@@ -115,11 +126,43 @@ export default function HomePage() {
       )}
 
       {!loading && !error && faqs.length > 0 && (
-        <div className="grid gap-5">
-          {faqs.map((faq) => (
-            <FaqCard key={faq.id} faq={faq} />
-          ))}
-        </div>
+        <>
+          <div className="grid gap-5">
+            {displayedFaqs.map((faq) => (
+              <FaqCard key={faq.id} faq={faq} />
+            ))}
+          </div>
+
+          {totalPages > 1 && (
+            <div className="mt-6 flex items-center justify-center gap-3">
+              <button
+                type="button"
+                onClick={() =>
+                  setCurrentPage((page) => Math.max(1, page - 1))
+                }
+                disabled={currentPage === 1}
+                className="rounded-full border border-white/10 bg-slate-900 px-4 py-2 text-sm text-slate-200 transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-slate-900"
+              >
+                前へ
+              </button>
+
+              <span className="text-sm text-slate-400">
+                {currentPage} / {totalPages}
+              </span>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setCurrentPage((page) => Math.min(totalPages, page + 1))
+                }
+                disabled={currentPage === totalPages}
+                className="rounded-full border border-white/10 bg-slate-900 px-4 py-2 text-sm text-slate-200 transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-slate-900"
+              >
+                次へ
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
