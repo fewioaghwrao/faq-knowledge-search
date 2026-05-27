@@ -1403,3 +1403,15 @@ npm run dev
 - Claude連携
 
 現行版では、Next.js / ASP.NET Core Web API / MySQL / OpenAI API / JWT認証 / AI検索履歴 / ユーザー管理 / デプロイ / テストを中心に設計を整理する。
+
+## 関連ドキュメント
+
+- [ルートREADME](../../README.md)
+- [要件定義書](../requirements/requirements.md)
+- [アーキテクチャ](./architecture.md)
+- [基本設計書](./basic-design.md)
+- [詳細設計書](./detail-design.md)
+- [ER図](../diagrams/faq_app_ERD.drawio.png)
+- [画面遷移図（一般利用者）](../diagrams/state-transition-user.drawio.png)
+- [画面遷移図（管理者）](../diagrams/state-transition-admin.drawio.png)
+- [画面イメージ](../images/)

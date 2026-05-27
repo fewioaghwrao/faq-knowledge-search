@@ -221,8 +221,13 @@ JWT取得
 
 ## 関連ドキュメント
 
-- [ルートREADME](../../README.md)
-- [要件定義](../requirements/)
-- [設計資料](./)
-- [画面イメージ](../images/)
-
+- [ルートREADME](../README.md)
+- [要件定義書](../docs/requirements/requirements.md)
+- [アーキテクチャ](../docs/design/architecture.md)
+- [基本設計書](../docs/design/basic-design.md)
+- [詳細設計書](../docs/design/detail-design.md)
+- [ER図](../docs/diagrams/faq_app_ERD.drawio.png)
+- [画面遷移図（一般利用者）](../docs/diagrams/state-transition-user.drawio.png)
+- [画面遷移図（管理者）](../docs/diagrams/state-transition-admin.drawio.png)
+- [画面イメージ](../docs/images/)
+- [Backend README](../backend/README.md)

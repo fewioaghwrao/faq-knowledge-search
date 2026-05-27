@@ -8,23 +8,36 @@ FAQ、手順書、障害対応メモを登録し、通常検索とAI検索の両
 
 ---
 
-## Demo
+## デモサイト
 
-### Frontend
+| 対象 | URL |
+|---|---|
+| フロントエンド | https://green-bush-0db40ef00.7.azurestaticapps.net/ |
+| バックエンドAPI | https://faq-app-api-d060ab93d646.herokuapp.com/ |
+| Swagger UI | https://faq-app-api-d060ab93d646.herokuapp.com/swagger |
 
-https://green-bush-0db40ef00.7.azurestaticapps.net/
+### デモアカウント
 
-### Backend API
-
-https://faq-app-api-d060ab93d646.herokuapp.com/
-
-### Demo Account
-
-| Role  | Email              | Password    |
-| ----- | ------------------ | ----------- |
-| Admin | admin@faq-app.local | Admin1234! |
+| ロール | メールアドレス | パスワード |
+|---|---|---|
+| 管理者 | admin@faq-app.local | Admin1234! |
 
 ※ このアカウントはポートフォリオ確認用のデモアカウントです。
+
+---
+
+### バックエンドAPI確認
+
+**Swagger UI**
+
+```
+https://faq-app-api-d060ab93d646.herokuapp.com/swagger
+```
+
+APIエンドポイントの仕様確認・動作テストが可能です。
+認証が必要なエンドポイントは、ログインAPIで取得したトークンを利用して確認します。
+
+> **注意:** Heroku のスリープにより、初回アクセス時にレスポンスが遅延することがあります。
 
 ---
 
@@ -419,14 +432,18 @@ NEXT_PUBLIC_API_BASE_URL=https://faq-app-api-d060ab93d646.herokuapp.com
 
 ## ドキュメント
 
-| 種別         | ファイル              |
-| ------------ | --------------------- |
-| 要件定義     | `docs/requirements/`  |
-| 基本設計     | `docs/design/`        |
-| 詳細設計     | `docs/design/`        |
-| ER図         | `docs/design/`        |
-| 状態遷移図   | `docs/design/`        |
-| 画面イメージ | `docs/images/`        |
+| 種別 | ファイル |
+|---|---|
+| アーキテクチャ | [docs/design/architecture.md](docs/design/architecture.md) |
+| 要件定義 | [docs/requirements/requirements.md](docs/requirements/requirements.md) |
+| 基本設計 | [docs/design/basic-design.md](docs/design/basic-design.md) |
+| 詳細設計 | [docs/design/detail-design.md](docs/design/detail-design.md) |
+| ER図 | [docs/diagrams/faq_app_ERD.drawio.png](docs/diagrams/faq_app_ERD.drawio.png) |
+| 画面遷移図（一般利用者） | [docs/diagrams/state-transition-user.drawio.png](docs/diagrams/state-transition-user.drawio.png) |
+| 画面遷移図（管理者） | [docs/diagrams/state-transition-admin.drawio.png](docs/diagrams/state-transition-admin.drawio.png) |
+| 画面イメージ | [docs/images/](docs/images/) |
+| Backend README | [backend/README.md](backend/README.md) |
+| Frontend README | [faq-app-frontend/README.md](faq-app-frontend/README.md) |
 
 ---
 
