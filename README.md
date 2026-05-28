@@ -1,5 +1,8 @@
 # faq-knowledge-search
 
+[![CI Tests](https://github.com/fewioaghwrao/faq-knowledge-search/actions/workflows/tests.yml/badge.svg)](https://github.com/fewioaghwrao/faq-knowledge-search/actions/workflows/tests.yml)
+[![Azure Static Web Apps](https://github.com/fewioaghwrao/faq-knowledge-search/actions/workflows/azure-static-web-apps-green-bush-0db40ef00.yml/badge.svg)](https://github.com/fewioaghwrao/studio-book-dotnet-next/actions/workflows/azure-static-web-apps-green-bush-0db40ef00.yml)
+
 社内FAQ・業務ナレッジ検索アプリです。  
 FAQ、手順書、障害対応メモを登録し、通常検索とAI検索の両方から必要な情報を確認できるWebアプリです。
 
