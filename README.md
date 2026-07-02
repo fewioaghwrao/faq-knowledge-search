@@ -1,7 +1,7 @@
 # faq-knowledge-search
 
 [![CI Tests](https://github.com/fewioaghwrao/faq-knowledge-search/actions/workflows/tests.yml/badge.svg)](https://github.com/fewioaghwrao/faq-knowledge-search/actions/workflows/tests.yml)
-[![Azure Static Web Apps](https://github.com/fewioaghwrao/faq-knowledge-search/actions/workflows/azure-static-web-apps-green-bush-0db40ef00.yml/badge.svg)](https://github.com/fewioaghwrao/studio-book-dotnet-next/actions/workflows/azure-static-web-apps-green-bush-0db40ef00.yml)
+[![Azure Static Web Apps](https://github.com/fewioaghwrao/faq-knowledge-search/actions/workflows/azure-static-web-apps-green-bush-0db40ef00.yml/badge.svg)](https://github.com/fewioaghwrao/faq-knowledge-search/actions/workflows/azure-static-web-apps-green-bush-0db40ef00.yml)
 
 社内FAQ・業務ナレッジ検索アプリです。  
 FAQ、手順書、障害対応メモを登録し、通常検索とAI検索の両方から必要な情報を確認できるWebアプリです。
@@ -13,17 +13,18 @@ FAQ、手順書、障害対応メモを登録し、通常検索とAI検索の両
 
 ## デモサイト
 
-| 対象 | URL |
-|---|---|
-| フロントエンド | https://green-bush-0db40ef00.7.azurestaticapps.net/ |
-| バックエンドAPI | https://faq-app-api-d060ab93d646.herokuapp.com/ |
-| Swagger UI | https://faq-app-api-d060ab93d646.herokuapp.com/swagger |
+| 対象                             | URL                                                    |
+| ------------------------------ | ------------------------------------------------------ |
+| フロントエンド（Vercel）                | https://faq-knowledge-search.vercel.app/               |
+| フロントエンド（Azure Static Web Apps） | https://green-bush-0db40ef00.7.azurestaticapps.net/    |
+| バックエンドAPI                      | https://faq-app-api-d060ab93d646.herokuapp.com/        |
+| Swagger UI                     | https://faq-app-api-d060ab93d646.herokuapp.com/swagger |
 
 ### デモアカウント
 
-| ロール | メールアドレス | パスワード |
-|---|---|---|
-| 管理者 | admin@faq-app.local | Admin1234! |
+| ロール | メールアドレス                                           | パスワード      |
+| --- | ------------------------------------------------- | ---------- |
+| 管理者 | [admin@faq-app.local](mailto:admin@faq-app.local) | Admin1234! |
 
 ※ このアカウントはポートフォリオ確認用のデモアカウントです。
 
@@ -112,7 +113,7 @@ AI検索では、質問内容をもとに関連FAQを検索し、上位FAQをコ
 | ユーザー管理          | 実装済み   | ユーザー一覧、状態管理         |
 | バックエンドテスト    | 実装済み   | Controller / Service のテスト  |
 | フロントエンドテスト  | 実装済み   | Page / Component / lib のテスト |
-| フロントエンドデプロイ | 実装済み  | Azure Static Web Apps          |
+| フロントエンドデプロイ | 実装済み | Vercel / Azure Static Web Apps |
 | バックエンドデプロイ  | 実装済み   | Heroku                         |
 | CSVインポート         | 今後の拡張 | 設計・拡張候補                 |
 | ファイルアップロード  | 今後の拡張 | 設計・拡張候補                 |
@@ -171,6 +172,7 @@ AI検索では、質問内容をもとに関連FAQを検索し、上位FAQをコ
 - CSS / Tailwind CSS
 - Jest
 - React Testing Library
+- Vercel
 - Azure Static Web Apps
 
 ### Backend
@@ -204,7 +206,7 @@ AI検索では、質問内容をもとに関連FAQを検索し、上位FAQをコ
       |
       v
 [Next.js Frontend]
-Azure Static Web Apps
+Vercel / Azure Static Web Apps
       |
       | REST API
       v
