@@ -24,3 +24,12 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+
+# ASP.NET Web Forms
+webforms/.vs/
+webforms/**/bin/
+webforms/**/obj/
+webforms/packages/
+
+webforms/FaqKnowledgeSearch.WebForms/connectionStrings.config
+webforms/FaqKnowledgeSearch.WebForms/appSettings.local.config

@@ -1,0 +1,156 @@
+name: WebForms Unit Tests
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "webforms/**"
+      - ".github/workflows/webforms-unit-tests.yml"
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "webforms/**"
+      - ".github/workflows/webforms-unit-tests.yml"
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: webforms-unit-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  unit-tests:
+    name: Build and run xUnit tests
+    runs-on: windows-latest
+    timeout-minutes: 15
+
+    defaults:
+      run:
+        working-directory: webforms
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v3
+        with:
+          nuget-version: latest
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v3
+
+      - name: Restore NuGet packages
+        shell: pwsh
+        run: |
+          nuget restore `
+            FaqKnowledgeSearch.WebForms.sln `
+            -NonInteractive
+
+      - name: Build solution
+        shell: pwsh
+        run: |
+          msbuild `
+            FaqKnowledgeSearch.WebForms.sln `
+            /t:Rebuild `
+            /p:Configuration=Release `
+            /p:Platform="Any CPU" `
+            /m `
+            /verbosity:minimal
+
+      - name: Run xUnit tests
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+
+          $webFormsRoot = Join-Path `
+            $env:GITHUB_WORKSPACE `
+            "webforms"
+
+          # Visual Studioのインストール先を取得
+          $vsWhere = Join-Path `
+            ${env:ProgramFiles(x86)} `
+            "Microsoft Visual Studio\Installer\vswhere.exe"
+
+          if (-not (Test-Path $vsWhere)) {
+              throw "vswhere.exe が見つかりません。"
+          }
+
+          $visualStudioPath = & $vsWhere `
+            -latest `
+            -products * `
+            -property installationPath
+
+          if ([string]::IsNullOrWhiteSpace($visualStudioPath)) {
+              throw "Visual Studioのインストール先を取得できません。"
+          }
+
+          $vsTestPath = Join-Path `
+            $visualStudioPath `
+            "Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe"
+
+          if (-not (Test-Path $vsTestPath)) {
+              throw "vstest.console.exe が見つかりません: $vsTestPath"
+          }
+
+          # packages.config形式とPackageReference形式の両方を探索
+          $adapterSearchPaths = @(
+              (Join-Path $webFormsRoot "packages"),
+              (Join-Path $env:USERPROFILE ".nuget\packages")
+          ) | Where-Object {
+              Test-Path $_
+          }
+
+          if ($adapterSearchPaths.Count -eq 0) {
+              throw "テストアダプターの探索先が存在しません。"
+          }
+
+          $adapterDll = Get-ChildItem `
+              -Path $adapterSearchPaths `
+              -Recurse `
+              -File `
+              -Filter "xunit.runner.visualstudio.testadapter.dll" `
+              -ErrorAction SilentlyContinue |
+              Select-Object -First 1
+
+          if ($null -eq $adapterDll) {
+              throw `
+                "xunit.runner.visualstudio.testadapter.dll が見つかりません。" +
+                "UnitTestsプロジェクトにxunit.runner.visualstudioを追加してください。"
+          }
+
+          $adapterPath = $adapterDll.Directory.FullName
+
+          $testOutputPath = Join-Path `
+            $webFormsRoot `
+            "FaqKnowledgeSearch.WebForms.UnitTests\bin\Release"
+
+          $testAssembly = Get-ChildItem `
+              -Path $testOutputPath `
+              -Recurse `
+              -File `
+              -Filter "FaqKnowledgeSearch.WebForms.UnitTests.dll" `
+              -ErrorAction SilentlyContinue |
+              Select-Object -First 1
+
+          if ($null -eq $testAssembly) {
+              throw "テストDLLが見つかりません: $testOutputPath"
+          }
+
+          Write-Host "VSTest: $vsTestPath"
+          Write-Host "Test adapter: $adapterPath"
+          Write-Host "Test assembly: $($testAssembly.FullName)"
+
+          & $vsTestPath `
+              $testAssembly.FullName `
+              "/TestAdapterPath:$adapterPath"
+
+          if ($LASTEXITCODE -ne 0) {
+              exit $LASTEXITCODE
+          }

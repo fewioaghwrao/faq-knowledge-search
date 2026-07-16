@@ -1,19 +1,36 @@
-name: CI Tests
+name: ASP.NET Core / Next.js Tests
 
 on:
   push:
     branches:
       - main
-      - feature/add-faq-app-initial
+    paths:
+      - "backend/**"
+      - "faq-app-frontend/**"
+      - ".github/workflows/tests.yml"
+
   pull_request:
     branches:
       - main
-      - feature/add-faq-app-initial
+    paths:
+      - "backend/**"
+      - "faq-app-frontend/**"
+      - ".github/workflows/tests.yml"
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: core-tests-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   backend-tests:
     name: Backend Tests
     runs-on: windows-latest
+    timeout-minutes: 15
 
     defaults:
       run:
@@ -21,25 +38,35 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: "9.0.x"
 
       - name: Restore
         run: dotnet restore FaqApp.Api.sln
 
       - name: Build
-        run: dotnet build FaqApp.Api.sln --configuration Release --no-restore
+        run: >
+          dotnet build
+          FaqApp.Api.sln
+          --configuration Release
+          --no-restore
 
       - name: Test
-        run: dotnet test FaqApp.Api.sln --configuration Release --no-build --verbosity normal
+        run: >
+          dotnet test
+          FaqApp.Api.sln
+          --configuration Release
+          --no-build
+          --verbosity normal
 
   frontend-tests:
     name: Frontend Tests
     runs-on: windows-latest
+    timeout-minutes: 15
 
     defaults:
       run:
@@ -47,14 +74,12 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '22'
-          cache: 'npm'
-          cache-dependency-path: faq-app-frontend/package-lock.json
+          node-version: "22"
 
       - name: Install dependencies
         run: npm ci

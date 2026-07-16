@@ -1,0 +1,411 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="FaqKnowledgeSearch.WebForms.SiteMaster" %>
+
+<!DOCTYPE html>
+
+<html lang="ja">
+<head runat="server">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%: Page.Title %> - 社内FAQナレッジ検索</title>
+
+    <asp:PlaceHolder runat="server">
+        <%: Scripts.Render("~/bundles/modernizr") %>
+    </asp:PlaceHolder>
+
+    <webopt:bundlereference runat="server" path="~/Content/css" />
+
+    <link
+    runat="server"
+    href="~/Content/Site.css"
+    rel="stylesheet"
+    type="text/css" />
+
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+</head>
+<body>
+    <form runat="server">
+        <asp:ScriptManager runat="server">
+            <Scripts>
+                <%--To learn more about bundling scripts in ScriptManager see https://go.microsoft.com/fwlink/?LinkID=301884 --%>
+                <%--Framework Scripts--%>
+                <asp:ScriptReference Name="MsAjaxBundle" />
+                <asp:ScriptReference Name="jquery" />
+                <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
+                <asp:ScriptReference Name="WebUIValidation.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebUIValidation.js" />
+                <asp:ScriptReference Name="MenuStandards.js" Assembly="System.Web" Path="~/Scripts/WebForms/MenuStandards.js" />
+                <asp:ScriptReference Name="GridView.js" Assembly="System.Web" Path="~/Scripts/WebForms/GridView.js" />
+                <asp:ScriptReference Name="DetailsView.js" Assembly="System.Web" Path="~/Scripts/WebForms/DetailsView.js" />
+                <asp:ScriptReference Name="TreeView.js" Assembly="System.Web" Path="~/Scripts/WebForms/TreeView.js" />
+                <asp:ScriptReference Name="WebParts.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebParts.js" />
+                <asp:ScriptReference Name="Focus.js" Assembly="System.Web" Path="~/Scripts/WebForms/Focus.js" />
+                <asp:ScriptReference Name="WebFormsBundle" />
+                <%--Site Scripts--%>
+            </Scripts>
+        </asp:ScriptManager>
+
+<nav class="navbar navbar-expand-lg navbar-dark app-navbar">
+    <div class="container">
+<a
+    class="navbar-brand app-brand"
+    runat="server"
+    href="~/">
+
+    <span class="app-brand__icon" aria-hidden="true">
+        Q
+    </span>
+
+    <span class="app-brand__text">
+        <span class="app-brand__title">
+            Knowledge FAQ
+        </span>
+
+        <span class="app-brand__subtitle">
+            社内ナレッジ検索
+        </span>
+    </span>
+</a>
+
+        <button
+            type="button"
+            class="navbar-toggler"
+            data-bs-toggle="collapse"
+            data-bs-target="#mainNavbar"
+            aria-controls="mainNavbar"
+            aria-expanded="false"
+            aria-label="ナビゲーションの切り替え">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div
+            id="mainNavbar"
+            class="collapse navbar-collapse">
+
+            <%-- 一般向けメニュー --%>
+<ul class="navbar-nav ms-auto align-items-lg-center app-navbar__menu">
+    <li class="nav-item">
+        <a
+            class="nav-link"
+            runat="server"
+            href="~/">
+            ホーム
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a
+            class="nav-link"
+            runat="server"
+            href="~/Faqs/Index.aspx">
+            FAQ検索
+        </a>
+    </li>
+
+<li class="nav-item">
+    <a
+        class="nav-link"
+        runat="server"
+        href="~/AiSearch/Index.aspx">
+        AI検索
+    </a>
+</li>
+</ul>
+
+            <%-- 認証状態に応じたメニュー --%>
+<ul class="navbar-nav ms-lg-3 align-items-lg-center">
+                <asp:LoginView
+                    ID="NavigationLoginView"
+                    runat="server">
+
+                    <%-- 未ログイン時 --%>
+                    <AnonymousTemplate>
+                        <li class="nav-item">
+<a
+    class="nav-link app-login-button"
+    runat="server"
+    href="~/Account/Login.aspx">
+    管理者ログイン
+</a>
+                        </li>
+                    </AnonymousTemplate>
+
+                    <%-- Adminロールのログイン時 --%>
+                    <RoleGroups>
+                        <asp:RoleGroup Roles="Admin">
+                            <ContentTemplate>
+                                <li class="nav-item">
+                                    <a
+                                        class="nav-link"
+                                        runat="server"
+                                        href="~/Admin/Default.aspx">
+                                        管理トップ
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a
+                                        class="nav-link"
+                                        runat="server"
+                                        href="~/Admin/Faqs/Index.aspx">
+                                        FAQ管理
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <span class="navbar-text px-2">
+                                        <asp:LoginName
+                                            ID="AdminLoginName"
+                                            runat="server"
+                                            FormatString="{0}" />
+                                    </span>
+                                </li>
+
+<li class="nav-item">
+    <button
+        type="button"
+        class="nav-link app-logout-button"
+        data-bs-toggle="modal"
+        data-bs-target="#logoutConfirmModal">
+        ログアウト
+    </button>
+</li>
+                            </ContentTemplate>
+                        </asp:RoleGroup>
+                    </RoleGroups>
+
+                    <%-- 将来、一般ユーザーがログインした場合 --%>
+                    <LoggedInTemplate>
+                        <li class="nav-item">
+                            <span class="navbar-text px-2">
+                                <asp:LoginName
+                                    ID="UserLoginName"
+                                    runat="server"
+                                    FormatString="{0}" />
+                            </span>
+                        </li>
+
+<li class="nav-item">
+    <a
+        class="nav-link"
+        runat="server"
+        href="~/Account/Logout.aspx">
+        ログアウト
+    </a>
+</li>
+                    </LoggedInTemplate>
+
+                </asp:LoginView>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container app-main">
+    <asp:ContentPlaceHolder
+        ID="MainContent"
+        runat="server">
+    </asp:ContentPlaceHolder>
+</div>
+
+<footer class="app-footer">
+    <div class="container">
+        <p>
+            &copy; <%: DateTime.Now.Year %>
+            Knowledge FAQ
+        </p>
+    </div>
+</footer>
+
+<div
+    class="modal fade"
+    id="logoutConfirmModal"
+    tabindex="-1"
+    aria-labelledby="logoutConfirmModalLabel"
+    aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content logout-modal">
+
+            <div class="modal-header logout-modal__header">
+                <h2
+                    class="modal-title logout-modal__title"
+                    id="logoutConfirmModalLabel">
+                    ログアウト
+                </h2>
+
+                <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal"
+                    aria-label="閉じる">
+                </button>
+            </div>
+
+            <div class="modal-body logout-modal__body">
+                <div
+                    class="logout-modal__icon"
+                    aria-hidden="true">
+                    Q
+                </div>
+
+                <p class="mb-0">
+                    管理画面からログアウトしますか？
+                </p>
+            </div>
+
+            <div class="modal-footer logout-modal__footer">
+                <button
+                    type="button"
+                    class="admin-secondary-button"
+                    data-bs-dismiss="modal">
+                    キャンセル
+                </button>
+
+                <asp:Button
+                    ID="ConfirmLogoutButton"
+                    runat="server"
+                    Text="ログアウトする"
+                    CssClass="admin-danger-button"
+                    CausesValidation="false"
+                    OnClick="ConfirmLogoutButton_Click" />
+            </div>
+
+        </div>
+    </div>
+</div>
+<div
+    id="globalLoadingOverlay"
+    class="global-loading-overlay"
+    aria-hidden="true">
+
+    <div
+        class="global-loading-overlay__content"
+        role="status"
+        aria-live="polite">
+
+        <span
+            class="global-loading-overlay__spinner"
+            aria-hidden="true">
+        </span>
+
+        <strong class="global-loading-overlay__title">
+            処理中です
+        </strong>
+
+        <span class="global-loading-overlay__description">
+            しばらくお待ちください。
+        </span>
+    </div>
+</div>
+</form>
+    <asp:PlaceHolder runat="server">
+        <%: Scripts.Render("~/Scripts/bootstrap.js") %>
+    </asp:PlaceHolder>
+    <script>
+    (function () {
+        "use strict";
+
+        function getOverlay() {
+            return document.getElementById("globalLoadingOverlay");
+        }
+
+        function showGlobalLoading() {
+            var overlay = getOverlay();
+
+            if (!overlay) {
+                return;
+            }
+
+            overlay.classList.add("is-visible");
+            overlay.setAttribute("aria-hidden", "false");
+            document.body.classList.add("is-loading");
+        }
+
+        function hideGlobalLoading() {
+            var overlay = getOverlay();
+
+            if (!overlay) {
+                return;
+            }
+
+            overlay.classList.remove("is-visible");
+            overlay.setAttribute("aria-hidden", "true");
+            document.body.classList.remove("is-loading");
+        }
+
+        window.showGlobalLoading = showGlobalLoading;
+        window.hideGlobalLoading = hideGlobalLoading;
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var form = document.forms[0];
+
+            hideGlobalLoading();
+
+            /*
+             * 通常のasp:Buttonなどによるフォーム送信。
+             * バリデーションで送信が中止された場合は表示しない。
+             */
+            if (form) {
+                form.addEventListener("submit", function (event) {
+                    window.setTimeout(function () {
+                        if (!event.defaultPrevented) {
+                            showGlobalLoading();
+                        }
+                    }, 0);
+                });
+            }
+
+            /*
+             * asp:LinkButtonなどの__doPostBackを監視。
+             */
+            if (typeof window.__doPostBack === "function") {
+                var originalDoPostBack = window.__doPostBack;
+
+                window.__doPostBack = function (
+                    eventTarget,
+                    eventArgument
+                ) {
+                    showGlobalLoading();
+
+                    return originalDoPostBack(
+                        eventTarget,
+                        eventArgument
+                    );
+                };
+            }
+
+            /*
+             * UpdatePanelを利用している場合の非同期PostBack。
+             */
+            if (
+                window.Sys &&
+                Sys.WebForms &&
+                Sys.WebForms.PageRequestManager
+            ) {
+                var pageRequestManager =
+                    Sys.WebForms.PageRequestManager.getInstance();
+
+                pageRequestManager.add_beginRequest(function () {
+                    showGlobalLoading();
+                });
+
+                pageRequestManager.add_endRequest(function () {
+                    hideGlobalLoading();
+                });
+            }
+        });
+
+        /*
+         * ブラウザの戻る・進むでローディングが残るのを防止。
+         */
+        window.addEventListener("pageshow", function () {
+            hideGlobalLoading();
+        });
+
+        window.addEventListener("load", function () {
+            hideGlobalLoading();
+        });
+    })();
+    </script>
+</body>
+</html>
