@@ -1,0 +1,79 @@
+﻿@page
+@model FaqKnowledgeSearch.Razor.Pages.Admin.IndexModel
+
+@{
+    ViewData["Title"] = "管理画面";
+}
+
+<main class="admin-container">
+    <section class="admin-hero">
+        <div>
+            <span class="admin-label">Admin Console</span>
+
+            <h1>FAQ管理画面</h1>
+
+            <p>
+                社内FAQの登録・編集・削除を行います。
+            </p>
+        </div>
+
+        <div class="admin-hero-actions">
+            <a asp-page="/Admin/Faqs/Index"
+               class="admin-button">
+                FAQ管理
+            </a>
+
+            <a asp-page="/Admin/Faqs/Create"
+               class="admin-button admin-button-primary">
+                新規登録
+            </a>
+
+            <a asp-page="/Admin/Users/Index"
+               class="admin-button">
+                ユーザー管理
+            </a>
+        </div>
+    </section>
+
+    <section class="admin-dashboard-grid">
+        <article class="admin-card">
+            <span class="admin-card-caption">
+                FAQ Management
+            </span>
+
+            <h2>FAQ管理</h2>
+
+            <p>
+                FAQの一覧確認、登録、編集、公開状態の変更を行います。
+            </p>
+
+            <a asp-page="/Admin/Faqs/Index"
+               class="admin-card-link">
+                FAQ管理を開く →
+            </a>
+        </article>
+
+        <article class="admin-card">
+            <span class="admin-card-caption">
+                Account
+            </span>
+
+            <h2>ログイン情報</h2>
+
+            <p>現在ログインしている管理者</p>
+
+            <strong class="admin-account-name">
+                @(User.Identity?.Name ?? "管理者")
+            </strong>
+
+            <div class="admin-account-action">
+                <button type="button"
+                        class="admin-logout-button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#logoutConfirmModal">
+                    ログアウト
+                </button>
+            </div>
+        </article>
+    </section>
+</main>

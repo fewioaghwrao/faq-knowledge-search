@@ -1,0 +1,116 @@
+﻿@page
+@model FaqKnowledgeSearch.Razor.Pages.Account.LoginModel
+
+@{
+    ViewData["Title"] = "管理者ログイン";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/login.css"
+          asp-append-version="true" />
+}
+
+<section class="login-page">
+    <div class="login-card">
+        <div class="login-card__header">
+            <div class="login-card__icon"
+                 aria-hidden="true">
+                A
+            </div>
+
+            <div>
+                <h1>管理者ログイン</h1>
+                <p>
+                    FAQの登録・編集を行う管理画面にログインします。
+                </p>
+            </div>
+        </div>
+
+        <form method="post"
+              asp-route-returnUrl="@Model.ReturnUrl">
+
+            <div asp-validation-summary="ModelOnly"
+                 class="login-validation"
+                 role="alert">
+            </div>
+
+            <div class="login-field">
+                <label asp-for="Input.Email"></label>
+
+                <input asp-for="Input.Email"
+                       class="login-input"
+                       autocomplete="username"
+                       placeholder="メールアドレスを入力" />
+
+                <span asp-validation-for="Input.Email"
+                      class="field-validation">
+                </span>
+            </div>
+
+            <div class="login-field">
+                <label asp-for="Input.Password"></label>
+
+                <div class="password-input">
+                    <input asp-for="Input.Password"
+                           id="passwordInput"
+                           class="login-input"
+                           autocomplete="current-password"
+                           placeholder="パスワードを入力" />
+
+                    <button type="button"
+                            id="passwordToggle"
+                            class="password-toggle"
+                            aria-controls="passwordInput"
+                            aria-label="パスワードを表示">
+                        表示
+                    </button>
+                </div>
+
+                <span asp-validation-for="Input.Password"
+                      class="field-validation">
+                </span>
+            </div>
+
+            <button type="submit"
+                    class="login-submit">
+                ログイン
+            </button>
+        </form>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        (() => {
+            const passwordInput =
+                document.getElementById("passwordInput");
+
+            const passwordToggle =
+                document.getElementById("passwordToggle");
+
+            if (!passwordInput || !passwordToggle) {
+                return;
+            }
+
+            passwordToggle.addEventListener("click", () => {
+                const isHidden =
+                    passwordInput.type === "password";
+
+                passwordInput.type =
+                    isHidden ? "text" : "password";
+
+                passwordToggle.textContent =
+                    isHidden ? "非表示" : "表示";
+
+                passwordToggle.setAttribute(
+                    "aria-label",
+                    isHidden
+                        ? "パスワードを非表示"
+                        : "パスワードを表示");
+            });
+        })();
+    </script>
+}

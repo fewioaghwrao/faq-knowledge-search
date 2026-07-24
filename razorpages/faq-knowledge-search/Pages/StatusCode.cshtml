@@ -1,0 +1,80 @@
+﻿@page "{statusCode:int}"
+@model FaqKnowledgeSearch.Razor.Pages.StatusCodeModel
+
+@{
+    ViewData["Title"] = $"{Model.Code} エラー";
+}
+
+<div class="error-page">
+    <section class="error-card"
+             role="alert"
+             aria-labelledby="statusCodeTitle">
+
+        <div class="error-card__code">
+            @Model.Code @Model.Label
+        </div>
+
+        <div class="error-card__icon"
+             aria-hidden="true">
+            @if (Model.Code == 404)
+            {
+                <span>?</span>
+            }
+            else
+            {
+                <span>!</span>
+            }
+        </div>
+
+        <h1 id="statusCodeTitle"
+            class="error-card__title">
+            @Model.TitleText
+        </h1>
+
+        <p class="error-card__description">
+            @Model.Description
+        </p>
+
+        @if (Model.Code == 404
+             && !string.IsNullOrWhiteSpace(Model.OriginalPath))
+        {
+            <div class="status-code-path">
+                <span>指定されたパス</span>
+
+                <code>@Model.OriginalPath</code>
+            </div>
+        }
+
+        <div class="error-card__guidance">
+            <h2>問題が解消しない場合</h2>
+
+            <p>
+                URLや操作内容を確認してください。
+                同じ問題が続く場合は、発生した操作と時刻を添えて
+                システム管理者へお問い合わせください。
+            </p>
+        </div>
+
+        <div class="error-card__actions">
+            @if (Model.Code == 401)
+            {
+                <a asp-page="/Account/Login"
+                   class="error-card__primary-button">
+                    ログイン画面へ
+                </a>
+            }
+            else
+            {
+                <a asp-page="/Index"
+                   class="error-card__primary-button">
+                    ホームへ戻る
+                </a>
+            }
+
+            <a asp-page="/Faqs/Index"
+               class="error-card__secondary-button">
+                FAQ検索を開く
+            </a>
+        </div>
+    </section>
+</div>

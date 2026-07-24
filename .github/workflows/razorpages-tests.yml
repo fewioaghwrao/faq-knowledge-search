@@ -1,0 +1,80 @@
+name: Razor Pages Tests
+
+on:
+  push:
+    branches:
+      - main
+      - feature/**
+    paths:
+      - "razorpages/**"
+      - ".github/workflows/razorpages-tests.yml"
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "razorpages/**"
+      - ".github/workflows/razorpages-tests.yml"
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: razorpages-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    defaults:
+      run:
+        working-directory: razorpages
+
+    env:
+      ASPNETCORE_ENVIRONMENT: Testing
+      ConnectionStrings__DefaultConnection: >-
+        Server=127.0.0.1;
+        Port=3306;
+        Database=faq_knowledge_search_test;
+        User=root;
+        Password=test;
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Domain
+            project: FaqKnowledgeSearch.Domain.Tests/FaqKnowledgeSearch.Domain.Tests.csproj
+
+          - name: Application
+            project: FaqKnowledgeSearch.Application.Tests/FaqKnowledgeSearch.Application.Tests.csproj
+
+          - name: Infrastructure
+            project: FaqKnowledgeSearch.Infrastructure.Tests/FaqKnowledgeSearch.Infrastructure.Tests.csproj
+
+          - name: Razor
+            project: FaqKnowledgeSearch.Razor.Tests/FaqKnowledgeSearch.Razor.Tests.csproj
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup .NET 10 SDK
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore
+        run: dotnet restore "${{ matrix.project }}"
+
+      - name: Run tests
+        run: >
+          dotnet test "${{ matrix.project }}"
+          --configuration Release
+          --no-restore
+          --logger "console;verbosity=normal"

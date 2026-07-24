@@ -1,0 +1,64 @@
+﻿@page
+@model ErrorModel
+
+@{
+    ViewData["Title"] = "エラー";
+}
+
+<div class="error-page">
+    <section class="error-card"
+             role="alert"
+             aria-labelledby="errorTitle">
+
+        <div class="error-card__code">
+            ERROR
+        </div>
+
+        <div class="error-card__icon"
+             aria-hidden="true">
+            !
+        </div>
+
+        <h1 id="errorTitle"
+            class="error-card__title">
+            処理中にエラーが発生しました
+        </h1>
+
+        <p class="error-card__description">
+            申し訳ありません。要求された処理を完了できませんでした。
+            一時的な問題の可能性がありますので、
+            時間を置いてから再度お試しください。
+        </p>
+
+        <div class="error-card__guidance">
+            <h2>問題が解消しない場合</h2>
+
+            <p>
+                操作内容と発生時刻を確認のうえ、
+                システム管理者へお問い合わせください。
+            </p>
+
+            @if (Model.ShowRequestId)
+            {
+                <dl class="error-card__request">
+                    <dt>お問い合わせ番号</dt>
+                    <dd>
+                        <code>@Model.RequestId</code>
+                    </dd>
+                </dl>
+            }
+        </div>
+
+        <div class="error-card__actions">
+            <a asp-page="/Index"
+               class="error-card__primary-button">
+                ホームへ戻る
+            </a>
+
+            <a asp-page="/Faqs/Index"
+               class="error-card__secondary-button">
+                FAQ検索を開く
+            </a>
+        </div>
+    </section>
+</div>

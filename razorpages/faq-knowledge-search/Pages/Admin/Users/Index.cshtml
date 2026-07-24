@@ -1,0 +1,228 @@
+﻿@page
+@model FaqKnowledgeSearch.Razor.Pages.Admin.Users.IndexModel
+
+@{
+    ViewData["Title"] = "ユーザー管理";
+}
+
+<main class="admin-container">
+    <section class="admin-hero admin-hero-compact">
+        <div>
+            <span class="admin-label">
+                Admin Console
+            </span>
+
+            <h1>FAQ管理画面</h1>
+
+            <p>
+                社内FAQの登録・編集・削除を行います。
+            </p>
+        </div>
+
+        <div class="admin-hero-actions">
+            <a asp-page="/Admin/Faqs/Index"
+               class="admin-button">
+                FAQ管理
+            </a>
+
+            <a asp-page="/Admin/Faqs/Create"
+               class="admin-button admin-button-primary">
+                新規登録
+            </a>
+
+            <a asp-page="/Admin/Users/Index"
+               class="admin-button">
+                ユーザー管理
+            </a>
+        </div>
+    </section>
+
+    <section class="user-admin-panel">
+        @if (TempData["SuccessMessage"] is string successMessage)
+        {
+            <div class="admin-success-message"
+                 role="status">
+                @successMessage
+            </div>
+        }
+
+        @if (TempData["ErrorMessage"] is string errorMessage)
+        {
+            <div class="admin-error-message"
+                 role="alert">
+                @errorMessage
+            </div>
+        }
+
+        <header class="user-admin-header">
+            <div>
+                <span class="user-management-label">
+                    User Management
+                </span>
+
+                <h2>ユーザー管理</h2>
+
+                <p>
+                    登録ユーザーのロール確認と、
+                    Admin権限を除く有効・無効の切替を行います。
+                </p>
+            </div>
+
+            <span class="result-count">
+                登録ユーザー数
+                @Model.Result.TotalCount 件
+            </span>
+        </header>
+
+        @if (Model.Result.Items.Count == 0)
+        {
+            <div class="admin-empty">
+                登録されているユーザーはいません。
+            </div>
+        }
+        else
+        {
+            <div class="user-table-wrapper">
+                <table class="user-admin-table">
+                    <thead>
+                        <tr>
+                            <th>表示名</th>
+                            <th>メールアドレス</th>
+                            <th>ロール</th>
+                            <th>状態</th>
+                            <th>作成日</th>
+                            <th class="user-operation-column">
+                                操作
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var user in Model.Result.Items)
+                        {
+                            <tr>
+                                <td class="user-primary-cell">
+                                    <strong class="user-display-name">
+                                        @user.DisplayName
+                                    </strong>
+
+                                    <small class="user-id">
+                                        ID: @user.Id
+                                    </small>
+                                </td>
+
+                                <td class="user-email"
+                                    data-label="メール">
+                                    @user.Email
+                                </td>
+
+                                <td data-label="ロール">
+                                    <span class="user-role-badge
+                                        @(user.IsAdmin
+                                            ? "admin"
+                                            : "user")">
+                                        @user.RoleName
+                                    </span>
+                                </td>
+
+                                <td data-label="状態">
+                                    <span class="user-status-badge
+                                        @(user.IsActive
+                                            ? "active"
+                                            : "inactive")">
+                                        @(user.IsActive
+                                            ? "有効"
+                                            : "無効")
+                                    </span>
+                                </td>
+
+                                <td class="user-created-at"
+                                    data-label="作成日">
+                                    @user.CreatedAt
+                                    .ToLocalTime()
+                                    .ToString("yyyy/MM/dd HH:mm:ss")
+                                </td>
+
+                                <td class="user-operation-cell"
+                                    data-label="操作">
+                                    @if (user.IsAdmin ||
+                                         user.Id == Model.CurrentUserId)
+                                    {
+                                        <span class="user-change-disabled">
+                                            変更不可
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <form method="post"
+                                              asp-page-handler="ToggleActive"
+                                              asp-route-id="@user.Id"
+                                              asp-route-isActive="@(!user.IsActive)"
+                                              asp-route-pageNumber="@Model.Result.Page"
+                                              class="user-status-form"
+                                              onsubmit="return confirm('ユーザーの有効状態を変更しますか？');">
+
+                                            <button type="submit"
+                                                    class="user-status-action
+                                                @(user.IsActive
+                                                    ? "disable"
+                                                    : "enable")">
+                                                @(user.IsActive
+                                                    ? "無効にする"
+                                                    : "有効にする")
+                                            </button>
+                                        </form>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+        <nav class="admin-pagination"
+             aria-label="ユーザー一覧ページ">
+
+            @if (Model.Result.HasPreviousPage)
+            {
+                <a asp-page="/Admin/Users/Index"
+                   asp-route-pageNumber="@(Model.Result.Page - 1)"
+                   class="pagination-button">
+                    前へ
+                </a>
+            }
+            else
+            {
+                <span class="pagination-button is-disabled">
+                    前へ
+                </span>
+            }
+
+            <span class="pagination-current">
+                @Model.Result.Page /
+                @Model.DisplayTotalPages
+            </span>
+
+            @if (Model.Result.HasNextPage)
+            {
+                <a asp-page="/Admin/Users/Index"
+                   asp-route-pageNumber="@(Model.Result.Page + 1)"
+                   class="pagination-button">
+                    次へ
+                </a>
+            }
+            else
+            {
+                <span class="pagination-button is-disabled">
+                    次へ
+                </span>
+            }
+        </nav>
+
+        <p class="user-management-note">
+            ※ 管理者ユーザーおよびログイン中のユーザー自身は、
+            有効・無効を変更できません。
+        </p>
+    </section>
+</main>

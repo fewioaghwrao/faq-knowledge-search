@@ -1,0 +1,10 @@
+<Solution>
+  <Project Path="faq-knowledge-search/FaqKnowledgeSearch.Razor.csproj" />
+  <Project Path="FaqKnowledgeSearch.Application.Tests/FaqKnowledgeSearch.Application.Tests.csproj" />
+  <Project Path="FaqKnowledgeSearch.Application/FaqKnowledgeSearch.Application.csproj" />
+  <Project Path="FaqKnowledgeSearch.Domain.Tests/FaqKnowledgeSearch.Domain.Tests.csproj" />
+  <Project Path="FaqKnowledgeSearch.Domain/FaqKnowledgeSearch.Domain.csproj" />
+  <Project Path="FaqKnowledgeSearch.Infrastructure.Tests/FaqKnowledgeSearch.Infrastructure.Tests.csproj" />
+  <Project Path="FaqKnowledgeSearch.Infrastructure/FaqKnowledgeSearch.Infrastructure.csproj" />
+  <Project Path="FaqKnowledgeSearch.Razor.Tests/FaqKnowledgeSearch.Razor.Tests.csproj" />
+</Solution>

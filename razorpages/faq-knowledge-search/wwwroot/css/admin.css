@@ -1,0 +1,1537 @@
+﻿:root {
+    --admin-panel: rgba(12, 23, 45, 0.92);
+    --admin-panel-soft: rgba(18, 29, 54, 0.9);
+    --admin-border: rgba(137, 161, 213, 0.18);
+    --admin-text: #f2f6ff;
+    --admin-muted: #8f9bb5;
+    --admin-blue: #55a9ff;
+    --admin-cyan: #27d7e8;
+    --admin-purple: #7254ff;
+}
+
+.admin-container {
+    width: min(1120px, calc(100% - 32px));
+    margin: 30px auto 80px;
+}
+
+.admin-hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    padding: 34px;
+    border: 1px solid rgba(117, 147, 223, 0.2);
+    border-radius: 24px;
+    background: linear-gradient( 120deg, rgba(75, 46, 195, 0.78), rgba(42, 35, 112, 0.72) 55%, rgba(9, 100, 139, 0.62));
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22);
+}
+
+.admin-hero-compact {
+    padding-block: 28px;
+}
+
+.admin-label {
+    display: inline-flex;
+    padding: 7px 14px;
+    margin-bottom: 14px;
+    border: 1px solid rgba(110, 170, 255, 0.4);
+    border-radius: 999px;
+    color: #a9cbff;
+    background: rgba(40, 73, 143, 0.22);
+    font-size: 0.82rem;
+}
+
+.admin-hero h1 {
+    margin: 0 0 8px;
+    color: var(--admin-text);
+    font-size: clamp(1.65rem, 3vw, 2.15rem);
+}
+
+.admin-hero p {
+    margin: 0;
+    color: #b2bdd5;
+}
+
+.admin-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.admin-button,
+.history-button,
+.result-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 18px;
+    border: 1px solid rgba(148, 171, 222, 0.22);
+    border-radius: 12px;
+    color: var(--admin-text);
+    background: rgba(42, 54, 86, 0.76);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+    .admin-button:hover {
+        color: #fff;
+        border-color: rgba(115, 183, 255, 0.6);
+        background: rgba(57, 73, 115, 0.92);
+    }
+
+.admin-button-primary {
+    border-color: rgba(127, 88, 255, 0.7);
+    background: linear-gradient(135deg, #377bff, #7a32ff);
+}
+
+.admin-dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    margin-top: 24px;
+}
+
+.admin-card {
+    min-height: 230px;
+    padding: 28px;
+    border: 1px solid var(--admin-border);
+    border-radius: 20px;
+    background: var(--admin-panel);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.16);
+}
+
+.admin-card-caption {
+    color: var(--admin-blue);
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.admin-card h2 {
+    margin: 14px 0 10px;
+    color: var(--admin-text);
+    font-size: 1.35rem;
+}
+
+.admin-card p {
+    color: var(--admin-muted);
+}
+
+.admin-card-link {
+    display: inline-block;
+    margin-top: 50px;
+    color: var(--admin-blue);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.admin-account-name {
+    display: block;
+    margin-top: 20px;
+    color: #56b9ff;
+}
+
+.admin-account-action {
+    margin-top: 20px;
+}
+
+.admin-logout-button {
+    display: inline-flex;
+    padding: 10px 18px;
+    border: 1px solid rgba(255, 85, 112, 0.32);
+    border-radius: 10px;
+    color: #ffb4c0;
+    background: rgba(105, 27, 47, 0.26);
+    text-decoration: none;
+}
+
+.faq-admin-panel {
+    position: relative;
+    margin-top: 24px;
+    padding: 28px 24px 20px;
+    overflow: hidden;
+    border: 1px solid var(--admin-border);
+    border-radius: 22px;
+    background: var(--admin-panel);
+}
+
+    .faq-admin-panel::before {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        height: 4px;
+        content: "";
+        background: linear-gradient( 90deg, #258aff, #8153ff, #18d6dd);
+    }
+
+.faq-admin-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 20px;
+}
+
+    .faq-admin-header h2 {
+        margin: 0 0 8px;
+        color: var(--admin-text);
+    }
+
+    .faq-admin-header p {
+        margin: 0;
+        color: var(--admin-muted);
+    }
+
+.faq-admin-summary {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.history-button {
+    color: #69e5ed;
+    border-color: rgba(39, 215, 232, 0.28);
+    background: rgba(8, 92, 108, 0.25);
+}
+
+.result-count {
+    min-height: 38px;
+    color: #d5dcef;
+    font-weight: 500;
+}
+
+.faq-table-wrapper {
+    overflow-x: auto;
+    border: 1px solid var(--admin-border);
+    border-radius: 17px;
+}
+
+.faq-admin-table {
+    width: 100%;
+    min-width: 850px;
+    border-collapse: collapse;
+    color: var(--admin-text);
+}
+
+    .faq-admin-table th {
+        padding: 17px 14px;
+        color: #8d9ab6;
+        background: rgba(40, 51, 81, 0.7);
+        font-size: 0.88rem;
+        text-align: left;
+    }
+
+    .faq-admin-table td {
+        padding: 18px 14px;
+        border-top: 1px solid rgba(137, 161, 213, 0.13);
+        vertical-align: top;
+    }
+
+.id-column {
+    width: 70px;
+}
+
+.operation-column {
+    width: 125px;
+}
+
+.faq-id,
+.view-count {
+    color: #a6b1c9;
+}
+
+.faq-title {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.faq-preview {
+    display: -webkit-box;
+    max-width: 470px;
+    margin: 0;
+    overflow: hidden;
+    color: #8491ad;
+    font-size: 0.88rem;
+    line-height: 1.65;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.category-badge,
+.publish-badge {
+    display: inline-flex;
+    padding: 6px 11px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    white-space: nowrap;
+}
+
+.category-badge {
+    color: #a6c9ff;
+    border: 1px solid rgba(73, 137, 255, 0.3);
+    background: rgba(31, 75, 143, 0.28);
+}
+
+.publish-badge.published {
+    color: #54e0a9;
+    border: 1px solid rgba(49, 219, 154, 0.28);
+    background: rgba(16, 105, 76, 0.25);
+}
+
+.publish-badge.private {
+    color: #ffcb7a;
+    border: 1px solid rgba(255, 185, 73, 0.28);
+    background: rgba(117, 77, 17, 0.26);
+}
+
+.faq-actions {
+    display: grid;
+    gap: 8px;
+}
+
+.faq-action-button {
+    display: flex;
+    justify-content: center;
+    padding: 9px 14px;
+    border: 1px solid rgba(145, 160, 201, 0.2);
+    border-radius: 8px;
+    background: rgba(50, 60, 90, 0.75);
+    font-size: 0.84rem;
+    font-weight: 700;
+}
+
+    .faq-action-button.danger {
+        border-color: rgba(255, 44, 71, 0.45);
+        background: #ee1631;
+    }
+
+.admin-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.pagination-button {
+    padding: 9px 16px;
+    border: 1px solid var(--admin-border);
+    border-radius: 999px;
+    color: #dce5fa;
+    background: rgba(20, 31, 57, 0.72);
+    text-decoration: none;
+}
+
+.pagination-current {
+    color: #9ba8c3;
+}
+
+.admin-empty {
+    padding: 70px 20px;
+    color: var(--admin-muted);
+    text-align: center;
+}
+
+.is-disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+@media (max-width: 800px) {
+    .admin-hero,
+    .faq-admin-header {
+        flex-direction: column;
+    }
+
+    .admin-hero-actions {
+        justify-content: flex-start;
+    }
+
+    .admin-dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .faq-admin-summary {
+        align-items: flex-start;
+    }
+}
+
+.admin-logout-form {
+    display: inline-flex;
+    margin: 0;
+}
+
+button.admin-logout-button {
+    font: inherit;
+    cursor: pointer;
+}
+
+.faq-form-panel {
+    position: relative;
+    margin-top: 24px;
+    padding: 28px 24px 24px;
+    overflow: hidden;
+    border: 1px solid var(--admin-border);
+    border-radius: 22px;
+    background: var(--admin-panel);
+}
+
+    .faq-form-panel::before {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        height: 4px;
+        content: "";
+        background: linear-gradient( 90deg, #258aff, #8153ff, #18d6dd);
+    }
+
+.faq-form-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 28px;
+}
+
+    .faq-form-header h2 {
+        margin: 0 0 8px;
+        color: var(--admin-text);
+    }
+
+    .faq-form-header p {
+        margin: 0;
+        color: var(--admin-muted);
+    }
+
+.faq-edit-form {
+    display: grid;
+    gap: 24px;
+}
+
+.faq-form-group {
+    display: grid;
+    gap: 9px;
+}
+
+.faq-form-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.faq-form-group label,
+.faq-publish-box strong {
+    color: #dfe7fa;
+    font-weight: 700;
+}
+
+.faq-character-count {
+    color: #7886a3;
+    font-size: 0.8rem;
+}
+
+.faq-form-control {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid rgba(146, 166, 211, 0.28);
+    border-radius: 12px;
+    outline: none;
+    color: #edf3ff;
+    background: rgba(35, 47, 72, 0.94);
+}
+
+    .faq-form-control:focus {
+        border-color: rgba(100, 145, 255, 0.85);
+        box-shadow: 0 0 0 3px rgba(62, 107, 255, 0.13);
+    }
+
+    .faq-form-control::placeholder {
+        color: #74819a;
+    }
+
+.faq-body-input {
+    min-height: 205px;
+    resize: vertical;
+    line-height: 1.7;
+}
+
+.faq-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.faq-form-help {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px 12px;
+    margin: 0;
+    color: #7785a2;
+    font-size: 0.78rem;
+}
+
+.faq-publish-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 18px;
+    border: 1px solid rgba(137, 161, 213, 0.18);
+    border-radius: 14px;
+    background: rgba(31, 42, 67, 0.7);
+    cursor: pointer;
+}
+
+    .faq-publish-box span {
+        display: grid;
+        gap: 4px;
+    }
+
+    .faq-publish-box small {
+        color: #7f8da9;
+    }
+
+.faq-publish-checkbox {
+    width: 20px;
+    height: 20px;
+    accent-color: #3e8cff;
+}
+
+.faq-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.faq-form-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 20px;
+    border-top: 1px solid rgba(137, 161, 213, 0.14);
+}
+
+.faq-record-id {
+    color: #75829e;
+    font-size: 0.82rem;
+}
+
+.faq-field-error,
+.faq-validation-summary {
+    color: #ff8c9d;
+    font-size: 0.86rem;
+}
+
+    .faq-validation-summary:empty {
+        display: none;
+    }
+
+@media (max-width: 800px) {
+    .faq-form-header,
+    .faq-form-footer {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .faq-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .faq-form-actions {
+        justify-content: stretch;
+    }
+
+        .faq-form-actions > * {
+            flex: 1;
+        }
+}
+.admin-success-message {
+    margin-bottom: 18px;
+    padding: 13px 16px;
+    border: 1px solid rgba(60, 220, 160, 0.28);
+    border-radius: 11px;
+    color: #72e6b6;
+    background: rgba(18, 111, 79, 0.2);
+}
+
+.faq-delete-form {
+    display: block;
+    margin: 0;
+}
+
+    .faq-delete-form .faq-action-button {
+        width: 100%;
+        border: 1px solid rgba(255, 44, 71, 0.45);
+        font: inherit;
+        cursor: pointer;
+    }
+
+.admin-error-message {
+    margin-bottom: 18px;
+    padding: 13px 16px;
+    border: 1px solid rgba(255, 95, 115, 0.32);
+    border-radius: 11px;
+    color: #ff9bab;
+    background: rgba(123, 31, 48, 0.22);
+}
+
+.faq-delete-form .faq-action-button.danger {
+    color: #ffffff;
+}
+
+.user-admin-panel {
+    position: relative;
+    margin-top: 24px;
+    padding: 28px 24px 20px;
+    overflow: hidden;
+    border: 1px solid var(--admin-border);
+    border-radius: 22px;
+    background: var(--admin-panel);
+}
+
+    .user-admin-panel::before {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        height: 4px;
+        content: "";
+        background: linear-gradient( 90deg, #258aff, #8153ff, #18d6dd);
+    }
+
+.user-admin-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+    .user-admin-header h2 {
+        margin: 14px 0 8px;
+        color: var(--admin-text);
+    }
+
+    .user-admin-header p {
+        margin: 0;
+        color: var(--admin-muted);
+    }
+
+.user-management-label {
+    display: inline-flex;
+    padding: 7px 14px;
+    border: 1px solid rgba(39, 215, 232, 0.3);
+    border-radius: 999px;
+    color: #71e0e8;
+    background: rgba(13, 96, 111, 0.22);
+    font-size: 0.82rem;
+}
+
+.user-table-wrapper {
+    overflow-x: auto;
+    border: 1px solid var(--admin-border);
+    border-radius: 17px;
+}
+
+.user-admin-table {
+    width: 100%;
+    min-width: 980px;
+    border-collapse: collapse;
+    color: var(--admin-text);
+}
+
+    .user-admin-table th {
+        padding: 17px 14px;
+        color: #aab4cc;
+        background: rgba(57, 67, 95, 0.78);
+        font-size: 0.88rem;
+        text-align: left;
+    }
+
+    .user-admin-table td {
+        padding: 17px 14px;
+        border-top: 1px solid rgba(137, 161, 213, 0.14);
+        vertical-align: middle;
+    }
+
+.user-display-name {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.user-id {
+    display: block;
+    max-width: 260px;
+    overflow: hidden;
+    color: #75819a;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.user-email,
+.user-created-at {
+    color: #aeb8ce;
+}
+
+.user-role-badge,
+.user-status-badge {
+    display: inline-flex;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+}
+
+    .user-role-badge.user {
+        color: #c7d2e8;
+        border: 1px solid rgba(147, 165, 203, 0.22);
+        background: rgba(50, 63, 92, 0.45);
+    }
+
+    .user-role-badge.admin {
+        color: #c7b8ff;
+        border: 1px solid rgba(139, 96, 255, 0.32);
+        background: rgba(87, 48, 161, 0.3);
+    }
+
+    .user-status-badge.active {
+        color: #65e5b0;
+        border: 1px solid rgba(50, 215, 159, 0.28);
+        background: rgba(15, 107, 76, 0.27);
+    }
+
+    .user-status-badge.inactive {
+        color: #ff9eae;
+        border: 1px solid rgba(255, 91, 117, 0.3);
+        background: rgba(113, 31, 50, 0.28);
+    }
+
+.user-operation-column {
+    width: 130px;
+}
+
+.user-status-form {
+    margin: 0;
+}
+
+.user-status-action {
+    width: 100%;
+    padding: 9px 12px;
+    border-radius: 8px;
+    color: #ffffff;
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+    .user-status-action.disable {
+        border: 1px solid rgba(255, 79, 103, 0.42);
+        background: rgba(196, 42, 67, 0.86);
+    }
+
+    .user-status-action.enable {
+        border: 1px solid rgba(42, 211, 156, 0.38);
+        background: rgba(20, 132, 94, 0.84);
+    }
+
+.user-change-disabled {
+    display: block;
+    padding: 9px 10px;
+    border: 1px solid rgba(130, 145, 179, 0.18);
+    border-radius: 8px;
+    color: #78849d;
+    background: rgba(44, 54, 79, 0.45);
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+.user-management-note {
+    margin: 18px 0 0;
+    color: #687590;
+    font-size: 0.8rem;
+}
+
+@media (max-width: 800px) {
+    .user-admin-header {
+        flex-direction: column;
+    }
+}
+
+.history-admin-panel,
+.history-detail-panel {
+    position: relative;
+    margin-top: 24px;
+    padding: 28px 24px 22px;
+    overflow: hidden;
+    border: 1px solid var(--admin-border);
+    border-radius: 22px;
+    background: var(--admin-panel);
+}
+
+    .history-admin-panel::before,
+    .history-detail-panel::before {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        height: 4px;
+        content: "";
+        background: linear-gradient( 90deg, #258aff, #8153ff, #18d6dd);
+    }
+
+.history-admin-header,
+.history-detail-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+    .history-admin-header h2,
+    .history-detail-header h2 {
+        margin: 10px 0 8px;
+        color: var(--admin-text);
+    }
+
+    .history-admin-header p {
+        margin: 0;
+        color: var(--admin-muted);
+    }
+
+.history-admin-label {
+    color: #61d9e6;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.history-filter-form {
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) minmax(180px, 0.7fr) minmax(180px, 0.7fr) auto;
+    gap: 14px;
+    padding: 18px;
+    border: 1px solid var(--admin-border);
+    border-radius: 16px;
+    background: rgba(20, 31, 57, 0.72);
+}
+
+.history-filter-field {
+    display: grid;
+    gap: 7px;
+}
+
+    .history-filter-field label {
+        color: #dce5f8;
+        font-size: 0.84rem;
+        font-weight: 700;
+    }
+
+.history-filter-control {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 13px;
+    border: 1px solid rgba(145, 166, 211, 0.25);
+    border-radius: 10px;
+    outline: none;
+    color: #edf3ff;
+    background: rgba(35, 47, 72, 0.94);
+}
+
+.history-filter-actions {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.history-result-summary {
+    margin: 18px 0 12px;
+    color: #8794ae;
+    font-size: 0.85rem;
+}
+
+.history-table-wrapper {
+    overflow-x: auto;
+    border: 1px solid var(--admin-border);
+    border-radius: 16px;
+}
+
+.history-admin-table {
+    width: 100%;
+    min-width: 980px;
+    border-collapse: collapse;
+    color: var(--admin-text);
+}
+
+    .history-admin-table th {
+        padding: 15px 13px;
+        color: #aab5cd;
+        background: rgba(47, 58, 88, 0.75);
+        font-size: 0.84rem;
+        text-align: left;
+    }
+
+    .history-admin-table td {
+        padding: 16px 13px;
+        border-top: 1px solid rgba(137, 161, 213, 0.13);
+        vertical-align: middle;
+    }
+
+.history-created-at,
+.history-preview {
+    color: #929eb7;
+}
+
+.history-preview {
+    max-width: 280px;
+}
+
+.history-question {
+    display: block;
+    max-width: 250px;
+}
+
+.history-status-badge {
+    display: inline-flex;
+    padding: 6px 11px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+}
+
+    .history-status-badge.success {
+        color: #61e2ae;
+        border: 1px solid rgba(51, 216, 157, 0.28);
+        background: rgba(15, 107, 76, 0.26);
+    }
+
+    .history-status-badge.failure {
+        color: #ff9cad;
+        border: 1px solid rgba(255, 91, 117, 0.3);
+        background: rgba(113, 31, 50, 0.28);
+    }
+
+.history-feedback.none {
+    color: #71809b;
+}
+
+.history-detail-button,
+.history-reference-link {
+    display: inline-flex;
+    padding: 8px 12px;
+    border: 1px solid rgba(32, 205, 226, 0.28);
+    border-radius: 8px;
+    color: #69ddea;
+    background: rgba(12, 94, 110, 0.24);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.history-metadata-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin: 0 0 24px;
+}
+
+    .history-metadata-grid > div {
+        padding: 16px;
+        border: 1px solid var(--admin-border);
+        border-radius: 13px;
+        background: rgba(21, 32, 58, 0.7);
+    }
+
+    .history-metadata-grid dt {
+        color: #7886a2;
+        font-size: 0.78rem;
+    }
+
+    .history-metadata-grid dd {
+        margin: 7px 0 0;
+        color: #e3eafa;
+    }
+
+.history-detail-section {
+    margin-top: 22px;
+}
+
+    .history-detail-section h3 {
+        margin-bottom: 10px;
+        color: #dfe7f8;
+        font-size: 1rem;
+    }
+
+.history-detail-content {
+    padding: 20px;
+    border: 1px solid var(--admin-border);
+    border-radius: 14px;
+    color: #e0e8f8;
+    background: rgba(4, 11, 29, 0.6);
+    line-height: 1.8;
+    white-space: pre-wrap;
+}
+
+.history-error {
+    color: #ffadb9;
+    border-color: rgba(255, 91, 117, 0.25);
+}
+
+.history-reference-list {
+    display: grid;
+    gap: 11px;
+}
+
+.history-reference-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 16px;
+    border: 1px solid var(--admin-border);
+    border-radius: 13px;
+    background: rgba(4, 11, 29, 0.55);
+}
+
+    .history-reference-card p {
+        margin: 6px 0 0;
+        color: #77849f;
+        font-size: 0.8rem;
+    }
+
+.history-reference-order {
+    margin-right: 8px;
+    color: #60d8e5;
+}
+
+@media (max-width: 900px) {
+    .history-filter-form {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .history-filter-actions {
+        align-items: stretch;
+    }
+
+    .history-metadata-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .history-admin-header,
+    .history-detail-header,
+    .history-reference-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .history-filter-form,
+    .history-metadata-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+a.history-button {
+    text-decoration: none;
+}
+
+    a.history-button:hover {
+        color: #a2f5fa;
+        border-color: rgba(39, 215, 232, 0.5);
+    }
+
+/* FAQ管理一覧：スマートフォンではカード表示 */
+@media (max-width: 640px) {
+    .admin-container {
+        width: calc(100% - 16px);
+        margin: 16px auto 48px;
+    }
+
+    .admin-hero {
+        gap: 20px;
+        padding: 20px 16px;
+        border-radius: 18px;
+    }
+
+    .admin-hero-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+        width: 100%;
+    }
+
+    .admin-button {
+        width: 100%;
+    }
+
+    .faq-admin-panel {
+        padding: 22px 14px 18px;
+        border-radius: 18px;
+    }
+
+    .faq-admin-header {
+        gap: 18px;
+    }
+
+    .faq-admin-summary {
+        width: 100%;
+    }
+
+    .history-button,
+    .result-count {
+        width: 100%;
+    }
+
+    /*
+     * PC用の横スクロールテーブルを解除
+     */
+    .faq-table-wrapper {
+        overflow: visible;
+        border: 0;
+        border-radius: 0;
+    }
+
+    .faq-admin-table {
+        width: 100%;
+        min-width: 0;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+        /*
+     * スマホではヘッダーを非表示にし、
+     * data-labelを各項目名として表示
+     */
+        .faq-admin-table thead {
+            display: none;
+        }
+
+        .faq-admin-table tbody {
+            display: grid;
+            gap: 14px;
+        }
+
+        /*
+     * 1行を1枚のカードに変換
+     */
+        .faq-admin-table tr {
+            display: block;
+            padding: 14px;
+            border: 1px solid rgba(137, 161, 213, 0.2);
+            border-radius: 15px;
+            background: linear-gradient( 145deg, rgba(18, 29, 54, 0.96), rgba(8, 16, 35, 0.96) );
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+        }
+
+        /*
+     * 通常項目は「項目名 / 値」の2列
+     */
+        .faq-admin-table td {
+            display: grid;
+            grid-template-columns: 76px minmax(0, 1fr);
+            align-items: start;
+            gap: 10px;
+            padding: 10px 0;
+            border-top: 1px solid rgba(137, 161, 213, 0.12);
+        }
+
+            .faq-admin-table td::before {
+                content: attr(data-label);
+                color: #7886a3;
+                font-size: 0.76rem;
+                font-weight: 700;
+                line-height: 1.7;
+            }
+
+            .faq-admin-table td:first-child {
+                padding-top: 0;
+                border-top: 0;
+            }
+
+        /*
+     * タイトルと本文はカード幅いっぱいに表示
+     */
+        .faq-admin-table .faq-content-cell {
+            display: block;
+            padding: 12px 0;
+        }
+
+            .faq-admin-table .faq-content-cell::before {
+                display: none;
+            }
+
+    .faq-title {
+        font-size: 0.98rem;
+        line-height: 1.55;
+        overflow-wrap: anywhere;
+    }
+
+    .faq-preview {
+        max-width: none;
+        font-size: 0.84rem;
+        line-height: 1.7;
+        overflow-wrap: anywhere;
+        -webkit-line-clamp: 3;
+    }
+
+    .faq-id {
+        color: #9dc7ff;
+        font-weight: 700;
+    }
+
+    /*
+     * 編集・削除ボタンは横並び
+     */
+    .faq-admin-table .faq-operation-cell {
+        display: block;
+        padding-bottom: 0;
+    }
+
+        .faq-admin-table .faq-operation-cell::before {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+    .faq-actions {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .faq-action-button {
+        min-height: 42px;
+        align-items: center;
+        padding: 9px 8px;
+    }
+
+    /*
+     * ページングも308px幅に収める
+     */
+    .admin-pagination {
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .pagination-button {
+        padding: 9px 13px;
+    }
+
+    .pagination-current {
+        white-space: nowrap;
+    }
+}
+
+/* ユーザー管理一覧：スマートフォンではカード表示 */
+@media (max-width: 640px) {
+    .user-admin-panel {
+        padding: 22px 14px 18px;
+        border-radius: 18px;
+    }
+
+    .user-admin-header {
+        gap: 18px;
+    }
+
+        .user-admin-header .result-count {
+            width: 100%;
+        }
+
+    /*
+     * 横スクロール用のテーブル設定を解除
+     */
+    .user-table-wrapper {
+        overflow: visible;
+        border: 0;
+        border-radius: 0;
+    }
+
+    .user-admin-table {
+        width: 100%;
+        min-width: 0;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+        /*
+     * スマホではテーブルヘッダーを非表示
+     */
+        .user-admin-table thead {
+            display: none;
+        }
+
+        .user-admin-table tbody {
+            display: grid;
+            gap: 14px;
+        }
+
+        /*
+     * 1ユーザーを1枚のカードとして表示
+     */
+        .user-admin-table tr {
+            display: block;
+            padding: 14px;
+            border: 1px solid rgba(137, 161, 213, 0.2);
+            border-radius: 15px;
+            background: linear-gradient( 145deg, rgba(18, 29, 54, 0.96), rgba(8, 16, 35, 0.96) );
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+        }
+
+        /*
+     * 各項目を「項目名 / 値」の2列で表示
+     */
+        .user-admin-table td {
+            display: grid;
+            grid-template-columns: 84px minmax(0, 1fr);
+            align-items: start;
+            gap: 10px;
+            padding: 10px 0;
+            border-top: 1px solid rgba(137, 161, 213, 0.12);
+        }
+
+            .user-admin-table td::before {
+                content: attr(data-label);
+                color: #7886a3;
+                font-size: 0.76rem;
+                font-weight: 700;
+                line-height: 1.7;
+            }
+
+        /*
+     * 表示名とIDはカード上部に大きく表示
+     */
+        .user-admin-table .user-primary-cell {
+            display: block;
+            padding-top: 0;
+            padding-bottom: 13px;
+            border-top: 0;
+        }
+
+            .user-admin-table .user-primary-cell::before {
+                display: none;
+            }
+
+    .user-display-name {
+        margin-bottom: 7px;
+        font-size: 1rem;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+    }
+
+    .user-id {
+        max-width: none;
+        overflow: visible;
+        color: #75819a;
+        line-height: 1.5;
+        text-overflow: clip;
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
+    /*
+     * 長いメールアドレスをカード内で折り返す
+     */
+    .user-email {
+        min-width: 0;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    .user-created-at {
+        line-height: 1.6;
+    }
+
+    /*
+     * 操作ボタンはカード幅いっぱいに表示
+     */
+    .user-admin-table .user-operation-cell {
+        display: block;
+        padding-bottom: 0;
+    }
+
+        .user-admin-table .user-operation-cell::before {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+    .user-status-form {
+        width: 100%;
+    }
+
+    .user-status-action,
+    .user-change-disabled {
+        width: 100%;
+        min-height: 42px;
+    }
+
+    .user-change-disabled {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .user-management-note {
+        line-height: 1.7;
+    }
+}
+
+/* AI検索履歴一覧：スマートフォンではカード表示 */
+@media (max-width: 640px) {
+    .history-admin-panel {
+        padding: 22px 14px 18px;
+        border-radius: 18px;
+    }
+
+    .history-admin-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 18px;
+    }
+
+        .history-admin-header > .admin-button {
+            width: 100%;
+        }
+
+    /*
+     * 検索条件を1列にする
+     */
+    .history-filter-form {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        padding: 14px;
+    }
+
+    .history-filter-actions {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: stretch;
+        gap: 8px;
+    }
+
+        .history-filter-actions .admin-button {
+            width: 100%;
+            padding-inline: 10px;
+        }
+
+    /*
+     * 横スクロール用の設定を解除
+     */
+    .history-table-wrapper {
+        overflow: visible;
+        border: 0;
+        border-radius: 0;
+    }
+
+    .history-admin-table {
+        width: 100%;
+        min-width: 0;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+        /*
+     * スマホではテーブルヘッダーを非表示
+     */
+        .history-admin-table thead {
+            display: none;
+        }
+
+        .history-admin-table tbody {
+            display: grid;
+            gap: 14px;
+        }
+
+        /*
+     * 1履歴を1枚のカードとして表示
+     */
+        .history-admin-table tr {
+            display: block;
+            padding: 14px;
+            border: 1px solid rgba(137, 161, 213, 0.2);
+            border-radius: 15px;
+            background: linear-gradient( 145deg, rgba(18, 29, 54, 0.96), rgba(8, 16, 35, 0.96) );
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+        }
+
+        /*
+     * 通常項目は「項目名 / 値」の2列
+     */
+        .history-admin-table td {
+            display: grid;
+            grid-template-columns: 90px minmax(0, 1fr);
+            align-items: start;
+            gap: 10px;
+            padding: 10px 0;
+            border-top: 1px solid rgba(137, 161, 213, 0.12);
+        }
+
+            .history-admin-table td::before {
+                content: attr(data-label);
+                color: #7886a3;
+                font-size: 0.76rem;
+                font-weight: 700;
+                line-height: 1.7;
+            }
+
+            .history-admin-table td:first-child {
+                padding-top: 0;
+                border-top: 0;
+            }
+
+    .history-created-at {
+        font-size: 0.82rem;
+        line-height: 1.6;
+    }
+
+    /*
+     * 質問と回答はカード幅いっぱいに表示
+     */
+    .history-admin-table .history-question-cell,
+    .history-admin-table .history-response-cell {
+        display: block;
+        padding: 12px 0;
+    }
+
+    .history-question-cell::before,
+    .history-response-cell::before {
+        display: block;
+        margin-bottom: 7px;
+    }
+
+    .history-question {
+        max-width: none;
+        color: #eef4ff;
+        font-size: 0.96rem;
+        line-height: 1.6;
+        overflow-wrap: anywhere;
+    }
+
+    .history-preview {
+        display: -webkit-box;
+        max-width: none;
+        overflow: hidden;
+        font-size: 0.84rem;
+        line-height: 1.7;
+        overflow-wrap: anywhere;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 4;
+    }
+
+    /*
+     * 詳細ボタンをカード幅いっぱいにする
+     */
+    .history-admin-table .history-detail-cell {
+        display: block;
+        padding-bottom: 0;
+    }
+
+    .history-detail-cell::before {
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    .history-detail-button {
+        justify-content: center;
+        width: 100%;
+        min-height: 42px;
+    }
+}

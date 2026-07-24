@@ -1,0 +1,183 @@
+﻿@page
+@model PrivacyModel
+
+@{
+    ViewData["Title"] = "プライバシーポリシー";
+}
+
+<div class="privacy-page">
+    <section class="privacy-hero">
+        <span class="privacy-hero__label">
+            Privacy Policy
+        </span>
+
+        <h1>
+            プライバシーポリシー
+        </h1>
+
+        <p>
+            本ページでは、Knowledge FAQにおける
+            利用者情報の取り扱いについて説明します。
+        </p>
+
+        <time datetime="2026-07-20">
+            最終更新日：2026年7月20日
+        </time>
+    </section>
+
+    <div class="privacy-content">
+        <section class="privacy-section">
+            <h2>1. 本サービスについて</h2>
+
+            <p>
+                本サービスは、FAQ検索、AIを利用した回答生成、
+                FAQ管理などの機能を確認するために公開している
+                ポートフォリオ用のデモアプリケーションです。
+            </p>
+        </section>
+
+        <section class="privacy-section">
+            <h2>2. 取り扱う情報</h2>
+
+            <p>
+                本サービスでは、機能の提供および動作確認のため、
+                次の情報を取り扱う場合があります。
+            </p>
+
+            <ul>
+                <li>
+                    AI検索画面に入力された質問・検索キーワード
+                </li>
+                <li>
+                    AIが生成した回答および参照されたFAQ
+                </li>
+                <li>
+                    「役に立った」「役に立たなかった」の評価
+                </li>
+                <li>
+                    AI検索の実行日時、成否、使用モデルなどの履歴
+                </li>
+                <li>
+                    ログイン利用者のメールアドレス、
+                    表示名およびアカウント状態
+                </li>
+                <li>
+                    レート制限やセキュリティ対策に必要な接続情報
+                </li>
+            </ul>
+        </section>
+
+        <section class="privacy-section">
+            <h2>3. AI検索機能について</h2>
+
+            <p>
+                AI検索を実行した場合、入力された質問と、
+                回答生成に必要なFAQの一部が
+                外部AIサービスであるOpenAI APIへ送信されます。
+            </p>
+
+            <div class="privacy-notice">
+                氏名、住所、電話番号、認証情報、社外秘情報など、
+                個人情報や機密情報を入力しないでください。
+            </div>
+
+            <p>
+                AIが生成する回答は参考情報です。
+                内容の正確性、完全性および最新性を
+                保証するものではありません。
+            </p>
+        </section>
+
+        <section class="privacy-section">
+            <h2>4. Cookieの利用</h2>
+
+            <p>
+                ログイン状態の維持、認証、セキュリティ対策のため、
+                Cookieを使用します。
+            </p>
+
+            <p>
+                Cookieを無効にした場合、
+                ログインを必要とする管理機能を
+                正常に利用できないことがあります。
+            </p>
+        </section>
+
+        <section class="privacy-section">
+            <h2>5. 利用目的</h2>
+
+            <p>取得した情報は、主に次の目的で利用します。</p>
+
+            <ul>
+                <li>FAQ検索およびAI回答生成機能の提供</li>
+                <li>検索結果や回答品質の確認・改善</li>
+                <li>利用状況およびエラー発生状況の確認</li>
+                <li>不正利用、連続アクセスなどへの対策</li>
+                <li>デモアプリケーションの保守および改善</li>
+            </ul>
+        </section>
+
+        <section class="privacy-section">
+            <h2>6. 情報の管理</h2>
+
+            <p>
+                取り扱う情報について、不正アクセス、漏えい、
+                改ざんなどを防ぐため、合理的な安全対策に努めます。
+            </p>
+
+            <p>
+                本サービスはデモ環境であるため、
+                保存された検索履歴やアカウント情報は、
+                保守作業や環境再構築によって削除される場合があります。
+            </p>
+        </section>
+
+        <section class="privacy-section">
+            <h2>7. 外部サービス</h2>
+
+            <p>
+                本サービスでは、AI回答生成、ホスティング、
+                データベースなどの提供に、
+                外部サービスを利用する場合があります。
+            </p>
+
+            <p>
+                外部サービス上で取り扱われる情報については、
+                各サービス提供者の規約および
+                プライバシーポリシーが適用されます。
+            </p>
+        </section>
+
+        <section class="privacy-section">
+            <h2>8. ポリシーの変更</h2>
+
+            <p>
+                機能追加や運用方法の変更に応じて、
+                本ポリシーの内容を変更する場合があります。
+                変更後の内容は、本ページへの掲載時点から適用します。
+            </p>
+        </section>
+
+        <section class="privacy-section">
+            <h2>9. お問い合わせ</h2>
+
+            <p>
+                本サービスに関するお問い合わせは、
+                ポートフォリオサイトまたは
+                GitHubリポジトリに記載された連絡先からお願いします。
+            </p>
+        </section>
+
+        <div class="privacy-actions">
+            <a asp-page="/Index"
+               class="privacy-primary-button">
+                ホームへ戻る
+            </a>
+
+            <a asp-page="/Ai/Index"
+               class="privacy-secondary-button">
+                AI FAQ検索を開く
+            </a>
+        </div>
+    </div>
+</div>

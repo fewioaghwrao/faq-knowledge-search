@@ -1,0 +1,173 @@
+﻿@page
+@model FaqKnowledgeSearch.Razor.Pages.Admin.Faqs.CreateModel
+
+@{
+    ViewData["Title"] = "FAQ新規登録";
+}
+
+<main class="admin-container">
+    <section class="admin-hero admin-hero-compact">
+        <div>
+            <span class="admin-label">Admin Console</span>
+            <h1>FAQ管理画面</h1>
+            <p>社内FAQの登録・編集・削除を行います。</p>
+        </div>
+
+        <div class="admin-hero-actions">
+            <a asp-page="/Admin/Faqs/Index"
+               class="admin-button">
+                FAQ管理
+            </a>
+
+            <a asp-page="/Admin/Faqs/Create"
+               class="admin-button admin-button-primary">
+                新規登録
+            </a>
+
+<a asp-page="/Admin/Users/Index"
+   class="admin-button">
+    ユーザー管理
+</a>
+        </div>
+    </section>
+
+    <section class="faq-form-panel">
+        <header class="faq-form-header">
+            <div>
+                <span class="admin-label">New FAQ</span>
+                <h2>FAQ新規登録</h2>
+                <p>社内FAQ・手順書・障害対応メモを登録します。</p>
+            </div>
+
+            <a asp-page="/Admin/Faqs/Index"
+               class="admin-button">
+                一覧へ戻る
+            </a>
+        </header>
+
+<form method="post"
+      class="faq-edit-form"
+      data-loading-message="FAQを登録しています…">
+
+            <div asp-validation-summary="ModelOnly"
+                 class="faq-validation-summary">
+            </div>
+
+            <div class="faq-form-group">
+                <div class="faq-form-label-row">
+                    <label asp-for="Input.Title"></label>
+
+                    <span class="faq-character-count"
+                          data-title-count>
+                        0/100
+                    </span>
+                </div>
+
+                <input asp-for="Input.Title"
+                       class="faq-form-control"
+                       maxlength="100"
+                       placeholder="例：ログインできない場合の対応"
+                       data-title-input />
+
+                <span asp-validation-for="Input.Title"
+                      class="faq-field-error">
+                </span>
+            </div>
+
+            <div class="faq-form-group">
+                <div class="faq-form-label-row">
+                    <label asp-for="Input.Body"></label>
+
+                    <span class="faq-character-count"
+                          data-body-count>
+                        0文字
+                    </span>
+                </div>
+
+                <textarea asp-for="Input.Body"
+                          class="faq-form-control faq-body-input"
+                          rows="10"
+                          placeholder="対応手順、確認ポイント、参照元などを記載してください。"
+                          data-body-input></textarea>
+
+                <span asp-validation-for="Input.Body"
+                      class="faq-field-error">
+                </span>
+            </div>
+
+            <div class="faq-form-grid">
+                <div class="faq-form-group">
+                    <label asp-for="Input.CategoryId"></label>
+
+                    <select asp-for="Input.CategoryId"
+                            class="faq-form-control">
+                        <option value="0">
+                            カテゴリを選択してください
+                        </option>
+
+                        @foreach (var category in Model.CategoryOptions)
+                        {
+                            <option value="@category.Id">
+                                @category.Name
+                            </option>
+                        }
+                    </select>
+
+                    <span asp-validation-for="Input.CategoryId"
+                          class="faq-field-error">
+                    </span>
+                </div>
+
+                <div class="faq-form-group">
+                    <label asp-for="Input.TagIds"></label>
+
+                    <input asp-for="Input.TagIds"
+                           class="faq-form-control"
+                           placeholder="例：1,2" />
+
+                    <span asp-validation-for="Input.TagIds"
+                          class="faq-field-error">
+                    </span>
+
+                    <p class="faq-form-help">
+                        @foreach (var tag in Model.TagOptions)
+                        {
+                            <span>@tag.Id: @tag.Name</span>
+                        }
+                    </p>
+                </div>
+            </div>
+
+            <label class="faq-publish-box">
+                <span>
+                    <strong>公開状態</strong>
+                    <small>
+                        ONにすると利用者向けのFAQ一覧・検索結果に表示されます。
+                    </small>
+                </span>
+
+                <input asp-for="Input.IsPublished"
+                       class="faq-publish-checkbox" />
+            </label>
+
+            <div class="faq-form-actions">
+                <a asp-page="/Admin/Faqs/Index"
+                   class="admin-button">
+                    キャンセル
+                </a>
+
+                <button type="submit"
+                        class="admin-button admin-button-primary">
+                    登録する
+                </button>
+            </div>
+        </form>
+    </section>
+</main>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script src="~/js/admin-faq-form.js"
+            asp-append-version="true"></script>
+}

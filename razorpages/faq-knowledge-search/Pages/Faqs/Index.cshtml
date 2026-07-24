@@ -1,0 +1,247 @@
+﻿@page
+@model FaqKnowledgeSearch.Razor.Pages.Faqs.IndexModel
+@using FaqKnowledgeSearch.Application.Faqs.Public
+
+@{
+    ViewData["Title"] = "FAQ検索";
+}
+
+<div class="faq-page">
+    <section class="faq-hero">
+        <div class="faq-hero__label">
+            Phase 1 / FAQ Search
+        </div>
+
+        <h1 class="faq-hero__title">
+            社内ナレッジをすばやく検索
+        </h1>
+
+        <p class="faq-hero__description">
+            手順書・FAQ・障害対応メモを登録し、
+            キーワードから必要な情報を探せる社内FAQ検索アプリです。
+        </p>
+
+        <div class="faq-hero__features">
+            <span>FAQ検索</span>
+            <span>根拠表示</span>
+            <span>管理者登録</span>
+        </div>
+    </section>
+
+    <section class="faq-search-panel"
+             aria-labelledby="search-heading">
+
+        <h2 id="search-heading"
+            class="visually-hidden">
+            FAQ検索条件
+        </h2>
+
+        <form method="get"
+              class="faq-search-form"
+              data-loading-message="FAQを検索しています…">
+
+            <input type="hidden"
+                   asp-for="SortOrder"
+                   value="@FaqSortOrder.Relevance" />
+
+            <div class="faq-search-form__keyword">
+                <label asp-for="Keyword"
+                       class="visually-hidden">
+                    キーワード
+                </label>
+
+                <input asp-for="Keyword"
+                       class="faq-search-input"
+                       placeholder="キーワードでFAQを検索"
+                       autocomplete="off"
+                       inputmode="search" />
+            </div>
+
+            <div class="faq-search-form__actions">
+                <button type="submit"
+                        class="faq-search-button">
+                    検索
+                </button>
+
+                <a asp-page="./Index"
+                   class="faq-clear-button">
+                    クリア
+                </a>
+            </div>
+        </form>
+    </section>
+
+    <section class="faq-results"
+             aria-labelledby="result-heading">
+
+        <div class="faq-results__header">
+            <div>
+                <h2 id="result-heading"
+                    class="faq-results__title">
+                    登録済みFAQ
+                </h2>
+
+                @if (!string.IsNullOrWhiteSpace(Model.Keyword))
+                {
+                    <p class="faq-results__condition">
+                        「@Model.Keyword」の検索結果
+                        ・@Model.GetSortOrderLabel()
+                    </p>
+                }
+            </div>
+
+            <div class="faq-results__count">
+                @Model.SearchResult.TotalCount 件
+            </div>
+        </div>
+
+        @if (Model.SearchResult.Items.Count == 0)
+        {
+            <div class="faq-empty"
+                 role="status">
+
+                <h3>該当するFAQが見つかりませんでした</h3>
+
+                <p>
+                    キーワードを短くするか、
+                    別の言葉で検索してください。
+                </p>
+            </div>
+        }
+        else
+        {
+            <div class="faq-card-list">
+                @foreach (var faq in Model.SearchResult.Items)
+                {
+                    <article class="faq-card">
+                        <div class="faq-card__accent"></div>
+
+                        <div class="faq-card__body">
+                            <div class="faq-card__main">
+                                <div class="faq-card__badges">
+                                    <span class="faq-category-badge">
+                                        @faq.CategoryName
+                                    </span>
+
+                                    @foreach (var tagName in faq.TagNames)
+                                    {
+                                        <span class="faq-tag-badge">
+                                            #@tagName
+                                        </span>
+                                    }
+                                </div>
+
+                                <h3 class="faq-card__title">
+                                    <a asp-page="./Detail"
+                                       asp-route-id="@faq.Id">
+                                        @faq.Title
+                                    </a>
+                                </h3>
+
+                                <p class="faq-card__excerpt">
+                                    @faq.BodyExcerpt
+                                </p>
+                            </div>
+
+                            <div class="faq-view-badge">
+                                <span class="faq-view-badge__label">
+                                    Views
+                                </span>
+
+                                <strong>
+                                    @faq.ViewCount
+                                </strong>
+                            </div>
+                        </div>
+
+                        <footer class="faq-card__footer">
+                            <div class="faq-card__updated">
+                                更新日：
+                                @(faq.UpdatedAt
+                                    .ToLocalTime()
+                                    .ToString("yyyy/MM/dd"))
+                            </div>
+
+                            <a asp-page="./Detail"
+                               asp-route-id="@faq.Id"
+                               class="faq-detail-link">
+                                詳細を見る →
+                            </a>
+                        </footer>
+                    </article>
+                }
+            </div>
+
+            @if (Model.SearchResult.TotalPages > 1)
+            {
+                <nav class="faq-pagination"
+                     aria-label="FAQ検索結果のページ移動">
+
+                    <ul>
+                        <li>
+                            @if (Model.SearchResult.HasPreviousPage)
+                            {
+                                <a asp-page="./Index"
+                                   asp-route-keyword="@Model.Keyword"
+                                   asp-route-sortOrder="@Model.SortOrder"
+                                   asp-route-pageNumber="@(Model.SearchResult.Page - 1)">
+                                    前へ
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="is-disabled">
+                                    前へ
+                                </span>
+                            }
+                        </li>
+
+                        @for (
+                            var pageNumber = 1;
+                            pageNumber <= Model.SearchResult.TotalPages;
+                            pageNumber++)
+                        {
+                            <li>
+                                @if (pageNumber ==
+                                     Model.SearchResult.Page)
+                                {
+                                    <span class="is-current"
+                                          aria-current="page">
+                                        @pageNumber
+                                    </span>
+                                }
+                                else
+                                {
+                                    <a asp-page="./Index"
+                                       asp-route-keyword="@Model.Keyword"
+                                       asp-route-sortOrder="@Model.SortOrder"
+                                       asp-route-pageNumber="@pageNumber">
+                                        @pageNumber
+                                    </a>
+                                }
+                            </li>
+                        }
+
+                        <li>
+                            @if (Model.SearchResult.HasNextPage)
+                            {
+                                <a asp-page="./Index"
+                                   asp-route-keyword="@Model.Keyword"
+                                   asp-route-sortOrder="@Model.SortOrder"
+                                   asp-route-pageNumber="@(Model.SearchResult.Page + 1)">
+                                    次へ
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="is-disabled">
+                                    次へ
+                                </span>
+                            }
+                        </li>
+                    </ul>
+                </nav>
+            }
+        }
+    </section>
+</div>

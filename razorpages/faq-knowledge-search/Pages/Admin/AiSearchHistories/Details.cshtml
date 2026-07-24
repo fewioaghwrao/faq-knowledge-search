@@ -1,0 +1,170 @@
+﻿@page
+@model FaqKnowledgeSearch.Razor.Pages.Admin.AiSearchHistories.DetailsModel
+
+@{
+    ViewData["Title"] = "AI検索履歴詳細";
+}
+
+<main class="admin-container">
+    <section class="admin-hero admin-hero-compact">
+        <div>
+            <span class="admin-label">Admin Console</span>
+
+            <h1>AI検索履歴詳細</h1>
+
+            <p>
+                AI検索時の質問、回答、参照FAQを確認します。
+            </p>
+        </div>
+
+        <div class="admin-hero-actions">
+            <a asp-page="/Admin/AiSearchHistories/Index"
+               class="admin-button">
+                履歴一覧へ戻る
+            </a>
+        </div>
+    </section>
+
+    <section class="history-detail-panel">
+        <header class="history-detail-header">
+            <div>
+                <span class="history-admin-label">
+                    History #@Model.History.Id
+                </span>
+
+                <h2>
+                    @(Model.History.IsSuccess
+                        ? "AI検索成功"
+                        : "AI検索失敗")
+                </h2>
+            </div>
+
+            <span class="history-status-badge
+                @(Model.History.IsSuccess
+                    ? "success"
+                    : "failure")">
+                @(Model.History.IsSuccess
+                    ? "成功"
+                    : "失敗")
+            </span>
+        </header>
+
+        <dl class="history-metadata-grid">
+            <div>
+                <dt>実行日時</dt>
+                <dd>
+                    @Model.History.CreatedAt
+                    .ToLocalTime()
+                    .ToString("yyyy/MM/dd HH:mm:ss")
+                </dd>
+            </div>
+
+            <div>
+                <dt>モデル</dt>
+                <dd>@Model.History.ModelName</dd>
+            </div>
+
+            <div>
+                <dt>外部AI使用</dt>
+                <dd>
+                    @(Model.History.UsedExternalAi
+                        ? "使用"
+                        : "未使用")
+                </dd>
+            </div>
+
+            <div>
+                <dt>フィードバック</dt>
+                <dd>
+                    @if (Model.History.WasHelpful == true)
+                    {
+                        <span>👍 役に立った</span>
+                    }
+                    else if (Model.History.WasHelpful == false)
+                    {
+                        <span>👎 役に立たなかった</span>
+                    }
+                    else
+                    {
+                        <span>未評価</span>
+                    }
+                </dd>
+            </div>
+        </dl>
+
+        <section class="history-detail-section">
+            <h3>質問</h3>
+
+            <div class="history-detail-content">
+                @Model.History.Question
+            </div>
+        </section>
+
+        @if (Model.History.IsSuccess)
+        {
+            <section class="history-detail-section">
+                <h3>回答</h3>
+
+                <div class="history-detail-content history-answer">
+                    @Model.History.Answer
+                </div>
+            </section>
+        }
+        else
+        {
+            <section class="history-detail-section">
+                <h3>エラー内容</h3>
+
+                <div class="history-detail-content history-error">
+                    @Model.History.ErrorMessage
+                </div>
+            </section>
+        }
+
+        <section class="history-detail-section">
+            <h3>
+                参照FAQ
+                （@Model.History.References.Count 件）
+            </h3>
+
+            @if (Model.History.References.Count == 0)
+            {
+                <div class="history-no-reference">
+                    参照したFAQはありません。
+                </div>
+            }
+            else
+            {
+                <div class="history-reference-list">
+                    @foreach (var reference
+                              in Model.History.References)
+                    {
+                        <article class="history-reference-card">
+                            <div>
+                                <span class="history-reference-order">
+                                    #@reference.DisplayOrder
+                                </span>
+
+                                <strong>
+                                    @reference.FaqTitle
+                                </strong>
+
+                                <p>
+                                    FAQ ID: @reference.FaqId
+                                    ／ @reference.CategoryName
+                                    ／ Score: @reference.Score
+                                </p>
+                            </div>
+
+                            <a asp-page="/Admin/Faqs/Edit"
+                               asp-route-id="@reference.FaqId"
+                               class="history-reference-link">
+                                FAQを確認 →
+                            </a>
+                        </article>
+                    }
+                </div>
+            }
+        </section>
+    </section>
+</main>

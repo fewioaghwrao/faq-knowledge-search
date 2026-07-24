@@ -1,0 +1,227 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>
+        @ViewData["Title"] - Knowledge FAQ
+    </title>
+
+    <script type="importmap"></script>
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/FaqKnowledgeSearch.Razor.styles.css"
+          asp-append-version="true" />
+    <link rel="stylesheet"
+      href="~/css/admin.css"
+      asp-append-version="true" />
+
+@await RenderSectionAsync("Styles", required: false)
+</head>
+
+<body>
+    <div id="globalLoadingOverlay"
+         class="global-loading-overlay"
+         aria-hidden="true"
+         hidden>
+
+        <div class="global-loading-overlay__panel"
+             role="status"
+             aria-live="polite">
+
+            <div class="global-loading-overlay__spinner"
+                 aria-hidden="true">
+            </div>
+
+            <p id="globalLoadingMessage"
+               class="global-loading-overlay__message">
+                処理しています…
+            </p>
+
+            <small class="global-loading-overlay__note">
+                この画面を閉じずにお待ちください。
+            </small>
+        </div>
+    </div>
+
+<header class="site-header">
+    <div class="site-header__inner">
+        <a asp-page="/Index"
+           class="site-brand">
+
+            <span class="site-brand__icon"
+                  aria-hidden="true">
+                Q
+            </span>
+
+            <span class="site-brand__text">
+                <strong>Knowledge FAQ</strong>
+                <small>社内ナレッジ検索</small>
+            </span>
+        </a>
+
+        <button type="button"
+                class="site-menu-toggle"
+                aria-controls="siteNavigation"
+                aria-expanded="false"
+                data-site-menu-toggle>
+            <span data-site-menu-label>
+                メニュー
+            </span>
+        </button>
+
+        <nav id="siteNavigation"
+             class="site-navigation"
+             aria-label="メインナビゲーション"
+             data-site-navigation>
+
+            <a asp-page="/Index"
+               class="site-navigation__link">
+                ホーム
+            </a>
+
+            <a asp-page="/Faqs/Index"
+               class="site-navigation__link">
+                FAQ検索
+            </a>
+
+            <a asp-page="/Ai/Index"
+               class="site-navigation__link">
+                AI検索
+            </a>
+
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-page="/Admin/Index"
+                       class="site-navigation__link">
+                        管理画面
+                    </a>
+                }
+
+                <button type="button"
+                        class="site-login-button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#logoutConfirmModal">
+                    ログアウト
+                </button>
+            }
+            else
+            {
+                <a asp-page="/Account/Login"
+                   class="site-login-button">
+                    ログイン
+                </a>
+            }
+        </nav>
+    </div>
+</header>
+
+    <main role="main"
+          class="site-main">
+        @RenderBody()
+    </main>
+
+<footer class="site-footer">
+    <div class="container site-footer__inner">
+        <span class="site-footer__copyright">
+            &copy; 2026 Knowledge FAQ
+        </span>
+
+        <nav class="site-footer__navigation"
+             aria-label="フッターナビゲーション">
+
+            <a asp-page="/Privacy"
+               class="site-footer__link">
+                プライバシーポリシー
+            </a>
+        </nav>
+    </div>
+</footer>
+    @if (User.Identity?.IsAuthenticated == true)
+{
+    <div class="modal fade"
+         id="logoutConfirmModal"
+         tabindex="-1"
+         aria-labelledby="logoutConfirmModalLabel"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content logout-modal">
+
+                <div class="modal-header logout-modal__header">
+                    <div>
+                        <span class="logout-modal__label">
+                            Sign Out
+                        </span>
+
+                        <h2 class="logout-modal__title"
+                            id="logoutConfirmModalLabel">
+                            ログアウトしますか？
+                        </h2>
+                    </div>
+
+                    <button type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"
+                            aria-label="閉じる">
+                    </button>
+                </div>
+
+                <div class="modal-body logout-modal__body">
+                    <p>
+                        現在のログインセッションを終了します。
+                    </p>
+
+                    <p class="logout-modal__note">
+                        管理画面を再び利用するには、
+                        メールアドレスとパスワードによる
+                        再ログインが必要です。
+                    </p>
+                </div>
+
+                <div class="modal-footer logout-modal__footer">
+                    <button type="button"
+                            class="logout-modal__cancel-button"
+                            data-bs-dismiss="modal">
+                        キャンセル
+                    </button>
+
+<form method="post"
+      asp-page="/Account/Logout"
+      class="logout-modal__form"
+      data-loading-message="ログアウトしています…">
+
+                        <button type="submit"
+                                class="logout-modal__submit-button">
+                            ログアウトする
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/js/site.js"
+            asp-append-version="true"></script>
+
+    @await RenderSectionAsync(
+        "Scripts",
+        required: false)
+</body>
+</html>

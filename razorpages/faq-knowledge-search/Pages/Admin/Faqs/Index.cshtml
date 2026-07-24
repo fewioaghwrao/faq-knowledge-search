@@ -1,0 +1,211 @@
+﻿@page
+@model FaqKnowledgeSearch.Razor.Pages.Admin.Faqs.IndexModel
+
+@{
+    ViewData["Title"] = "FAQ管理";
+}
+
+<main class="admin-container">
+    <section class="admin-hero admin-hero-compact">
+        <div>
+            <span class="admin-label">Admin Console</span>
+
+            <h1>FAQ管理画面</h1>
+
+            <p>
+                社内FAQの登録・編集・削除を行います。
+            </p>
+        </div>
+
+        <div class="admin-hero-actions">
+            <a asp-page="/Admin/Faqs/Index"
+               class="admin-button">
+                FAQ管理
+            </a>
+
+            <a asp-page="/Admin/Faqs/Create"
+               class="admin-button admin-button-primary">
+                新規登録
+            </a>
+
+            <a asp-page="/Admin/Users/Index"
+               class="admin-button">
+                ユーザー管理
+            </a>
+        </div>
+    </section>
+
+    <section class="faq-admin-panel">
+        @if (TempData["SuccessMessage"] is string successMessage)
+        {
+            <div class="admin-success-message"
+                 role="status">
+                @successMessage
+            </div>
+        }
+
+        @if (TempData["ErrorMessage"] is string errorMessage)
+        {
+            <div class="admin-error-message"
+                 role="alert">
+                @errorMessage
+            </div>
+        }
+        <header class="faq-admin-header">
+            <div>
+                <h2>FAQ一覧</h2>
+
+                <p>
+                    登録済みFAQの公開状態・編集・削除を管理します。
+                    長いタイトルや本文でも崩れにくい一覧表示です。
+                </p>
+            </div>
+
+            <div class="faq-admin-summary">
+                <a asp-page="/Admin/AiSearchHistories/Index"
+                   class="history-button">
+                    AI検索履歴を見る
+                </a>
+
+                <span class="result-count">
+                    登録件数 @Model.Result.TotalCount 件
+                </span>
+            </div>
+        </header>
+
+        @if (Model.Result.Items.Count == 0)
+        {
+            <div class="admin-empty">
+                登録されているFAQはありません。
+            </div>
+        }
+        else
+        {
+            <div class="faq-table-wrapper">
+                <table class="faq-admin-table">
+                    <thead>
+                        <tr>
+                            <th class="id-column">ID</th>
+                            <th>タイトル / 本文</th>
+                            <th>カテゴリ</th>
+                            <th>公開状態</th>
+                            <th>閲覧数</th>
+                            <th class="operation-column">操作</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var faq in Model.Result.Items)
+                        {
+                            <tr>
+                                <td class="faq-id"
+                                    data-label="ID">
+                                    #@faq.Id
+                                </td>
+
+                                <td class="faq-content-cell">
+                                    <strong class="faq-title">
+                                        @faq.Title
+                                    </strong>
+
+                                    <p class="faq-preview">
+                                        @faq.BodyPreview
+                                    </p>
+                                </td>
+
+                                <td data-label="カテゴリ">
+                                    <span class="category-badge">
+                                        @faq.CategoryName
+                                    </span>
+                                </td>
+
+                                <td data-label="公開状態">
+                                    @if (faq.IsPublished)
+                                    {
+                                        <span class="publish-badge published">
+                                            公開
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="publish-badge private">
+                                            非公開
+                                        </span>
+                                    }
+                                </td>
+
+                                <td class="view-count"
+                                    data-label="閲覧数">
+                                    @faq.ViewCount
+                                </td>
+
+                                <td class="faq-operation-cell"
+                                    data-label="操作">
+                                    <div class="faq-actions">
+                                        <a asp-page="/Admin/Faqs/Edit"
+                                           asp-route-id="@faq.Id"
+                                           class="faq-action-button">
+                                            編集
+                                        </a>
+
+                                        <form method="post"
+                                              asp-page-handler="Delete"
+                                              asp-route-id="@faq.Id"
+                                              asp-route-pageNumber="@Model.Result.Page"
+                                              class="faq-delete-form"
+                                              data-loading-message="FAQを削除しています…"
+                                              onsubmit="return confirm('「@faq.Title」を削除しますか？\n削除後は一般FAQ一覧にも表示されなくなります。');">
+
+                                            <button type="submit"
+                                                    class="faq-action-button danger">
+                                                削除
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+        <nav class="admin-pagination"
+             aria-label="FAQ一覧ページ">
+
+            @if (Model.Result.HasPreviousPage)
+            {
+                <a asp-page="/Admin/Faqs/Index"
+                   asp-route-pageNumber="@(Model.Result.Page - 1)"
+                   class="pagination-button">
+                    前へ
+                </a>
+            }
+            else
+            {
+                <span class="pagination-button is-disabled">
+                    前へ
+                </span>
+            }
+
+            <span class="pagination-current">
+                @Model.Result.Page / @Model.DisplayTotalPages
+            </span>
+
+            @if (Model.Result.HasNextPage)
+            {
+                <a asp-page="/Admin/Faqs/Index"
+                   asp-route-pageNumber="@(Model.Result.Page + 1)"
+                   class="pagination-button">
+                    次へ
+                </a>
+            }
+            else
+            {
+                <span class="pagination-button is-disabled">
+                    次へ
+                </span>
+            }
+        </nav>
+    </section>
+</main>

@@ -1,0 +1,219 @@
+﻿@page
+@model FaqKnowledgeSearch.Razor.Pages.Ai.IndexModel
+
+@{
+    ViewData["Title"] = "AI FAQ検索";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/ai-search.css"
+          asp-append-version="true" />
+}
+
+<div class="ai-page">
+    <section class="ai-hero">
+        <span class="ai-label">
+            AI FAQ Search
+        </span>
+
+        <h1>FAQをもとにAI回答を生成</h1>
+
+        <p>
+            質問・検索キーワードから関連FAQを検索し、
+            上位FAQをもとにAI回答と参照元を表示します。
+        </p>
+
+        <div class="ai-feature-list">
+            <span>FAQ検索連携</span>
+            <span>参照元表示</span>
+            <span>外部AI API連携</span>
+        </div>
+    </section>
+
+    <section class="ai-search-panel">
+            @if (Model.IsRateLimited)
+    {
+        <div class="ai-rate-limit-message"
+             role="alert">
+            AI検索は1分あたり5回まで利用できます。
+            約 @Model.RetryAfterSeconds 秒待ってから
+            再度お試しください。
+        </div>
+    }
+<form method="post"
+      data-loading-message="FAQを検索し、AI回答を生成しています…">
+            <div asp-validation-summary="ModelOnly"
+                 class="ai-validation-summary"
+                 role="alert">
+            </div>
+
+            <div class="ai-question-header">
+                <label asp-for="Input.Question"></label>
+
+                <span data-ai-count>
+                    @Model.Input.Question.Length/500
+                </span>
+            </div>
+
+            <textarea asp-for="Input.Question"
+                      class="ai-question-input"
+                      rows="6"
+                      maxlength="500"
+                      placeholder="例：CSV取込でエラーが出た場合の確認方法"
+                      data-ai-input></textarea>
+
+            <span asp-validation-for="Input.Question"
+                  class="ai-field-error">
+            </span>
+
+<div class="ai-example-area">
+    <span>質問例</span>
+
+    <div class="ai-example-buttons">
+        <button type="button"
+                data-ai-example="ログインできない 初期対応">
+            ログインできない 初期対応
+        </button>
+
+        <button type="button"
+                data-ai-example="CSV取込 文字コード エラー">
+            CSV取込 文字コード エラー
+        </button>
+
+        <button type="button"
+                data-ai-example="PDF出力 失敗 対応">
+            PDF出力 失敗 対応
+        </button>
+
+        <button type="button"
+                data-ai-example="権限不足 メニュー 表示されない">
+            権限不足 メニュー表示
+        </button>
+    </div>
+</div>
+
+            <div class="ai-search-footer">
+                <a asp-page="/Faqs/Index">
+                    通常のFAQ検索を見る →
+                </a>
+
+                <button type="submit"
+                        class="ai-search-button">
+                    AI検索する
+                </button>
+            </div>
+        </form>
+    </section>
+
+    @if (Model.Result is not null)
+    {
+        <section class="ai-result-panel">
+            <span class="ai-result-label">
+                FAQ参照AI回答
+            </span>
+
+            <div class="ai-answer">
+                @Model.Result.Answer
+            </div>
+
+            @if (Model.Result.UsedExternalAi)
+            {
+                <div class="ai-disclaimer">
+                    この回答はFAQをもとに生成されています。
+                    必ず参照元を確認してください。
+                </div>
+            }
+
+@if (Model.Result.UsedExternalAi &&
+     !string.IsNullOrWhiteSpace(Model.FeedbackToken))
+{
+    <div class="ai-feedback-panel">
+        <strong>
+            このAI回答は役に立ちましたか？
+        </strong>
+
+        <form method="post"
+              asp-page-handler="Feedback"
+              class="ai-feedback-form"
+              data-ai-feedback-form>
+
+            <input type="hidden"
+                   name="feedbackToken"
+                   value="@Model.FeedbackToken" />
+
+            <div class="ai-feedback-actions">
+                <button type="button"
+                        class="ai-feedback-button helpful"
+                        data-ai-feedback-button
+                        data-ai-feedback-value="true"
+                        aria-pressed="false">
+                    役に立った
+                </button>
+
+                <button type="button"
+                        class="ai-feedback-button not-helpful"
+                        data-ai-feedback-button
+                        data-ai-feedback-value="false"
+                        aria-pressed="false">
+                    役に立たなかった
+                </button>
+            </div>
+
+            <p class="ai-feedback-message"
+               data-ai-feedback-message
+               aria-live="polite">
+            </p>
+        </form>
+    </div>
+}
+
+            <div class="ai-reference-section">
+                <h2>
+                    参照元FAQ
+                </h2>
+
+                @if (Model.Result.References.Count == 0)
+                {
+                    <p class="ai-no-reference">
+                        参照できるFAQはありません。
+                    </p>
+                }
+                else
+                {
+                    @foreach (var reference
+                              in Model.Result.References)
+                    {
+                        <article class="ai-reference-card">
+                            <div>
+                                <strong>
+                                    @reference.Title
+                                </strong>
+
+                                <span>
+                                    FAQ ID: @reference.Id
+                                    ／ @reference.CategoryName
+                                </span>
+
+                                <p>
+                                    @reference.BodyPreview
+                                </p>
+                            </div>
+
+                            <a asp-page="/Faqs/Index">
+                                FAQ検索を見る →
+                            </a>
+                        </article>
+                    }
+                }
+            </div>
+        </section>
+    }
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script src="~/js/ai-search.js"
+            asp-append-version="true"></script>
+}

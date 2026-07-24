@@ -1,0 +1,79 @@
+﻿@page
+@model IndexModel
+
+@{
+    ViewData["Title"] = "ホーム";
+}
+
+<div class="home-page">
+    <section class="home-hero">
+        <div class="home-hero__label">
+            FAQ Knowledge Search
+        </div>
+
+        <h1 class="home-hero__title">
+            社内ナレッジ検索アプリ
+        </h1>
+
+        <p class="home-hero__description">
+            手順書・FAQ・障害対応メモを登録し、
+            通常検索とAI検索の両方から必要な情報を探せるアプリです。
+        </p>
+
+        <div class="home-hero__actions">
+            <a asp-page="/Faqs/Index"
+               class="home-primary-button">
+                通常FAQ検索を使う
+            </a>
+
+            <a asp-page="/Ai/Index"
+               class="home-secondary-button">
+                AI FAQ検索を使う
+            </a>
+        </div>
+    </section>
+
+    <section class="home-feature-grid"
+             aria-label="検索機能">
+
+        <article class="home-feature-card">
+            <div class="home-feature-card__label">
+                FAQ Search
+            </div>
+
+            <h2 class="home-feature-card__title">
+                通常FAQ検索
+            </h2>
+
+            <p class="home-feature-card__description">
+                キーワード・カテゴリ・タグをもとに、
+                登録済みFAQを検索します。
+            </p>
+
+            <a asp-page="/Faqs/Index"
+               class="home-feature-card__link home-feature-card__link--faq">
+                検索画面へ →
+            </a>
+        </article>
+
+        <article class="home-feature-card">
+            <div class="home-feature-card__label">
+                AI FAQ Search
+            </div>
+
+            <h2 class="home-feature-card__title">
+                AI FAQ検索
+            </h2>
+
+            <p class="home-feature-card__description">
+                関連FAQの上位候補をもとに、
+                外部AI APIで回答を生成し、参照元FAQも表示します。
+            </p>
+
+            <a asp-page="/Ai/Index"
+               class="home-feature-card__link home-feature-card__link--ai">
+                AI検索画面へ →
+            </a>
+        </article>
+    </section>
+</div>

@@ -1,0 +1,274 @@
+﻿@page
+@using FaqKnowledgeSearch.Application.AiSearch.History.Admin
+@model FaqKnowledgeSearch.Razor.Pages.Admin.AiSearchHistories.IndexModel
+
+@{
+    ViewData["Title"] = "AI検索履歴";
+}
+
+<main class="admin-container">
+    <section class="admin-hero admin-hero-compact">
+        <div>
+            <span class="admin-label">Admin Console</span>
+
+            <h1>FAQ管理画面</h1>
+
+            <p>
+                社内FAQの登録・編集・AI検索履歴を管理します。
+            </p>
+        </div>
+
+        <div class="admin-hero-actions">
+            <a asp-page="/Admin/Faqs/Index"
+               class="admin-button">
+                FAQ管理
+            </a>
+
+            <a asp-page="/Admin/Faqs/Create"
+               class="admin-button admin-button-primary">
+                新規登録
+            </a>
+
+            <a asp-page="/Admin/Users/Index"
+               class="admin-button">
+                ユーザー管理
+            </a>
+        </div>
+    </section>
+
+    <section class="history-admin-panel">
+        <header class="history-admin-header">
+            <div>
+                <span class="history-admin-label">
+                    Admin
+                </span>
+
+                <h2>AI検索履歴</h2>
+
+                <p>
+                    AI検索で実行された質問、回答結果、
+                    参照FAQ件数を確認できます。
+                </p>
+            </div>
+
+            <a asp-page="/Admin/Index"
+               class="admin-button">
+                管理トップへ戻る
+            </a>
+        </header>
+
+        <form method="get"
+              class="history-filter-form">
+
+            <div class="history-filter-field">
+                <label asp-for="Keyword">
+                    キーワード
+                </label>
+
+                <input asp-for="Keyword"
+                       class="history-filter-control"
+                       placeholder="質問・回答・エラー内容で検索" />
+            </div>
+
+            <div class="history-filter-field">
+                <label asp-for="Status">
+                    成功／失敗
+                </label>
+
+                <select asp-for="Status"
+                        class="history-filter-control">
+                    <option value="@AdminAiSearchStatusFilter.All">
+                        すべて
+                    </option>
+                    <option value="@AdminAiSearchStatusFilter.Success">
+                        成功
+                    </option>
+                    <option value="@AdminAiSearchStatusFilter.Failure">
+                        失敗
+                    </option>
+                </select>
+            </div>
+
+            <div class="history-filter-field">
+                <label asp-for="Feedback">
+                    フィードバック
+                </label>
+
+                <select asp-for="Feedback"
+                        class="history-filter-control">
+                    <option value="@AdminAiSearchFeedbackFilter.All">
+                        すべて
+                    </option>
+                    <option value="@AdminAiSearchFeedbackFilter.Helpful">
+                        役に立った
+                    </option>
+                    <option value="@AdminAiSearchFeedbackFilter.NotHelpful">
+                        役に立たなかった
+                    </option>
+                    <option value="@AdminAiSearchFeedbackFilter.None">
+                        未評価
+                    </option>
+                </select>
+            </div>
+
+            <div class="history-filter-actions">
+                <button type="submit"
+                        class="admin-button admin-button-primary">
+                    検索
+                </button>
+
+                <a asp-page="/Admin/AiSearchHistories/Index"
+                   class="admin-button">
+                    クリア
+                </a>
+            </div>
+        </form>
+
+        <div class="history-result-summary">
+            検索結果 @Model.Result.TotalCount 件
+        </div>
+
+        @if (Model.Result.Items.Count == 0)
+        {
+            <div class="admin-empty">
+                条件に一致するAI検索履歴はありません。
+            </div>
+        }
+        else
+        {
+            <div class="history-table-wrapper">
+                <table class="history-admin-table">
+                    <thead>
+                        <tr>
+                            <th>実行日時</th>
+                            <th>質問</th>
+                            <th>回答プレビュー</th>
+                            <th>結果</th>
+                            <th>参照FAQ</th>
+                            <th>FB</th>
+                            <th>詳細</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var history in Model.Result.Items)
+                        {
+                            <tr>
+                                <td class="history-created-at"
+                                    data-label="実行日時">
+                                    @history.CreatedAt
+                                    .ToLocalTime()
+                                    .ToString("yyyy/MM/dd HH:mm")
+                                </td>
+
+                                <td class="history-question-cell"
+                                    data-label="質問">
+                                    <strong class="history-question">
+                                        @history.Question
+                                    </strong>
+                                </td>
+
+                                <td class="history-preview history-response-cell"
+                                    data-label="回答プレビュー">
+                                    @history.ResponsePreview
+                                </td>
+
+                                <td data-label="結果">
+                                    <span class="history-status-badge
+                                        @(history.IsSuccess
+                                            ? "success"
+                                            : "failure")">
+                                        @(history.IsSuccess
+                                            ? "成功"
+                                            : "失敗")
+                                    </span>
+                                </td>
+
+                                <td data-label="参照FAQ">
+                                    @history.ReferenceCount 件
+                                </td>
+
+                                <td data-label="フィードバック">
+                                    @if (history.WasHelpful == true)
+                                    {
+                                        <span class="history-feedback helpful"
+                                              title="役に立った">
+                                            👍
+                                        </span>
+                                    }
+                                    else if (history.WasHelpful == false)
+                                    {
+                                        <span class="history-feedback not-helpful"
+                                              title="役に立たなかった">
+                                            👎
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="history-feedback none">
+                                            未評価
+                                        </span>
+                                    }
+                                </td>
+
+                                <td class="history-detail-cell"
+                                    data-label="詳細">
+                                    <a asp-page="/Admin/AiSearchHistories/Details"
+                                       asp-route-id="@history.Id"
+                                       class="history-detail-button">
+                                        詳細を見る
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+        <nav class="admin-pagination"
+             aria-label="AI検索履歴ページ">
+
+            @if (Model.Result.HasPreviousPage)
+            {
+                <a asp-page="/Admin/AiSearchHistories/Index"
+                   asp-route-keyword="@Model.Keyword"
+                   asp-route-status="@Model.Status"
+                   asp-route-feedback="@Model.Feedback"
+                   asp-route-pageNumber="@(Model.Result.Page - 1)"
+                   class="pagination-button">
+                    前へ
+                </a>
+            }
+            else
+            {
+                <span class="pagination-button is-disabled">
+                    前へ
+                </span>
+            }
+
+            <span class="pagination-current">
+                @Model.Result.Page /
+                @Model.DisplayTotalPages
+            </span>
+
+            @if (Model.Result.HasNextPage)
+            {
+                <a asp-page="/Admin/AiSearchHistories/Index"
+                   asp-route-keyword="@Model.Keyword"
+                   asp-route-status="@Model.Status"
+                   asp-route-feedback="@Model.Feedback"
+                   asp-route-pageNumber="@(Model.Result.Page + 1)"
+                   class="pagination-button">
+                    次へ
+                </a>
+            }
+            else
+            {
+                <span class="pagination-button is-disabled">
+                    次へ
+                </span>
+            }
+        </nav>
+    </section>
+</main>

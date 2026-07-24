@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" modified="2026-07-24T00:00:00.000Z" agent="OpenAI" version="24.7.17" type="device" compressed="false">
+  <diagram id="faq-erd" name="ER図">
+    <mxGraphModel dx="1800" dy="1100" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1100" math="0" shadow="0" background="#FFFFFF">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="&lt;b&gt;FAQ Knowledge Search — ER Diagram&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#666666&quot; size=&quot;2&quot;&gt;ASP.NET Core Identity + FAQ + AI検索履歴（現行 EF Core モデル準拠）&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=22;" vertex="1" parent="1">
+          <mxGeometry x="40" y="15" width="850" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="sec_identity" value="&lt;b&gt;&lt;font color=&quot;#548235&quot;&gt;認証・ユーザー&lt;/font&gt;&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="65" width="180" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="sec_faq" value="&lt;b&gt;&lt;font color=&quot;#2F5597&quot;&gt;FAQ管理&lt;/font&gt;&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="42" width="180" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="sec_ai" value="&lt;b&gt;&lt;font color=&quot;#5F497A&quot;&gt;AI検索履歴&lt;/font&gt;&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="620" width="180" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="users" value="&lt;div style=&quot;font-size:14px;font-weight:bold;color:white;text-align:center;padding:4px;background-color:#70AD47;&quot;&gt;AspNetUsers / ApplicationUser&lt;/div&gt;&lt;div style=&quot;font-size:12px;line-height:1.75;padding:8px;text-align:left;&quot;&gt;PK Id : varchar(255)&lt;br&gt;UserName : varchar(256)?&lt;br&gt;Email : varchar(256)?&lt;br&gt;DisplayName : longtext&lt;br&gt;IsActive : tinyint(1)&lt;br&gt;CreatedAt : datetime(6)&lt;br&gt;… Identity標準列は省略&lt;/div&gt;" style="html=1;whiteSpace=wrap;rounded=0;strokeColor=#404040;fillColor=#E2F0D9;verticalAlign=top;align=left;spacing=0;overflow=hidden;" vertex="1" parent="1">
+          <mxGeometry x="40" y="85" width="330" height="265" as="geometry" />
+        </mxCell>
+        <mxCell id="userroles" value="&lt;div style=&quot;font-size:14px;font-weight:bold;color:white;text-align:center;padding:4px;background-color:#A5A5A5;&quot;&gt;AspNetUserRoles&lt;/div&gt;&lt;div style=&quot;font-size:12px;line-height:1.75;padding:8px;text-align:left;&quot;&gt;PK/FK UserId : varchar(255)&lt;br&gt;PK/FK RoleId : varchar(255)&lt;/div&gt;" style="html=1;whiteSpace=wrap;rounded=0;strokeColor=#404040;fillColor=#E7E6E6;verticalAlign=top;align=left;spacing=0;overflow=hidden;" vertex="1" parent="1">
+          <mxGeometry x="430" y="135" width="280" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="roles" value="&lt;div style=&quot;font-size:14px;font-weight:bold;color:white;text-align:center;padding:4px;background-color:#70AD47;&quot;&gt;AspNetRoles&lt;/div&gt;&lt;div style=&quot;font-size:12px;line-height:1.75;padding:8px;text-align:left;&quot;&gt;PK Id : varchar(255)&lt;br&gt;Name : varchar(256)?&lt;br&gt;NormalizedName : varchar(256)? [UQ]&lt;br&gt;ConcurrencyStamp : longtext?&lt;/div&gt;" style="html=1;whiteSpace=wrap;rounded=0;strokeColor=#404040;fillColor=#E2F0D9;verticalAlign=top;align=left;spacing=0;overflow=hidden;" vertex="1" parent="1">
+          <mxGeometry x="770" y="85" width="280" height="165" as="geometry" />
+        </mxCell>
+        <mxCell id="categories" value="&lt;div style=&quot;font-size:14px;font-weight:bold;color:white;text-align:center;padding:4px;background-color:#5B9BD5;&quot;&gt;Categories&lt;/div&gt;&lt;div style=&quot;font-size:12px;line-height:1.75;padding:8px;text-align:left;&quot;&gt;PK Id : int&lt;br&gt;Name : varchar(50) [UQ]&lt;br&gt;DisplayOrder : int&lt;/div&gt;" style="html=1;whiteSpace=wrap;rounded=0;strokeColor=#404040;fillColor=#DDEBF7;verticalAlign=top;align=left;spacing=0;overflow=hidden;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="65" width="300" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="tags" value="&lt;div style=&quot;font-size:14px;font-weight:bold;color:white;text-align:center;padding:4px;background-color:#5B9BD5;&quot;&gt;Tags&lt;/div&gt;&lt;div style=&quot;font-size:12px;line-height:1.75;padding:8px;text-align:left;&quot;&gt;PK Id : int&lt;br&gt;Name : varchar(50) [UQ]&lt;br&gt;DisplayOrder : int&lt;/div&gt;" style="html=1;whiteSpace=wrap;rounded=0;strokeColor=#404040;fillColor=#DDEBF7;verticalAlign=top;align=left;spacing=0;overflow=hidden;" vertex="1" parent="1">
+          <mxGeometry x="1470" y="65" width="280" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="faqs" value="&lt;div style=&quot;font-size:14px;font-weight:bold;color:white;text-align:center;padding:4px;background-color:#5B9BD5;&quot;&gt;Faqs&lt;/div&gt;&lt;div style=&quot;font-size:12px;line-height:1.75;padding:8px;text-align:left;&quot;&gt;PK Id : int&lt;br&gt;FK CategoryId : int&lt;br&gt;Title : varchar(100)&lt;br&gt;Body : longtext&lt;br&gt;IsPublished : tinyint(1)&lt;br&gt;ViewCount : int = 0&lt;br&gt;CreatedAt : datetime(6)&lt;br&gt;UpdatedAt : datetime(6)&lt;br&gt;DeletedAt : datetime(6)?&lt;/div&gt;" style="html=1;whiteSpace=wrap;rounded=0;strokeColor=#404040;fillColor=#DDEBF7;verticalAlign=top;align=left;spacing=0;overflow=hidden;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="330" width="390" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="faqtags" value="&lt;div style=&quot;font-size:14px;font-weight:bold;color:white;text-align:center;padding:4px;background-color:#A5A5A5;&quot;&gt;FaqTags&lt;/div&gt;&lt;div style=&quot;font-size:12px;line-height:1.75;padding:8px;text-align:left;&quot;&gt;PK/FK FaqId : int&lt;br&gt;PK/FK TagId : int&lt;/div&gt;" style="html=1;whiteSpace=wrap;rounded=0;strokeColor=#404040;fillColor=#E7E6E6;verticalAlign=top;align=left;spacing=0;overflow=hidden;" vertex="1" parent="1">
+          <mxGeometry x="1500" y="385" width="250" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="histories" value="&lt;div style=&quot;font-size:14px;font-weight:bold;color:white;text-align:center;padding:4px;background-color:#8064A2;&quot;&gt;AiSearchHistories&lt;/div&gt;&lt;div style=&quot;font-size:12px;line-height:1.75;padding:8px;text-align:left;&quot;&gt;PK Id : bigint&lt;br&gt;Question : varchar(500)&lt;br&gt;Answer : longtext?&lt;br&gt;IsSuccess : tinyint(1)&lt;br&gt;ErrorMessage : varchar(2000)?&lt;br&gt;ModelName : varchar(100)&lt;br&gt;UsedExternalAi : tinyint(1)&lt;br&gt;WasHelpful : tinyint(1)?&lt;br&gt;CreatedAt : datetime(6)&lt;/div&gt;" style="html=1;whiteSpace=wrap;rounded=0;strokeColor=#404040;fillColor=#E4DFEC;verticalAlign=top;align=left;spacing=0;overflow=hidden;" vertex="1" parent="1">
+          <mxGeometry x="40" y="650" width="410" height="330" as="geometry" />
+        </mxCell>
+        <mxCell id="references" value="&lt;div style=&quot;font-size:14px;font-weight:bold;color:white;text-align:center;padding:4px;background-color:#8064A2;&quot;&gt;AiSearchReferences&lt;/div&gt;&lt;div style=&quot;font-size:12px;line-height:1.75;padding:8px;text-align:left;&quot;&gt;PK Id : bigint&lt;br&gt;FK AiSearchHistoryId : bigint&lt;br&gt;FaqId : int ※FK制約なし&lt;br&gt;FaqTitle : varchar(100)&lt;br&gt;CategoryName : varchar(50)&lt;br&gt;DisplayOrder : int&lt;br&gt;Score : int&lt;br&gt;UQ (AiSearchHistoryId, DisplayOrder)&lt;/div&gt;" style="html=1;whiteSpace=wrap;rounded=0;strokeColor=#404040;fillColor=#E4DFEC;verticalAlign=top;align=left;spacing=0;overflow=hidden;" vertex="1" parent="1">
+          <mxGeometry x="560" y="680" width="410" height="285" as="geometry" />
+        </mxCell>
+        <mxCell id="note" value="&lt;div style=&quot;font-size:15px;font-weight:bold;padding:4px;background-color:#FFD966;&quot;&gt;ER図の方針&lt;/div&gt;&lt;div style=&quot;font-size:12px;line-height:1.8;padding:8px;&quot;&gt;・AppDbContextModelSnapshot と Fluent API を基準にした物理寄りのER図&lt;br&gt;・AspNetRoleClaims / AspNetUserClaims / AspNetUserLogins / AspNetUserTokens は省略&lt;br&gt;・AiSearchReferences.FaqId は検索時点のFAQ IDを保持する論理参照で、DB外部キー制約はない&lt;br&gt;・Faqs は DeletedAt による論理削除。通常検索ではグローバルクエリフィルターで除外&lt;br&gt;・Categories → Faqs は削除制約 Restrict、履歴・中間テーブル側は Cascade&lt;/div&gt;" style="html=1;whiteSpace=wrap;rounded=1;strokeColor=#404040;fillColor=#FFF2CC;verticalAlign=top;align=left;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="725" width="710" height="255" as="geometry" />
+        </mxCell>
+        <mxCell id="e_users_userroles" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.45;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;strokeColor=#595959;strokeWidth=2;" edge="1" parent="1" source="users" target="userroles">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_roles_userroles" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.6;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;strokeColor=#595959;strokeWidth=2;" edge="1" parent="1" source="roles" target="userroles">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_categories_faqs" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;strokeColor=#595959;strokeWidth=2;" edge="1" parent="1" source="categories" target="faqs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_tags_faqtags" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;strokeColor=#595959;strokeWidth=2;" edge="1" parent="1" source="tags" target="faqtags">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_faqs_faqtags" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.42;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;strokeColor=#595959;strokeWidth=2;" edge="1" parent="1" source="faqs" target="faqtags">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_hist_refs" value="1 : N" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.52;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;strokeColor=#595959;strokeWidth=2;" edge="1" parent="1" source="histories" target="references">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="leg1" value="Identity" style="shape=label;html=1;rounded=0;strokeColor=#404040;fillColor=#E2F0D9;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1190" y="1010" width="100" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="leg2" value="FAQ" style="shape=label;html=1;rounded=0;strokeColor=#404040;fillColor=#DDEBF7;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1310" y="1010" width="100" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="leg3" value="AI検索" style="shape=label;html=1;rounded=0;strokeColor=#404040;fillColor=#E4DFEC;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="1010" width="100" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="leg4" value="中間テーブル" style="shape=label;html=1;rounded=0;strokeColor=#404040;fillColor=#E7E6E6;align=center;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1515" y="1010" width="130" height="28" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
