@@ -115,7 +115,7 @@ AI回答には、主に次のガードレールを設定しています。
 | UI | Next.js / React / TypeScript | Razor View / PageModel | ASPX / Master Page / UserControl |
 | 画面処理 | React / REST API | Razor Pages Handler | CodeBehind / PostBack |
 | バックエンド | ASP.NET Core Web API | ASP.NET Core Razor Pages | ASP.NET Web Forms |
-| 実行基盤 | .NET 8 | .NET 10 | .NET Framework 4.8 |
+| 実行基盤 | .NET 10 | .NET 10 | .NET Framework 4.8 |
 | ORM | Entity Framework Core | Entity Framework Core | Entity Framework 6 |
 | 認証 | ASP.NET Core Identity / JWT | ASP.NET Core Identity / Cookie | ASP.NET Identity 2 / OWIN Cookie |
 | DB | MySQL | MySQL | MySQL |
