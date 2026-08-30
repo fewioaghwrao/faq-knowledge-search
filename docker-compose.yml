@@ -12,6 +12,25 @@ services:
     volumes:
       - faq-app-mysql-data:/var/lib/mysql
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_0900_ai_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-prootpass"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: faq-app-api
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      PORT: 8080
+      ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=FaqAppDb;User=faqapp;Password=faqapp_pass;"
+    ports:
+      - "8080:8080"
 
 volumes:
   faq-app-mysql-data:
