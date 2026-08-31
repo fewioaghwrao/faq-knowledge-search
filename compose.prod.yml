@@ -16,6 +16,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
+    networks:
+      - default
 
   api:
     build:
@@ -32,6 +34,14 @@ services:
       ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=${MYSQL_DATABASE};User=${MYSQL_USER};Password=${MYSQL_PASSWORD};"
     ports:
       - "127.0.0.1:8081:8080"
+    networks:
+      - default
+      - invoice-network
 
 volumes:
   faq-app-mysql-prod-data:
+
+networks:
+  invoice-network:
+    external: true
+    name: invoice-management-system-lite_invoice-network
