@@ -103,7 +103,7 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:xxxx
 デモ環境では以下のバックエンドAPIを使用します。
 
 ```env
-NEXT_PUBLIC_API_BASE_URL=https://faq-app-api-d060ab93d646.herokuapp.com
+NEXT_PUBLIC_API_BASE_URL=https://faq-api.oybusin.com
 ```
 
 ---
@@ -171,7 +171,7 @@ npm run build
 ### デモ環境
 
 ```
-https://green-bush-0db40ef00.7.azurestaticapps.net/
+https://faq-knowledge-search.vercel.app/
 ```
 
 GitHub Actions により、mainブランチへのpushを契機にデプロイされます。

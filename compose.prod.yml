@@ -1,0 +1,75 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: faq-app-mysql-prod
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - faq-app-mysql-prod-data:/var/lib/mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_0900_ai_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - default
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: faq-app-api-prod
+    restart: unless-stopped
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+    environment:
+      PORT: 8080
+      ASPNETCORE_ENVIRONMENT: Production
+
+      # Database
+      ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=${MYSQL_DATABASE};User=${MYSQL_USER};Password=${MYSQL_PASSWORD};"
+
+      # JWT
+      JwtSettings__Secret: ${JWT_SECRET}
+      JwtSettings__Issuer: ${JWT_ISSUER}
+      JwtSettings__Audience: ${JWT_AUDIENCE}
+
+      # OpenAI
+      AiSettings__ApiKey: ${OPENAI_API_KEY}
+
+      # Admin Seed
+      AdminSeed__Email: ${ADMIN_SEED_EMAIL}
+      AdminSeed__Password: ${ADMIN_SEED_PASSWORD}
+
+      # CORS
+      Cors__AllowedOrigins__0: ${CORS_ORIGIN_0}
+      Cors__AllowedOrigins__1: ${CORS_ORIGIN_1}
+      Cors__AllowedOrigins__2: ${CORS_ORIGIN_2}
+
+      # Startup
+      ENABLE_SWAGGER: ${ENABLE_SWAGGER}
+      ENABLE_DB_MIGRATION: ${ENABLE_DB_MIGRATION}
+      ENABLE_DB_SEED: ${ENABLE_DB_SEED}
+
+    ports:
+      - "127.0.0.1:8081:8080"
+
+    networks:
+      - default
+      - invoice-network
+
+volumes:
+  faq-app-mysql-prod-data:
+
+networks:
+  invoice-network:
+    external: true
+    name: invoice-management-system-lite_invoice-network
