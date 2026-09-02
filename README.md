@@ -33,7 +33,6 @@ API分離型、モダン一体型、レガシー一体型を同一題材で比�
 | 対象 | URL |
 |---|---|
 | フロントエンド（Vercel） | https://faq-knowledge-search.vercel.app/ |
-| フロントエンド（Azure Static Web Apps） | https://green-bush-0db40ef00.7.azurestaticapps.net/ |
 | バックエンドAPI | https://faq-api.oybusin.com/ |
 | Swagger UI | https://faq-api.oybusin.com/swagger |
 
@@ -123,7 +122,7 @@ AI回答には、主に次のガードレールを設定しています。
 | 主な責務分離 | Controller / Service / DTO | Domain / Application / Infrastructure / Presentation | CodeBehind / Service / DTO |
 | テスト | xUnit / Jest / React Testing Library | xUnit（Domain～PageModel） | xUnit / ブラウザ操作確認 |
 | CI実行環境 | Ubuntu | Ubuntu | Windows |
-| 公開状況 | Vercel・Azure・VPS | ローカル | ローカル / IIS Express |
+| 公開状況 | Vercel・VPS | ローカル | ローカル / IIS Express |
 
 ---
 
@@ -203,7 +202,6 @@ faq-knowledge-search
 │       ├── tests.yml
 │       ├── razorpages-tests.yml
 │       ├── webforms-unit-tests.yml
-│       └── azure-static-web-apps-green-bush-0db40ef00.yml
 │
 ├── README-aspnetcore-nextjs.md
 └── README.md
@@ -262,8 +260,6 @@ GitHub Actionsでは、実装ごとに独立したWorkflowを使用していま�
 | `tests.yml` | ASP.NET Coreバックエンド、Next.jsフロントエンド | .NETテスト、フロントエンドテスト・ビルド |
 | `razorpages-tests.yml` | ASP.NET Core Razor Pages版 | Domain、Application、Infrastructure、RazorのxUnitテスト |
 | `webforms-unit-tests.yml` | ASP.NET Web Forms版 | NuGet復元、MSBuild、xUnitテスト |
-| `azure-static-web-apps-green-bush-0db40ef00.yml` | Next.jsフロントエンド | Azure Static Web Appsへのデプロイ |
-
 各テストWorkflowは、対応するディレクトリまたはWorkflowファイルが変更された場合に実行する構成です。
 
 ### Razor Pages版のテスト構成
