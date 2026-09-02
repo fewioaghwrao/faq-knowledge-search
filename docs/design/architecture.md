@@ -21,7 +21,7 @@ Azure Static Web Apps
       | REST API / JSON
       v
 [ASP.NET Core Web API]
-Heroku
+ConoHa VPS / Docker
       |
       | Entity Framework Core
       v
@@ -39,7 +39,7 @@ Heroku
 | Frontend | Next.js / React / TypeScript |
 | Frontend Hosting | Azure Static Web Apps |
 | Backend | ASP.NET Core Web API / C# / .NET |
-| Backend Hosting | Heroku |
+| Backend Hosting | ConoHa VPS / Docker |
 | Database | MySQL |
 | ORM | Entity Framework Core |
 | Authentication | JWT認証 / ASP.NET Core Identity |
@@ -279,11 +279,20 @@ GitHub Actions
       |
       ├─ Backend Restore / Build / Test
       |
-      ├─ Frontend Install / Test
+      └─ Frontend Install / Test / Deploy
+             ↓
+      Azure Static Web Apps
+
+Backend Deploy
+GitHub Repository
       |
-      ├─ Deploy Frontend to Azure Static Web Apps
+      | git pull
+      v
+ConoHa VPS
       |
-      └─ Deploy Backend to Heroku
+      | Docker Compose
+      v
+ASP.NET Core Web API + MySQL
 ```
 
 ### Frontend Deploy
@@ -299,14 +308,16 @@ Next.js Frontend
 ### Backend Deploy
 
 ```
-GitHub / Heroku
-  ↓
-Heroku
-  ↓
+GitHub Repository
+  ↓ git pull
+ConoHa VPS
+  ↓ Docker Compose
 ASP.NET Core Web API
-  ↓
+  ↓ Entity Framework Core
 MySQL
 ```
+
+公開APIは nginx をリバースプロキシとして使用し、`https://faq-api.oybusin.com` でHTTPS公開します。
 
 ### 外部サービス連携
 
@@ -314,7 +325,7 @@ MySQL
 |---|---|
 | OpenAI API | FAQコンテキストに基づくAI回答生成 |
 | Azure Static Web Apps | フロントエンドホスティング |
-| Heroku | バックエンドAPIホスティング |
+| ConoHa VPS | バックエンドAPI・MySQLホスティング |
 | MySQL | FAQ、AI検索履歴、ユーザー情報の保存 |
 | GitHub Actions | テスト・デプロイ自動化 |
 

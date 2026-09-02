@@ -7,9 +7,9 @@
 |---|---|
 | プロジェクト名 | 社内FAQ・業務ナレッジ検索アプリ |
 | ドキュメント種別 | 基本設計書 |
-| バージョン | 1.1 |
+| バージョン | 1.2 |
 | 作成日 | 2026/05/09 |
-| 更新日 | 2026/05/28 |
+| 更新日 | 2026/09/03 |
 | 作成者 | — |
 | 承認者 | — |
 
@@ -21,6 +21,7 @@
 |---|---|---|---|
 | 1.0 | 2026/05/09 | 初版作成 | — |
 | 1.1 | 2026/05/28 | 現行実装に合わせて修正。MySQL、OpenAI API、Heroku、Azure Static Web Apps、AiSearchHistory構成へ整理 | — |
+| 1.2 | 2026/09/03 | バックエンドをHerokuからConoHa VPS（Docker Compose / nginx / HTTPS）へ移行 | — |
 
 ---
 
@@ -75,7 +76,7 @@ Azure Static Web Apps
       | REST API / JSON
       v
 [ASP.NET Core Web API]
-Heroku
+ConoHa VPS / Docker
       |
       | Entity Framework Core
       v
@@ -95,7 +96,7 @@ Heroku
 | Frontend | Next.js / React / TypeScript |
 | Frontend Hosting | Azure Static Web Apps |
 | Backend | ASP.NET Core Web API / C# |
-| Backend Hosting | Heroku |
+| Backend Hosting | ConoHa VPS / Docker |
 | Database | MySQL |
 | ORM | Entity Framework Core |
 | Authentication | JWT認証 / ASP.NET Core Identity |
@@ -110,7 +111,7 @@ Heroku
 |---|---|
 | OpenAI API | FAQコンテキストに基づくAI回答生成 |
 | Azure Static Web Apps | フロントエンドホスティング |
-| Heroku | バックエンドAPIホスティング |
+| ConoHa VPS | バックエンドAPI・MySQLホスティング |
 | MySQL | FAQ、AI検索履歴、ユーザー情報の保存 |
 | GitHub Actions | テスト・デプロイ自動化 |
 
@@ -140,7 +141,7 @@ Heroku
 | バックエンドテスト | ✅ 実装済み | Controller / Service のテスト |
 | フロントエンドテスト | ✅ 実装済み | Page / Component / lib のテスト |
 | フロントエンドデプロイ | ✅ 実装済み | Azure Static Web Apps |
-| バックエンドデプロイ | ✅ 実装済み | Heroku |
+| バックエンドデプロイ | ✅ 実装済み | ConoHa VPS / Docker Compose |
 
 ---
 
@@ -729,10 +730,14 @@ npm test -- --watchAll=false
 
 | 項目 | 内容 |
 |---|---|
-| ホスティング | Heroku |
+| ホスティング | ConoHa VPS |
+| 実行方式 | Docker Compose |
+| リバースプロキシ | nginx |
+| 公開URL | `https://faq-api.oybusin.com` |
 | アプリ | ASP.NET Core Web API |
-| DB | MySQL |
+| DB | MySQL（Docker） |
 | 環境変数 | `ConnectionStrings`、`JwtSettings`、`AiSettings`、`Cors` |
+| デプロイ | GitHubからVPSへpull後、Docker Composeで起動 |
 
 ### 14.3 CI/CD
 

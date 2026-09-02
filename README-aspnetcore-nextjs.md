@@ -16,14 +16,14 @@ FAQ、手順書、障害対応メモを登録し、通常検索とAI検索の両
 | ------------------------------ | ------------------------------------------------------ |
 | フロントエンド（Vercel）                | https://faq-knowledge-search.vercel.app/               |
 | フロントエンド（Azure Static Web Apps） | https://green-bush-0db40ef00.7.azurestaticapps.net/    |
-| バックエンドAPI                      | https://faq-app-api-d060ab93d646.herokuapp.com/        |
-| Swagger UI                     | https://faq-app-api-d060ab93d646.herokuapp.com/swagger |
+| バックエンドAPI                      | https://faq-api.oybusin.com/        |
+| Swagger UI                     | https://faq-api.oybusin.com/swagger |
 
 ### デモアカウント
 
 | ロール | メールアドレス                                           | パスワード      |
 | --- | ------------------------------------------------- | ---------- |
-| 管理者 | [admin@faq-app.local](mailto:admin@faq-app.local) | Admin1234! |
+| 管理者 | [admin@faq-app.local](mailto:admin@faq-app.local) | Password123! |
 
 ※ このアカウントはポートフォリオ確認用のデモアカウントです。
 
@@ -34,13 +34,13 @@ FAQ、手順書、障害対応メモを登録し、通常検索とAI検索の両
 **Swagger UI**
 
 ```
-https://faq-app-api-d060ab93d646.herokuapp.com/swagger
+https://faq-api.oybusin.com/swagger
 ```
 
 APIエンドポイントの仕様確認・動作テストが可能です。
 認証が必要なエンドポイントは、ログインAPIで取得したトークンを利用して確認します。
 
-> **注意:** Heroku のスリープにより、初回アクセス時にレスポンスが遅延することがあります。
+> バックエンドAPIは ConoHa VPS 上のDocker環境で稼働し、nginx経由でHTTPS公開しています。
 
 ---
 
@@ -113,7 +113,7 @@ AI検索では、質問内容をもとに関連FAQを検索し、上位FAQをコ
 | バックエンドテスト    | 実装済み   | Controller / Service のテスト  |
 | フロントエンドテスト  | 実装済み   | Page / Component / lib のテスト |
 | フロントエンドデプロイ | 実装済み | Vercel / Azure Static Web Apps |
-| バックエンドデプロイ  | 実装済み   | Heroku                         |
+| バックエンドデプロイ  | 実装済み   | ConoHa VPS / Docker                         |
 | CSVインポート         | 今後の拡張 | 設計・拡張候補                 |
 | ファイルアップロード  | 今後の拡張 | 設計・拡張候補                 |
 | Slack / Teams通知     | 今後の拡張 | 設計・拡張候補                 |
@@ -183,7 +183,7 @@ AI検索では、質問内容をもとに関連FAQを検索し、上位FAQをコ
 - JWT認証
 - xUnit
 - OpenAI API連携
-- Heroku
+- Docker / ConoHa VPS
 
 ### Database
 
@@ -210,7 +210,7 @@ Vercel / Azure Static Web Apps
       | REST API
       v
 [ASP.NET Core Web API]
-Heroku
+ConoHa VPS / Docker
       |
       | EF Core
       v
@@ -429,7 +429,7 @@ AI API連携を利用する場合は、以下を設定します。
 ### Frontend
 
 ```env
-NEXT_PUBLIC_API_BASE_URL=https://faq-app-api-d060ab93d646.herokuapp.com
+NEXT_PUBLIC_API_BASE_URL=https://faq-api.oybusin.com
 ```
 
 ---

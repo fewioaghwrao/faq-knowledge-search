@@ -34,8 +34,8 @@ API分離型、モダン一体型、レガシー一体型を同一題材で比�
 |---|---|
 | フロントエンド（Vercel） | https://faq-knowledge-search.vercel.app/ |
 | フロントエンド（Azure Static Web Apps） | https://green-bush-0db40ef00.7.azurestaticapps.net/ |
-| バックエンドAPI | https://faq-app-api-d060ab93d646.herokuapp.com/ |
-| Swagger UI | https://faq-app-api-d060ab93d646.herokuapp.com/swagger |
+| バックエンドAPI | https://faq-api.oybusin.com/ |
+| Swagger UI | https://faq-api.oybusin.com/swagger |
 
 Razor Pages版とWeb Forms版は、ホスティング、環境設定、監視、セキュリティ対応などの運用対象を重複させないため、ローカル実行版として管理しています。
 
@@ -123,7 +123,7 @@ AI回答には、主に次のガードレールを設定しています。
 | 主な責務分離 | Controller / Service / DTO | Domain / Application / Infrastructure / Presentation | CodeBehind / Service / DTO |
 | テスト | xUnit / Jest / React Testing Library | xUnit（Domain～PageModel） | xUnit / ブラウザ操作確認 |
 | CI実行環境 | Ubuntu | Ubuntu | Windows |
-| 公開状況 | Vercel・Azure・Heroku | ローカル | ローカル / IIS Express |
+| 公開状況 | Vercel・Azure・VPS | ローカル | ローカル / IIS Express |
 
 ---
 

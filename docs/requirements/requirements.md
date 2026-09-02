@@ -7,9 +7,9 @@
 |---|---|
 | プロジェクト名 | 社内FAQ・業務ナレッジ検索アプリ |
 | ドキュメント種別 | 要件定義書 |
-| バージョン | 2.2 |
+| バージョン | 2.3 |
 | 作成日 | 2026/05/09 |
-| 更新日 | 2026/05/28 |
+| 更新日 | 2026/09/03 |
 | 作成者 | — |
 | 承認者 | — |
 
@@ -23,6 +23,7 @@
 | 2.0 | 2026/05/09 | フェーズ2〜6を統合・拡張 | — |
 | 2.1 | 2026/05/09 | ユーザー管理をApplicationUser方針に統一 | — |
 | 2.2 | 2026/05/28 | 現行実装に合わせて修正。MySQL、OpenAI API、Heroku、Azure Static Web Apps、AiSearchHistory構成へ整理 | — |
+| 2.3 | 2026/09/03 | バックエンドをHerokuからConoHa VPS（Docker Compose / nginx / HTTPS）へ移行 | — |
 
 ---
 
@@ -124,7 +125,7 @@
 | Frontend | Next.js / React / TypeScript |
 | Frontend Hosting | Azure Static Web Apps |
 | Backend | ASP.NET Core Web API / C# |
-| Backend Hosting | Heroku |
+| Backend Hosting | ConoHa VPS / Docker |
 | Database | MySQL |
 | ORM | Entity Framework Core |
 | Authentication | JWT認証 / ASP.NET Core Identity |
@@ -145,7 +146,7 @@ Azure Static Web Apps
       | REST API / JSON
       v
 [ASP.NET Core Web API]
-Heroku
+ConoHa VPS / Docker
       |
       | Entity Framework Core
       v
@@ -175,7 +176,7 @@ Heroku
 | AI検索履歴管理 | AI検索の質問・回答・参照元・フィードバックを管理する |
 | AI回答フィードバック | 役に立った / 役に立たなかったを記録する |
 | テスト | バックエンド・フロントエンドの主要テストを行う |
-| デプロイ | FrontendをAzure Static Web Apps、BackendをHerokuにデプロイする |
+| デプロイ | FrontendをAzure Static Web Apps、BackendをConoHa VPSへデプロイする |
 
 ---
 
@@ -209,7 +210,7 @@ Heroku
 | AI安全性 | FAQにない内容は断言しないようにプロンプトで制御する |
 | DB | MySQLを利用する |
 | ブラウザ | Chrome / Edge の最新版を想定する |
-| デプロイ | FrontendはAzure Static Web Apps、BackendはHerokuに配置する |
+| デプロイ | FrontendはAzure Static Web Apps、BackendはConoHa VPSに配置する |
 | APIキー | User Secrets またはホスティング環境の環境変数で管理する |
 | 個人情報 | 実在の個人情報・顧客情報・認証情報は登録しない |
 
@@ -542,11 +543,14 @@ Heroku
 
 | 項目 | 内容 |
 |---|---|
-| ホスティング | Heroku |
+| ホスティング | ConoHa VPS |
+| 実行方式 | Docker Compose |
+| リバースプロキシ | nginx |
+| 公開URL | `https://faq-api.oybusin.com` |
 | アプリ | ASP.NET Core Web API |
-| DB | MySQL |
+| DB | MySQL（Docker） |
 | 環境変数 | `ConnectionStrings`、`JwtSettings`、`AiSettings`、`Cors` |
-| デプロイ | Git / GitHub Actions または Heroku連携 |
+| デプロイ | GitHubからVPSへpull後、Docker Composeで起動 |
 
 ---
 

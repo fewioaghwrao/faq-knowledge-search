@@ -16,7 +16,7 @@ ASP.NET Core Web API を使用し、FAQ管理、JWT認証、ユーザー管理�
 - MySQL
 - OpenAI API
 - xUnit
-- Heroku
+- Docker / ConoHa VPS
 
 ---
 
@@ -225,15 +225,15 @@ dotnet test FaqApp.Api.Tests
 
 ## デプロイ
 
-バックエンドは Heroku へデプロイしています。
+バックエンドは ConoHa VPS へDocker Composeでデプロイしています。nginxをリバースプロキシとして使用し、HTTPSで公開しています。
 
 ### デモ環境
 
 ```
-https://faq-app-api-d060ab93d646.herokuapp.com/
+https://faq-api.oybusin.com/
 ```
 
-Heroku環境では、接続文字列、JWT設定、AI API設定を環境変数として管理します。
+VPS環境では、接続文字列、JWT設定、AI API設定、CORS設定を `.env` とDocker Composeの環境変数で管理します。
 
 ---
 
