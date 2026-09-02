@@ -15,7 +15,6 @@ FAQ、手順書、障害対応メモを登録し、通常検索とAI検索の両
 | 対象                             | URL                                                    |
 | ------------------------------ | ------------------------------------------------------ |
 | フロントエンド（Vercel）                | https://faq-knowledge-search.vercel.app/               |
-| フロントエンド（Azure Static Web Apps） | https://green-bush-0db40ef00.7.azurestaticapps.net/    |
 | バックエンドAPI                      | https://faq-api.oybusin.com/        |
 | Swagger UI                     | https://faq-api.oybusin.com/swagger |
 
@@ -112,7 +111,7 @@ AI検索では、質問内容をもとに関連FAQを検索し、上位FAQをコ
 | ユーザー管理          | 実装済み   | ユーザー一覧、状態管理         |
 | バックエンドテスト    | 実装済み   | Controller / Service のテスト  |
 | フロントエンドテスト  | 実装済み   | Page / Component / lib のテスト |
-| フロントエンドデプロイ | 実装済み | Vercel / Azure Static Web Apps |
+| フロントエンドデプロイ | 実装済み | Vercel |
 | バックエンドデプロイ  | 実装済み   | ConoHa VPS / Docker                         |
 | CSVインポート         | 今後の拡張 | 設計・拡張候補                 |
 | ファイルアップロード  | 今後の拡張 | 設計・拡張候補                 |
@@ -172,8 +171,6 @@ AI検索では、質問内容をもとに関連FAQを検索し、上位FAQをコ
 - Jest
 - React Testing Library
 - Vercel
-- Azure Static Web Apps
-
 ### Backend
 
 - ASP.NET Core Web API
@@ -205,7 +202,7 @@ AI検索では、質問内容をもとに関連FAQを検索し、上位FAQをコ
       |
       v
 [Next.js Frontend]
-Vercel / Azure Static Web Apps
+Vercel
       |
       | REST API
       v
